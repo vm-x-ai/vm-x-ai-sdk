@@ -1,7 +1,7 @@
 import type { Metadata } from '@grpc/grpc-js';
 import axios from 'axios';
 import type { Cache, Store, MemoryStore } from 'cache-manager';
-import { caching } from 'cache-manager';
+import { memoryStore } from 'cache-manager';
 import type { VMXClient } from '../client';
 import type { VMXClientAuthProvider } from './types';
 
@@ -17,13 +17,11 @@ type OAuthTokenResult = {
   token_type: string;
 };
 
-const memoryCache = await caching('memory');
-
 export class VMXClientOAuth<TCacheStore extends Store = MemoryStore> implements VMXClientAuthProvider {
-  private cache: Cache<TCacheStore>;
+  private cache: Cache<TCacheStore> | MemoryStore;
 
   constructor(private readonly options: VMXClientOAuthOptions<TCacheStore>) {
-    this.cache = options.cacheManager ?? (memoryCache as unknown as Cache<TCacheStore>);
+    this.cache = options.cacheManager || memoryStore();
   }
 
   public async injectCredentials(client: VMXClient, grpcMetadata: Metadata): Promise<void> {

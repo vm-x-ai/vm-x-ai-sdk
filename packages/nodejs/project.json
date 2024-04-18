@@ -4,16 +4,6 @@
   "sourceRoot": "packages/nodejs/src",
   "projectType": "library",
   "targets": {
-    "build": {
-      "executor": "@nx/js:tsc",
-      "outputs": ["{options.outputPath}"],
-      "options": {
-        "outputPath": "dist/packages/nodejs",
-        "main": "packages/nodejs/src/index.ts",
-        "tsConfig": "packages/nodejs/tsconfig.lib.json",
-        "assets": ["packages/nodejs/*.md"]
-      }
-    },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
@@ -31,6 +21,43 @@
         "parallel": false
       },
       "dependsOn": ["build", "^release"]
+    },
+    "build": {
+      "executor": "@nx/rollup:rollup",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "main": "packages/nodejs/src/index.ts",
+        "outputPath": "dist/packages/nodejs",
+        "tsConfig": "packages/nodejs/tsconfig.lib.json",
+        "compiler": "swc",
+        "project": "packages/nodejs/package.json",
+        "format": ["esm", "cjs"],
+        "external": "all",
+        "rollupConfig": "packages/nodejs/rollup.config.js",
+        "generateExportsField": true,
+        "assets": [
+          {
+            "glob": "packages/nodejs/README.md",
+            "input": ".",
+            "output": "."
+          },
+          {
+            "glob": "packages/nodejs/CHANGELOG.md",
+            "input": ".",
+            "output": "."
+          }
+        ]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
+        }
+      }
     }
   },
   "tags": ["sdk", "nodejs"]
