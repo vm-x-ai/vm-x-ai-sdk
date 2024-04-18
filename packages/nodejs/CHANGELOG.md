@@ -1,3 +1,9 @@
+## [1.0.2](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/nodejs@1.0.1...nodejs@1.0.2) (2024-04-18)
+
+### Bug Fixes
+
+- **nodejs:** fix oauth client to add auth. before the domain ([e367045](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/e3670457236a5c8408155d6ab4b3d3e45cc464c8))
+
 ## [1.0.1](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/nodejs@1.0.0...nodejs@1.0.1) (2024-04-18)
 
 ### Bug Fixes
