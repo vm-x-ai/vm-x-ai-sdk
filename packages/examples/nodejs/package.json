@@ -2,7 +2,7 @@
   "name": "@vm-x-ai/sdk/examples/nodejs",
   "version": "0.0.1",
   "dependencies": {
-    "@vm-x-ai/client": "1.0.0",
+    "@vm-x-ai/client": "1.0.1",
     "tslib": "^2.3.0"
   },
   "type": "module",
