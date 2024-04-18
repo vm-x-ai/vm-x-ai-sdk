@@ -1,6 +1,6 @@
 {
   "name": "@vm-x-ai/client",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "VM-X AI SDK Node.js Client",
   "license": "MIT",
   "repository": {
