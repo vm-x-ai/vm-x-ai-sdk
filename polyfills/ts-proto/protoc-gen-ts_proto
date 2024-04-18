@@ -1,0 +1,20 @@
+#!/usr/bin/env node
+const options = require('ts-proto/build/options')
+
+/**
+ * Override the `getTsPoetOpts` to add objsMinimal to forceDefaultImport and forceModuleImport
+ */
+options.getTsPoetOpts = (options) => {
+  const { importSuffix, esModuleInterop } = options;
+  const pbjsMinimal = 'protobufjs/minimal' + importSuffix;
+  const pbjs = 'protobufjs';
+  return {
+    prefix: `/* eslint-disable */`,
+    dprintOptions: { preferSingleLine: true, lineWidth: 120 },
+    forceRequireImport: esModuleInterop ? [] : ['long'],
+    forceDefaultImport: esModuleInterop ? [pbjsMinimal, pbjs] : [],
+    forceModuleImport: esModuleInterop ? [] : [pbjsMinimal, pbjs],
+  };
+}
+
+require('ts-proto/build/plugin')
