@@ -76,3 +76,5 @@ const nonStreamingResponse = await client.completion(
 
 console.log(nonStreamingResponse.message);
 ```
+
+## [Change Log](./CHANGELOG.md)
