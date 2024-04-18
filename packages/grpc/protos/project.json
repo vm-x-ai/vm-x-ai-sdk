@@ -1,0 +1,23 @@
+{
+  "name": "grpc-protos",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/grpc/protos/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/grpc/protos",
+        "main": "packages/grpc/protos/src/index.ts",
+        "tsConfig": "packages/grpc/protos/tsconfig.lib.json",
+        "assets": []
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    }
+  },
+  "tags": ["grpc", "proto"]
+}
