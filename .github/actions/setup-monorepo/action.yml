@@ -4,6 +4,15 @@ description: Set up nx monorepo for CI workflows
 runs:
   using: 'composite'
   steps:
+    - name: Set up Python 3.9
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.9
+    - name: Set up Poetry
+      uses: abatilo/actions-poetry@v2
+      with:
+        poetry-version: 1.8.2
+
     - name: Use PNPM 8.x
       uses: pnpm/action-setup@v3
       with:
@@ -27,8 +36,12 @@ runs:
         restore-keys: |
           ${{ runner.os }}-pnpm-store-
 
-    - name: Install Dependencies
+    - name: Install Node.js Dependencies
       shell: bash
       run: pnpm install
+
+    - name: Install Python Dependencies
+      shell: bash
+      run: poetry install
 
     - uses: nrwl/nx-set-shas@v4
