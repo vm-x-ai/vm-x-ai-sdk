@@ -33,6 +33,7 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+/reports
 
 # System Files
 .DS_Store
@@ -48,3 +49,10 @@ cdk.out
 .pnpm-store
 
 .env.local
+
+# Python
+*.pyc
+.venv
+.ruff_cache
+.pytest_cache
+.cache

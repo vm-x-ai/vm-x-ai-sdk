@@ -1,0 +1,88 @@
+{
+  "name": "python",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/python/vmxai",
+  "targets": {
+    "lock": {
+      "executor": "@nxlv/python:run-commands",
+      "options": {
+        "command": "poetry lock --no-update",
+        "cwd": "packages/python"
+      }
+    },
+    "add": {
+      "executor": "@nxlv/python:add",
+      "options": {}
+    },
+    "update": {
+      "executor": "@nxlv/python:update",
+      "options": {}
+    },
+    "remove": {
+      "executor": "@nxlv/python:remove",
+      "options": {}
+    },
+    "build": {
+      "executor": "@nxlv/python:build",
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "outputPath": "packages/python/dist",
+        "publish": true,
+        "lockedVersions": false,
+        "bundleLocalDependencies": true
+      }
+    },
+    "install": {
+      "executor": "@nxlv/python:install",
+      "options": {
+        "silent": false,
+        "args": "",
+        "cacheDir": ".cache/pypoetry",
+        "verbose": false,
+        "debug": false
+      }
+    },
+    "lint": {
+      "executor": "@nxlv/python:ruff-check",
+      "outputs": [],
+      "options": {
+        "lintFilePatterns": ["vmxai", "tests"]
+      }
+    },
+    "test": {
+      "executor": "@nxlv/python:run-commands",
+      "outputs": ["{workspaceRoot}/reports/packages/python/unittests", "{workspaceRoot}/coverage/packages/python"],
+      "options": {
+        "command": "poetry run pytest tests/",
+        "cwd": "packages/python"
+      }
+    },
+    "release": {
+      "executor": "nx:run-commands",
+      "outputs": [],
+      "options": {
+        "command": "npx semantic-release --extends ./packages/python/release.config.cjs",
+        "parallel": false
+      },
+      "dependsOn": ["^release"]
+    },
+    "publish": {
+      "executor": "nx:run-commands",
+      "outputs": [],
+      "options": {
+        "command": "poetry publish --repository pypi -vvv",
+        "cwd": "packages/python"
+      },
+      "dependsOn": ["build"]
+    },
+    "proto-gen": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "python -m grpc_tools.protoc -I. -I/usr/local/include --python_out=. --pyi_out=. --grpc_python_out=. ./vmxai/protos/completion/completion.proto",
+        "cwd": "packages/python"
+      }
+    }
+  },
+  "tags": ["sdk", "python"]
+}
