@@ -17,10 +17,10 @@
       "executor": "nx:run-commands",
       "outputs": [],
       "options": {
-        "command": "npx release-it --dry-run",
+        "command": "npx release-it",
         "cwd": "packages/nodejs"
       },
-      "dependsOn": ["build", "^release"]
+      "dependsOn": ["^release"]
     },
     "build": {
       "executor": "@nx/rollup:rollup",

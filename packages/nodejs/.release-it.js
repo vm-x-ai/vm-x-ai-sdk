@@ -12,8 +12,8 @@ module.exports = {
       },
     },
     '@release-it/bumper': {
-      in: '../../dist/packages/nodejs/package.json',
-      out: '../../dist/packages/nodejs/package.json',
+      in: 'package.json',
+      out: 'package.json',
     },
   },
   git: {
@@ -26,8 +26,8 @@ module.exports = {
     requireCommitsFail: false,
   },
   npm: {
-    publish: false,
-    versionArgs: [],
+    publish: true,
+    publishPath: '../../dist/packages/nodejs',
   },
   github: {
     release: true,
@@ -35,5 +35,6 @@ module.exports = {
   },
   hooks: {
     'before:git:release': ['git add --all'],
+    'after:bump': ['pnpm nx run nodejs:build'],
   },
 };
