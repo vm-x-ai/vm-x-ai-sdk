@@ -71,7 +71,7 @@
       "executor": "nx:run-commands",
       "outputs": [],
       "options": {
-        "command": "poetry publish --repository pypi -vvv",
+        "command": "poetry publish -vvv",
         "cwd": "packages/python"
       },
       "dependsOn": ["build"]
