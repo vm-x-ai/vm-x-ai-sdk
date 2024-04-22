@@ -1,3 +1,9 @@
+## [0.1.1](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/nodejs-v0.1.0...nodejs-v0.1.1) (2024-04-22)
+
+### Bug Fixes
+
+- **nodejs:** re-enable release checks and fix git config ([bf463e1](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/bf463e1e660f1cd2cbb98877c9de3dd6199b16bd))
+
 ## 0.1.0 (2024-04-22)
 
 ### Features
