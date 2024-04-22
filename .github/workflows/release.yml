@@ -48,7 +48,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
         run: |
-          git config user.name "Release It"
+          git config user.name "vm-x-ai-release[bot]"
           git config user.email "880284+vm-x-ai-release[bot]@users.noreply.github.com"
       - name: npm config
         run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
