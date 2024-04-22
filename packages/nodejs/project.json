@@ -17,8 +17,8 @@
       "executor": "nx:run-commands",
       "outputs": [],
       "options": {
-        "command": "npx semantic-release --extends ./packages/nodejs/release.config.cjs",
-        "parallel": false
+        "command": "npx release-it --dry-run",
+        "cwd": "packages/nodejs"
       },
       "dependsOn": ["build", "^release"]
     },
