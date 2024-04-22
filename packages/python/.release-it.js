@@ -39,7 +39,7 @@ module.exports = {
     releaseName: `${packageName}-v${version}`,
   },
   hooks: {
-    'before:git:release': ['cd ../..; pnpm nx format', 'git add --all'],
+    'before:git:release': ['cd ../..; pnpm nx format', 'poetry publish --repository pypi -vvv', 'git add --all'],
     'after:bump': ['pnpm nx run python:build'],
   },
 };
