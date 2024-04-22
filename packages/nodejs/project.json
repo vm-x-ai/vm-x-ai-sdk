@@ -17,7 +17,7 @@
       "executor": "nx:run-commands",
       "outputs": [],
       "options": {
-        "command": "npx release-it",
+        "command": "npx release-it --ci",
         "cwd": "packages/nodejs"
       },
       "dependsOn": ["^release"]
