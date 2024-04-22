@@ -28,6 +28,7 @@ module.exports = {
   npm: {
     publish: true,
     publishPath: '../../dist/packages/nodejs',
+    versionArgs: ['--allow-same-version', '--workspaces false'],
   },
   github: {
     release: true,
