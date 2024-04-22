@@ -19,7 +19,6 @@ module.exports = {
   git: {
     push: true,
     tagName: `${packageName}-v${version}`,
-    pushRepo: 'git@github.com:vm-x-ai/vm-x-ai-sdk.git',
     commitsPath: '.',
     commitMessage: `feat(${packageName}): released version v${version} [no ci]`,
     requireCommits: true,
