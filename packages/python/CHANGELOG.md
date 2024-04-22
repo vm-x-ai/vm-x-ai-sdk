@@ -1,3 +1,9 @@
+## [0.1.1](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/python-v0.1.0...python-v0.1.1) (2024-04-22)
+
+### Bug Fixes
+
+- **python:** remove incorrect public pypi arg ([c1b9064](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/c1b906468d0d3f6490d8acff42656fb1599297be))
+
 ## 0.1.0 (2024-04-22)
 
 ### Features

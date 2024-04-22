@@ -11,7 +11,7 @@ addopts = "--cov --cov-report html:'../../coverage/packages/python/html' --cov-r
 
 [tool.poetry]
 name = "vm-x-ai-sdk"
-version = "0.1.0"
+version = "0.1.1"
 description = "VM-X Python SDK"
 authors = [ "VM-X Engineering <eng@vm-x.ai>" ]
 maintainers = [ "VM-X Engineering <eng@vm-x.ai>" ]
