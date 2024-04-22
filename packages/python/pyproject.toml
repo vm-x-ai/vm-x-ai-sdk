@@ -33,6 +33,7 @@ group = { }
   requests = "^2.31.0"
   cachetools = "^5.3.3"
   grpcio = "^1.62.2"
+  protobuf = "^4.21.6"
 
 [tool.ruff]
 exclude = [ ".ruff_cache", ".svn", ".tox", ".venv", "dist", "vmxai/protos" ]
