@@ -26,7 +26,7 @@ module.exports = {
     requireCommitsFail: false,
   },
   npm: {
-    publish: true,
+    publish: false,
     publishPath: '../../dist/packages/nodejs',
     versionArgs: ['--allow-same-version', '--workspaces false'],
   },
