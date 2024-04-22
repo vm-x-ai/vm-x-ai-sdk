@@ -23,9 +23,9 @@
     "baseUrl": ".",
     "typeRoots": ["node_modules/@types", "./types"],
     "paths": {
-      "@vm-x-ai/client": ["packages/nodejs/src/index"],
       "@vm-x-ai/grpc/protos": ["packages/grpc/protos/src/index"],
-      "@vm-x-ai/grpc/protos/*": ["packages/grpc/protos/src/*"]
+      "@vm-x-ai/grpc/protos/*": ["packages/grpc/protos/src/*"],
+      "@vm-x-ai/sdk": ["packages/nodejs/src/index"]
     }
   },
   "exclude": ["node_modules", "tmp"]

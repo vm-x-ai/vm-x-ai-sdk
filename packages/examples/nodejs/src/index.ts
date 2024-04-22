@@ -1,4 +1,4 @@
-import { VMXClient, VMXClientOAuth } from '@vm-x-ai/client';
+import { VMXClient, VMXClientOAuth } from '@vm-x-ai/sdk';
 
 const client = new VMXClient({
   domain: 'env-abc123.clnt.vm-x.ai',

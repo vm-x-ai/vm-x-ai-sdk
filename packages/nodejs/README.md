@@ -1,4 +1,4 @@
-# @vm-x-ai/client
+# @vm-x-ai/sdk
 
 ## Description
 
@@ -7,21 +7,21 @@ VM-X AI SDK client for Node.js
 ## Installation
 
 ```bash
-pnpm add @vm-x-ai/client
+pnpm add @vm-x-ai/sdk
 ```
 
 ```bash
-npm install @vm-x-ai/client
+npm install @vm-x-ai/sdk
 ```
 
 ```bash
-yarn add @vm-x-ai/client
+yarn add @vm-x-ai/sdk
 ```
 
 ## Usage
 
 ```typescript
-import { VMXClient, VMXClientOAuth } from '@vm-x-ai/client';
+import { VMXClient, VMXClientOAuth } from '@vm-x-ai/sdk';
 
 const client = new VMXClient({
   domain: 'env-abc123.clnt.vm-x.ai',
