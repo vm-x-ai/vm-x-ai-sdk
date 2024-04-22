@@ -62,8 +62,8 @@
       "executor": "nx:run-commands",
       "outputs": [],
       "options": {
-        "command": "npx semantic-release-plus --extends ./packages/python/release.config.cjs",
-        "parallel": false
+        "command": "npx release-it",
+        "cwd": "packages/python"
       },
       "dependsOn": ["^release"]
     },
