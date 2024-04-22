@@ -27,6 +27,7 @@ module.exports = {
   },
   npm: {
     publish: true,
+    skipChecks: true,
     publishPath: '../../dist/packages/nodejs',
     versionArgs: ['--allow-same-version', '--workspaces false'],
   },

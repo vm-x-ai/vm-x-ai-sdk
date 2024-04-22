@@ -45,8 +45,10 @@ jobs:
           aws-region: ${{ vars.NXCACHE_AWS_REGION }}
           role-session-name: NxCache
 
-      - name: Semantic Release
-        run: pnpm nx affected -t release
+      - name: Release
+        run: |
+          poetry config pypi-token.pypi "$PYPI_TOKEN"
+          pnpm nx affected -t release --parallel=false
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
