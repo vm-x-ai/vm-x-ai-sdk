@@ -35,7 +35,7 @@ module.exports = {
     releaseName: `${packageName}-v${version}`,
   },
   hooks: {
-    'before:git:release': ['pnpm nx format', 'git add --all'],
+    'before:git:release': ['cd ../..', 'pnpm nx format', 'cd packages/nodejs', 'git add --all'],
     'after:bump': ['pnpm nx run nodejs:build'],
   },
 };
