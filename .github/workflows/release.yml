@@ -45,9 +45,11 @@ jobs:
           aws-region: ${{ vars.NXCACHE_AWS_REGION }}
           role-session-name: NxCache
       - name: git config
+        env:
+          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
         run: |
-          git config user.name "${GITHUB_ACTOR}"
-          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+          git config user.name "Release It"
+          git config user.email "880284+vm-x-ai-release[bot]@users.noreply.github.com"
       - name: npm config
         run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
         env:
