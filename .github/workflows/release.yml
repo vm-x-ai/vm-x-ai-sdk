@@ -44,11 +44,20 @@ jobs:
           role-to-assume: ${{ vars.NXCACHE_IAM_ROLE }}
           aws-region: ${{ vars.NXCACHE_AWS_REGION }}
           role-session-name: NxCache
-
-      - name: Release
+      - name: git config
         run: |
-          poetry config pypi-token.pypi "$PYPI_TOKEN"
-          pnpm nx affected -t release --parallel=false
+          git config user.name "${GITHUB_ACTOR}"
+          git config user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+      - name: npm config
+        run: npm config set //registry.npmjs.org/:_authToken $NPM_TOKEN
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: poetry config
+        run: poetry config pypi-token.pypi "$PYPI_TOKEN"
+        env:
+          PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
+      - name: Release
+        run: pnpm nx affected -t release --parallel=false
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
