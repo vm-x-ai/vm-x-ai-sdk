@@ -12,8 +12,14 @@ module.exports = {
       },
     },
     '@release-it/bumper': {
-      in: 'pyproject.toml',
-      out: 'pyproject.toml',
+      in: {
+        file: 'pyproject.toml',
+        type: 'text/plain',
+      },
+      out: {
+        file: 'pyproject.toml',
+        type: 'text/plain',
+      },
     },
   },
   git: {
