@@ -26,7 +26,7 @@ module.exports = {
     requireUpstream: false,
   },
   npm: {
-    publish: false,
+    publish: true,
     publishPath: '../../dist/packages/nodejs',
     versionArgs: ['--allow-same-version', '--workspaces false'],
   },
