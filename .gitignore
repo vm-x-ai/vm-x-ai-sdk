@@ -56,3 +56,5 @@ cdk.out
 .ruff_cache
 .pytest_cache
 .cache
+
+.coverage
