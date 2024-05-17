@@ -1,3 +1,5 @@
+const { whatBump } = require('../../release/util');
+
 const version = '${version}';
 const packageName = 'python';
 
@@ -7,6 +9,7 @@ module.exports = {
       path: '.',
       infile: 'CHANGELOG.md',
       preset: 'conventionalcommits',
+      whatBump,
       gitRawCommitsOpts: {
         path: '.',
       },
@@ -30,6 +33,7 @@ module.exports = {
     requireCommits: true,
     requireCommitsFail: false,
     requireUpstream: false,
+    requireCleanWorkingDir: false,
   },
   npm: {
     publish: false,
