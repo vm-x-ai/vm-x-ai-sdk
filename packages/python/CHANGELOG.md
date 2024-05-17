@@ -1,3 +1,12 @@
+
+
+## [0.2.0](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/python-v0.1.5...python-v0.2.0) (2024-05-17)
+
+
+### Features
+
+* update package description ([ada4d4b](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/ada4d4bf45616c71edcf4d232b7d1b0ce629512c))
+
 ## [0.1.5](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/python-v0.1.4...python-v0.1.5) (2024-05-17)
 
 ## [0.1.4](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/python-v0.1.3...python-v0.1.4) (2024-05-17)
