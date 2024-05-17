@@ -16,6 +16,21 @@ function addBangNotes(commit) {
   return commit.notes;
 }
 
+/**
+ *
+ * The `@release-it/conventional-changelog` plugin never returns `ignore` as the level of the release.
+ *
+ * This custom `whatBump` is based on the original `whatBump` function in the conventional-changelog package,
+ * but it adds support for the `ignore` release type for the following commit types:
+ *
+ * - build
+ * - ci
+ * - docs
+ * - refactor
+ * - test
+ *
+ * Reference: https://github.com/release-it/conventional-changelog/issues/22#issuecomment-1450958650
+ */
 module.exports = {
   whatBump: (commits, options) => {
     const defaults = {
