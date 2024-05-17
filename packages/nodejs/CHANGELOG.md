@@ -1,3 +1,7 @@
+
+
+## [0.1.3](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/nodejs-v0.1.2...nodejs-v0.1.3) (2024-05-17)
+
 ## [0.1.2](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/nodejs-v0.1.1...nodejs-v0.1.2) (2024-04-22)
 
 ### Bug Fixes
