@@ -1,3 +1,5 @@
+## [0.1.5](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/python-v0.1.4...python-v0.1.5) (2024-05-17)
+
 ## [0.1.4](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/python-v0.1.3...python-v0.1.4) (2024-05-17)
 
 ## [0.1.3](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/python-v0.1.2...python-v0.1.3) (2024-04-22)
