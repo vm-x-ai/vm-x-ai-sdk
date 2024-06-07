@@ -1,5 +1,12 @@
 
 
+## [0.3.0](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/python-v0.2.0...python-v0.3.0) (2024-06-07)
+
+
+### Features
+
+* upgrade workspace libs and update sdks to use the latest protos ([#6](https://github.com/vm-x-ai/vm-x-ai-sdk/issues/6)) ([005b99a](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/005b99a18bbdf05686122ab5ee603ffe34a906c0))
+
 ## [0.2.0](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/python-v0.1.5...python-v0.2.0) (2024-05-17)
 
 
