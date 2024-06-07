@@ -3,6 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/nodejs/src",
   "projectType": "library",
+  "tags": ["sdk", "nodejs"],
   "targets": {
     "lint": {
       "executor": "@nx/eslint:lint",
@@ -59,6 +60,5 @@
         }
       }
     }
-  },
-  "tags": ["sdk", "nodejs"]
+  }
 }

@@ -17,6 +17,10 @@ package-mode = false
     path = "packages/python"
     develop = true
 
+    [tool.poetry.dependencies.vm-x-ai-sdk-example]
+    path = "packages/examples/python"
+    develop = true
+
 [tool.poetry.group.dev.dependencies]
 autopep8 = "2.1.0"
 ruff = "0.4.1"

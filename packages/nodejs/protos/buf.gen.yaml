@@ -1,10 +1,8 @@
 version: v1
 plugins:
-  # Node.js SDK
   - name: ts
-    out: ../../nodejs/src/proto-types
+    out: ../src/proto-types
     strategy: all
-    # path: ../../../node_modules/ts-proto/protoc-gen-ts_proto
     path: '../../../polyfills/ts-proto/protoc-gen-ts_proto'
     opt:
       - esModuleInterop=true

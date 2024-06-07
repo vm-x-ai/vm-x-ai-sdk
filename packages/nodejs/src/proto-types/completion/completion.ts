@@ -1,32 +1,44 @@
 /* eslint-disable */
 import {
+  type CallOptions,
   ChannelCredentials,
   Client,
+  type ClientOptions,
   ClientReadableStream,
   handleServerStreamingCall,
   makeGenericClientConstructor,
   Metadata,
+  type UntypedServiceImplementation,
 } from '@grpc/grpc-js';
-import type { CallOptions, ClientOptions, UntypedServiceImplementation } from '@grpc/grpc-js';
 import Long from 'long';
 import _m0 from 'protobufjs/minimal.js';
-import { Struct } from '../google/protobuf/struct.js';
+import { Struct } from '../google/protobuf/struct';
 
 export const protobufPackage = 'llm.chat';
 
-export interface RequestFunctions {
-  description: string;
+export interface RequestTools {
+  type: string;
+  function: RequestToolFunction | undefined;
+}
+
+export interface RequestToolFunction {
   name: string;
+  description: string;
   parameters: { [key: string]: any } | undefined;
 }
 
-export interface RequestFunctionCall {
+export interface RequestToolChoice {
   auto?: boolean | undefined;
   none?: boolean | undefined;
-  function?: RequestFunctionCallName | undefined;
+  tool?: RequestToolChoiceItem | undefined;
 }
 
-export interface RequestFunctionCallName {
+export interface RequestToolChoiceItem {
+  type: string;
+  function: RequestToolChoiceFunction | undefined;
+}
+
+export interface RequestToolChoiceFunction {
   name: string;
 }
 
@@ -34,45 +46,36 @@ export interface RequestMessage {
   name?: string | undefined;
   role: string;
   content?: string | undefined;
-  functionCall?: RequestMessageFunctionCall | undefined;
+  toolCalls: RequestMessageToolCall[];
+  toolCallId?: string | undefined;
 }
 
-export interface RequestMessageFunctionCall {
+export interface RequestMessageToolCall {
+  id: string;
+  type: string;
+  function: RequestMessageToolCallFunction | undefined;
+}
+
+export interface RequestMessageToolCallFunction {
   name: string;
   arguments: string;
-}
-
-export interface OpenAIRequest {
-  model: string;
-  frequencyPenalty?: number | undefined;
-  maxTokens?: number | undefined;
-  presencePenalty?: number | undefined;
-  temperature?: number | undefined;
-}
-
-export interface GeminiRequest {
-  model: string;
-  maxOutputTokens?: number | undefined;
-  temperature?: number | undefined;
 }
 
 export interface CompletionRequest {
   resource: string;
   workload: string;
-  provider: string;
   stream: boolean;
   messages: RequestMessage[];
-  functions: RequestFunctions[];
-  functionCall?: RequestFunctionCall | undefined;
-  openai?: OpenAIRequest | undefined;
-  gemini?: GeminiRequest | undefined;
+  tools: RequestTools[];
+  toolChoice?: RequestToolChoice | undefined;
+  config?: { [key: string]: any } | undefined;
 }
 
 export interface CompletionResponse {
   id: string;
   message?: string | undefined;
   role: string;
-  functionCall?: RequestMessageFunctionCall | undefined;
+  toolCalls: RequestMessageToolCall[];
   usage?: CompletionUsage | undefined;
   responseTimestamp?: number | undefined;
 }
@@ -83,28 +86,25 @@ export interface CompletionUsage {
   total: number;
 }
 
-function createBaseRequestFunctions(): RequestFunctions {
-  return { description: '', name: '', parameters: undefined };
+function createBaseRequestTools(): RequestTools {
+  return { type: '', function: undefined };
 }
 
-export const RequestFunctions = {
-  encode(message: RequestFunctions, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.description !== '') {
-      writer.uint32(10).string(message.description);
+export const RequestTools = {
+  encode(message: RequestTools, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.type !== '') {
+      writer.uint32(10).string(message.type);
     }
-    if (message.name !== '') {
-      writer.uint32(18).string(message.name);
-    }
-    if (message.parameters !== undefined) {
-      Struct.encode(Struct.wrap(message.parameters), writer.uint32(26).fork()).ldelim();
+    if (message.function !== undefined) {
+      RequestToolFunction.encode(message.function, writer.uint32(18).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): RequestFunctions {
+  decode(input: _m0.Reader | Uint8Array, length?: number): RequestTools {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRequestFunctions();
+    const message = createBaseRequestTools();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -113,14 +113,126 @@ export const RequestFunctions = {
             break;
           }
 
-          message.description = reader.string();
+          message.type = reader.string();
           continue;
         case 2:
           if (tag !== 18) {
             break;
           }
 
+          message.function = RequestToolFunction.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  // encodeTransform encodes a source of message objects.
+  // Transform<RequestTools, Uint8Array>
+  async *encodeTransform(
+    source: AsyncIterable<RequestTools | RequestTools[]> | Iterable<RequestTools | RequestTools[]>,
+  ): AsyncIterable<Uint8Array> {
+    for await (const pkt of source) {
+      if (globalThis.Array.isArray(pkt)) {
+        for (const p of pkt as any) {
+          yield* [RequestTools.encode(p).finish()];
+        }
+      } else {
+        yield* [RequestTools.encode(pkt as any).finish()];
+      }
+    }
+  },
+
+  // decodeTransform decodes a source of encoded messages.
+  // Transform<Uint8Array, RequestTools>
+  async *decodeTransform(
+    source: AsyncIterable<Uint8Array | Uint8Array[]> | Iterable<Uint8Array | Uint8Array[]>,
+  ): AsyncIterable<RequestTools> {
+    for await (const pkt of source) {
+      if (globalThis.Array.isArray(pkt)) {
+        for (const p of pkt as any) {
+          yield* [RequestTools.decode(p)];
+        }
+      } else {
+        yield* [RequestTools.decode(pkt as any)];
+      }
+    }
+  },
+
+  fromJSON(object: any): RequestTools {
+    return {
+      type: isSet(object.type) ? globalThis.String(object.type) : '',
+      function: isSet(object.function) ? RequestToolFunction.fromJSON(object.function) : undefined,
+    };
+  },
+
+  toJSON(message: RequestTools): unknown {
+    const obj: any = {};
+    if (message.type !== '') {
+      obj.type = message.type;
+    }
+    if (message.function !== undefined) {
+      obj.function = RequestToolFunction.toJSON(message.function);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<RequestTools>, I>>(base?: I): RequestTools {
+    return RequestTools.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<RequestTools>, I>>(object: I): RequestTools {
+    const message = createBaseRequestTools();
+    message.type = object.type ?? '';
+    message.function =
+      object.function !== undefined && object.function !== null
+        ? RequestToolFunction.fromPartial(object.function)
+        : undefined;
+    return message;
+  },
+};
+
+function createBaseRequestToolFunction(): RequestToolFunction {
+  return { name: '', description: '', parameters: undefined };
+}
+
+export const RequestToolFunction = {
+  encode(message: RequestToolFunction, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.name !== '') {
+      writer.uint32(10).string(message.name);
+    }
+    if (message.description !== '') {
+      writer.uint32(18).string(message.description);
+    }
+    if (message.parameters !== undefined) {
+      Struct.encode(Struct.wrap(message.parameters), writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): RequestToolFunction {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRequestToolFunction();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
           message.name = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.description = reader.string();
           continue;
         case 3:
           if (tag !== 26) {
@@ -139,52 +251,54 @@ export const RequestFunctions = {
   },
 
   // encodeTransform encodes a source of message objects.
-  // Transform<RequestFunctions, Uint8Array>
+  // Transform<RequestToolFunction, Uint8Array>
   async *encodeTransform(
-    source: AsyncIterable<RequestFunctions | RequestFunctions[]> | Iterable<RequestFunctions | RequestFunctions[]>,
+    source:
+      | AsyncIterable<RequestToolFunction | RequestToolFunction[]>
+      | Iterable<RequestToolFunction | RequestToolFunction[]>,
   ): AsyncIterable<Uint8Array> {
     for await (const pkt of source) {
       if (globalThis.Array.isArray(pkt)) {
         for (const p of pkt as any) {
-          yield* [RequestFunctions.encode(p).finish()];
+          yield* [RequestToolFunction.encode(p).finish()];
         }
       } else {
-        yield* [RequestFunctions.encode(pkt as any).finish()];
+        yield* [RequestToolFunction.encode(pkt as any).finish()];
       }
     }
   },
 
   // decodeTransform decodes a source of encoded messages.
-  // Transform<Uint8Array, RequestFunctions>
+  // Transform<Uint8Array, RequestToolFunction>
   async *decodeTransform(
     source: AsyncIterable<Uint8Array | Uint8Array[]> | Iterable<Uint8Array | Uint8Array[]>,
-  ): AsyncIterable<RequestFunctions> {
+  ): AsyncIterable<RequestToolFunction> {
     for await (const pkt of source) {
       if (globalThis.Array.isArray(pkt)) {
         for (const p of pkt as any) {
-          yield* [RequestFunctions.decode(p)];
+          yield* [RequestToolFunction.decode(p)];
         }
       } else {
-        yield* [RequestFunctions.decode(pkt as any)];
+        yield* [RequestToolFunction.decode(pkt as any)];
       }
     }
   },
 
-  fromJSON(object: any): RequestFunctions {
+  fromJSON(object: any): RequestToolFunction {
     return {
-      description: isSet(object.description) ? globalThis.String(object.description) : '',
       name: isSet(object.name) ? globalThis.String(object.name) : '',
+      description: isSet(object.description) ? globalThis.String(object.description) : '',
       parameters: isObject(object.parameters) ? object.parameters : undefined,
     };
   },
 
-  toJSON(message: RequestFunctions): unknown {
+  toJSON(message: RequestToolFunction): unknown {
     const obj: any = {};
-    if (message.description !== '') {
-      obj.description = message.description;
-    }
     if (message.name !== '') {
       obj.name = message.name;
+    }
+    if (message.description !== '') {
+      obj.description = message.description;
     }
     if (message.parameters !== undefined) {
       obj.parameters = message.parameters;
@@ -192,40 +306,40 @@ export const RequestFunctions = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<RequestFunctions>, I>>(base?: I): RequestFunctions {
-    return RequestFunctions.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<RequestToolFunction>, I>>(base?: I): RequestToolFunction {
+    return RequestToolFunction.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<RequestFunctions>, I>>(object: I): RequestFunctions {
-    const message = createBaseRequestFunctions();
-    message.description = object.description ?? '';
+  fromPartial<I extends Exact<DeepPartial<RequestToolFunction>, I>>(object: I): RequestToolFunction {
+    const message = createBaseRequestToolFunction();
     message.name = object.name ?? '';
+    message.description = object.description ?? '';
     message.parameters = object.parameters ?? undefined;
     return message;
   },
 };
 
-function createBaseRequestFunctionCall(): RequestFunctionCall {
-  return { auto: undefined, none: undefined, function: undefined };
+function createBaseRequestToolChoice(): RequestToolChoice {
+  return { auto: undefined, none: undefined, tool: undefined };
 }
 
-export const RequestFunctionCall = {
-  encode(message: RequestFunctionCall, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const RequestToolChoice = {
+  encode(message: RequestToolChoice, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.auto !== undefined) {
       writer.uint32(8).bool(message.auto);
     }
     if (message.none !== undefined) {
       writer.uint32(16).bool(message.none);
     }
-    if (message.function !== undefined) {
-      RequestFunctionCallName.encode(message.function, writer.uint32(26).fork()).ldelim();
+    if (message.tool !== undefined) {
+      RequestToolChoiceItem.encode(message.tool, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): RequestFunctionCall {
+  decode(input: _m0.Reader | Uint8Array, length?: number): RequestToolChoice {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRequestFunctionCall();
+    const message = createBaseRequestToolChoice();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -248,7 +362,7 @@ export const RequestFunctionCall = {
             break;
           }
 
-          message.function = RequestFunctionCallName.decode(reader, reader.uint32());
+          message.tool = RequestToolChoiceItem.decode(reader, reader.uint32());
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -260,48 +374,46 @@ export const RequestFunctionCall = {
   },
 
   // encodeTransform encodes a source of message objects.
-  // Transform<RequestFunctionCall, Uint8Array>
+  // Transform<RequestToolChoice, Uint8Array>
   async *encodeTransform(
-    source:
-      | AsyncIterable<RequestFunctionCall | RequestFunctionCall[]>
-      | Iterable<RequestFunctionCall | RequestFunctionCall[]>,
+    source: AsyncIterable<RequestToolChoice | RequestToolChoice[]> | Iterable<RequestToolChoice | RequestToolChoice[]>,
   ): AsyncIterable<Uint8Array> {
     for await (const pkt of source) {
       if (globalThis.Array.isArray(pkt)) {
         for (const p of pkt as any) {
-          yield* [RequestFunctionCall.encode(p).finish()];
+          yield* [RequestToolChoice.encode(p).finish()];
         }
       } else {
-        yield* [RequestFunctionCall.encode(pkt as any).finish()];
+        yield* [RequestToolChoice.encode(pkt as any).finish()];
       }
     }
   },
 
   // decodeTransform decodes a source of encoded messages.
-  // Transform<Uint8Array, RequestFunctionCall>
+  // Transform<Uint8Array, RequestToolChoice>
   async *decodeTransform(
     source: AsyncIterable<Uint8Array | Uint8Array[]> | Iterable<Uint8Array | Uint8Array[]>,
-  ): AsyncIterable<RequestFunctionCall> {
+  ): AsyncIterable<RequestToolChoice> {
     for await (const pkt of source) {
       if (globalThis.Array.isArray(pkt)) {
         for (const p of pkt as any) {
-          yield* [RequestFunctionCall.decode(p)];
+          yield* [RequestToolChoice.decode(p)];
         }
       } else {
-        yield* [RequestFunctionCall.decode(pkt as any)];
+        yield* [RequestToolChoice.decode(pkt as any)];
       }
     }
   },
 
-  fromJSON(object: any): RequestFunctionCall {
+  fromJSON(object: any): RequestToolChoice {
     return {
       auto: isSet(object.auto) ? globalThis.Boolean(object.auto) : undefined,
       none: isSet(object.none) ? globalThis.Boolean(object.none) : undefined,
-      function: isSet(object.function) ? RequestFunctionCallName.fromJSON(object.function) : undefined,
+      tool: isSet(object.tool) ? RequestToolChoiceItem.fromJSON(object.tool) : undefined,
     };
   },
 
-  toJSON(message: RequestFunctionCall): unknown {
+  toJSON(message: RequestToolChoice): unknown {
     const obj: any = {};
     if (message.auto !== undefined) {
       obj.auto = message.auto;
@@ -309,43 +421,152 @@ export const RequestFunctionCall = {
     if (message.none !== undefined) {
       obj.none = message.none;
     }
-    if (message.function !== undefined) {
-      obj.function = RequestFunctionCallName.toJSON(message.function);
+    if (message.tool !== undefined) {
+      obj.tool = RequestToolChoiceItem.toJSON(message.tool);
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<RequestFunctionCall>, I>>(base?: I): RequestFunctionCall {
-    return RequestFunctionCall.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<RequestToolChoice>, I>>(base?: I): RequestToolChoice {
+    return RequestToolChoice.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<RequestFunctionCall>, I>>(object: I): RequestFunctionCall {
-    const message = createBaseRequestFunctionCall();
+  fromPartial<I extends Exact<DeepPartial<RequestToolChoice>, I>>(object: I): RequestToolChoice {
+    const message = createBaseRequestToolChoice();
     message.auto = object.auto ?? undefined;
     message.none = object.none ?? undefined;
+    message.tool =
+      object.tool !== undefined && object.tool !== null ? RequestToolChoiceItem.fromPartial(object.tool) : undefined;
+    return message;
+  },
+};
+
+function createBaseRequestToolChoiceItem(): RequestToolChoiceItem {
+  return { type: '', function: undefined };
+}
+
+export const RequestToolChoiceItem = {
+  encode(message: RequestToolChoiceItem, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.type !== '') {
+      writer.uint32(10).string(message.type);
+    }
+    if (message.function !== undefined) {
+      RequestToolChoiceFunction.encode(message.function, writer.uint32(18).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): RequestToolChoiceItem {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRequestToolChoiceItem();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.type = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.function = RequestToolChoiceFunction.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  // encodeTransform encodes a source of message objects.
+  // Transform<RequestToolChoiceItem, Uint8Array>
+  async *encodeTransform(
+    source:
+      | AsyncIterable<RequestToolChoiceItem | RequestToolChoiceItem[]>
+      | Iterable<RequestToolChoiceItem | RequestToolChoiceItem[]>,
+  ): AsyncIterable<Uint8Array> {
+    for await (const pkt of source) {
+      if (globalThis.Array.isArray(pkt)) {
+        for (const p of pkt as any) {
+          yield* [RequestToolChoiceItem.encode(p).finish()];
+        }
+      } else {
+        yield* [RequestToolChoiceItem.encode(pkt as any).finish()];
+      }
+    }
+  },
+
+  // decodeTransform decodes a source of encoded messages.
+  // Transform<Uint8Array, RequestToolChoiceItem>
+  async *decodeTransform(
+    source: AsyncIterable<Uint8Array | Uint8Array[]> | Iterable<Uint8Array | Uint8Array[]>,
+  ): AsyncIterable<RequestToolChoiceItem> {
+    for await (const pkt of source) {
+      if (globalThis.Array.isArray(pkt)) {
+        for (const p of pkt as any) {
+          yield* [RequestToolChoiceItem.decode(p)];
+        }
+      } else {
+        yield* [RequestToolChoiceItem.decode(pkt as any)];
+      }
+    }
+  },
+
+  fromJSON(object: any): RequestToolChoiceItem {
+    return {
+      type: isSet(object.type) ? globalThis.String(object.type) : '',
+      function: isSet(object.function) ? RequestToolChoiceFunction.fromJSON(object.function) : undefined,
+    };
+  },
+
+  toJSON(message: RequestToolChoiceItem): unknown {
+    const obj: any = {};
+    if (message.type !== '') {
+      obj.type = message.type;
+    }
+    if (message.function !== undefined) {
+      obj.function = RequestToolChoiceFunction.toJSON(message.function);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<RequestToolChoiceItem>, I>>(base?: I): RequestToolChoiceItem {
+    return RequestToolChoiceItem.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<RequestToolChoiceItem>, I>>(object: I): RequestToolChoiceItem {
+    const message = createBaseRequestToolChoiceItem();
+    message.type = object.type ?? '';
     message.function =
       object.function !== undefined && object.function !== null
-        ? RequestFunctionCallName.fromPartial(object.function)
+        ? RequestToolChoiceFunction.fromPartial(object.function)
         : undefined;
     return message;
   },
 };
 
-function createBaseRequestFunctionCallName(): RequestFunctionCallName {
+function createBaseRequestToolChoiceFunction(): RequestToolChoiceFunction {
   return { name: '' };
 }
 
-export const RequestFunctionCallName = {
-  encode(message: RequestFunctionCallName, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const RequestToolChoiceFunction = {
+  encode(message: RequestToolChoiceFunction, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== '') {
       writer.uint32(10).string(message.name);
     }
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): RequestFunctionCallName {
+  decode(input: _m0.Reader | Uint8Array, length?: number): RequestToolChoiceFunction {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRequestFunctionCallName();
+    const message = createBaseRequestToolChoiceFunction();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -366,44 +587,44 @@ export const RequestFunctionCallName = {
   },
 
   // encodeTransform encodes a source of message objects.
-  // Transform<RequestFunctionCallName, Uint8Array>
+  // Transform<RequestToolChoiceFunction, Uint8Array>
   async *encodeTransform(
     source:
-      | AsyncIterable<RequestFunctionCallName | RequestFunctionCallName[]>
-      | Iterable<RequestFunctionCallName | RequestFunctionCallName[]>,
+      | AsyncIterable<RequestToolChoiceFunction | RequestToolChoiceFunction[]>
+      | Iterable<RequestToolChoiceFunction | RequestToolChoiceFunction[]>,
   ): AsyncIterable<Uint8Array> {
     for await (const pkt of source) {
       if (globalThis.Array.isArray(pkt)) {
         for (const p of pkt as any) {
-          yield* [RequestFunctionCallName.encode(p).finish()];
+          yield* [RequestToolChoiceFunction.encode(p).finish()];
         }
       } else {
-        yield* [RequestFunctionCallName.encode(pkt as any).finish()];
+        yield* [RequestToolChoiceFunction.encode(pkt as any).finish()];
       }
     }
   },
 
   // decodeTransform decodes a source of encoded messages.
-  // Transform<Uint8Array, RequestFunctionCallName>
+  // Transform<Uint8Array, RequestToolChoiceFunction>
   async *decodeTransform(
     source: AsyncIterable<Uint8Array | Uint8Array[]> | Iterable<Uint8Array | Uint8Array[]>,
-  ): AsyncIterable<RequestFunctionCallName> {
+  ): AsyncIterable<RequestToolChoiceFunction> {
     for await (const pkt of source) {
       if (globalThis.Array.isArray(pkt)) {
         for (const p of pkt as any) {
-          yield* [RequestFunctionCallName.decode(p)];
+          yield* [RequestToolChoiceFunction.decode(p)];
         }
       } else {
-        yield* [RequestFunctionCallName.decode(pkt as any)];
+        yield* [RequestToolChoiceFunction.decode(pkt as any)];
       }
     }
   },
 
-  fromJSON(object: any): RequestFunctionCallName {
+  fromJSON(object: any): RequestToolChoiceFunction {
     return { name: isSet(object.name) ? globalThis.String(object.name) : '' };
   },
 
-  toJSON(message: RequestFunctionCallName): unknown {
+  toJSON(message: RequestToolChoiceFunction): unknown {
     const obj: any = {};
     if (message.name !== '') {
       obj.name = message.name;
@@ -411,18 +632,18 @@ export const RequestFunctionCallName = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<RequestFunctionCallName>, I>>(base?: I): RequestFunctionCallName {
-    return RequestFunctionCallName.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<RequestToolChoiceFunction>, I>>(base?: I): RequestToolChoiceFunction {
+    return RequestToolChoiceFunction.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<RequestFunctionCallName>, I>>(object: I): RequestFunctionCallName {
-    const message = createBaseRequestFunctionCallName();
+  fromPartial<I extends Exact<DeepPartial<RequestToolChoiceFunction>, I>>(object: I): RequestToolChoiceFunction {
+    const message = createBaseRequestToolChoiceFunction();
     message.name = object.name ?? '';
     return message;
   },
 };
 
 function createBaseRequestMessage(): RequestMessage {
-  return { name: undefined, role: '', content: undefined, functionCall: undefined };
+  return { name: undefined, role: '', content: undefined, toolCalls: [], toolCallId: undefined };
 }
 
 export const RequestMessage = {
@@ -436,8 +657,11 @@ export const RequestMessage = {
     if (message.content !== undefined) {
       writer.uint32(26).string(message.content);
     }
-    if (message.functionCall !== undefined) {
-      RequestMessageFunctionCall.encode(message.functionCall, writer.uint32(34).fork()).ldelim();
+    for (const v of message.toolCalls) {
+      RequestMessageToolCall.encode(v!, writer.uint32(34).fork()).ldelim();
+    }
+    if (message.toolCallId !== undefined) {
+      writer.uint32(42).string(message.toolCallId);
     }
     return writer;
   },
@@ -475,7 +699,14 @@ export const RequestMessage = {
             break;
           }
 
-          message.functionCall = RequestMessageFunctionCall.decode(reader, reader.uint32());
+          message.toolCalls.push(RequestMessageToolCall.decode(reader, reader.uint32()));
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.toolCallId = reader.string();
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -523,7 +754,10 @@ export const RequestMessage = {
       name: isSet(object.name) ? globalThis.String(object.name) : undefined,
       role: isSet(object.role) ? globalThis.String(object.role) : '',
       content: isSet(object.content) ? globalThis.String(object.content) : undefined,
-      functionCall: isSet(object.functionCall) ? RequestMessageFunctionCall.fromJSON(object.functionCall) : undefined,
+      toolCalls: globalThis.Array.isArray(object?.toolCalls)
+        ? object.toolCalls.map((e: any) => RequestMessageToolCall.fromJSON(e))
+        : [],
+      toolCallId: isSet(object.toolCallId) ? globalThis.String(object.toolCallId) : undefined,
     };
   },
 
@@ -538,8 +772,11 @@ export const RequestMessage = {
     if (message.content !== undefined) {
       obj.content = message.content;
     }
-    if (message.functionCall !== undefined) {
-      obj.functionCall = RequestMessageFunctionCall.toJSON(message.functionCall);
+    if (message.toolCalls?.length) {
+      obj.toolCalls = message.toolCalls.map((e) => RequestMessageToolCall.toJSON(e));
+    }
+    if (message.toolCallId !== undefined) {
+      obj.toolCallId = message.toolCallId;
     }
     return obj;
   },
@@ -552,20 +789,144 @@ export const RequestMessage = {
     message.name = object.name ?? undefined;
     message.role = object.role ?? '';
     message.content = object.content ?? undefined;
-    message.functionCall =
-      object.functionCall !== undefined && object.functionCall !== null
-        ? RequestMessageFunctionCall.fromPartial(object.functionCall)
+    message.toolCalls = object.toolCalls?.map((e) => RequestMessageToolCall.fromPartial(e)) || [];
+    message.toolCallId = object.toolCallId ?? undefined;
+    return message;
+  },
+};
+
+function createBaseRequestMessageToolCall(): RequestMessageToolCall {
+  return { id: '', type: '', function: undefined };
+}
+
+export const RequestMessageToolCall = {
+  encode(message: RequestMessageToolCall, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== '') {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.type !== '') {
+      writer.uint32(18).string(message.type);
+    }
+    if (message.function !== undefined) {
+      RequestMessageToolCallFunction.encode(message.function, writer.uint32(26).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): RequestMessageToolCall {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseRequestMessageToolCall();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.type = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.function = RequestMessageToolCallFunction.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  // encodeTransform encodes a source of message objects.
+  // Transform<RequestMessageToolCall, Uint8Array>
+  async *encodeTransform(
+    source:
+      | AsyncIterable<RequestMessageToolCall | RequestMessageToolCall[]>
+      | Iterable<RequestMessageToolCall | RequestMessageToolCall[]>,
+  ): AsyncIterable<Uint8Array> {
+    for await (const pkt of source) {
+      if (globalThis.Array.isArray(pkt)) {
+        for (const p of pkt as any) {
+          yield* [RequestMessageToolCall.encode(p).finish()];
+        }
+      } else {
+        yield* [RequestMessageToolCall.encode(pkt as any).finish()];
+      }
+    }
+  },
+
+  // decodeTransform decodes a source of encoded messages.
+  // Transform<Uint8Array, RequestMessageToolCall>
+  async *decodeTransform(
+    source: AsyncIterable<Uint8Array | Uint8Array[]> | Iterable<Uint8Array | Uint8Array[]>,
+  ): AsyncIterable<RequestMessageToolCall> {
+    for await (const pkt of source) {
+      if (globalThis.Array.isArray(pkt)) {
+        for (const p of pkt as any) {
+          yield* [RequestMessageToolCall.decode(p)];
+        }
+      } else {
+        yield* [RequestMessageToolCall.decode(pkt as any)];
+      }
+    }
+  },
+
+  fromJSON(object: any): RequestMessageToolCall {
+    return {
+      id: isSet(object.id) ? globalThis.String(object.id) : '',
+      type: isSet(object.type) ? globalThis.String(object.type) : '',
+      function: isSet(object.function) ? RequestMessageToolCallFunction.fromJSON(object.function) : undefined,
+    };
+  },
+
+  toJSON(message: RequestMessageToolCall): unknown {
+    const obj: any = {};
+    if (message.id !== '') {
+      obj.id = message.id;
+    }
+    if (message.type !== '') {
+      obj.type = message.type;
+    }
+    if (message.function !== undefined) {
+      obj.function = RequestMessageToolCallFunction.toJSON(message.function);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<RequestMessageToolCall>, I>>(base?: I): RequestMessageToolCall {
+    return RequestMessageToolCall.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<RequestMessageToolCall>, I>>(object: I): RequestMessageToolCall {
+    const message = createBaseRequestMessageToolCall();
+    message.id = object.id ?? '';
+    message.type = object.type ?? '';
+    message.function =
+      object.function !== undefined && object.function !== null
+        ? RequestMessageToolCallFunction.fromPartial(object.function)
         : undefined;
     return message;
   },
 };
 
-function createBaseRequestMessageFunctionCall(): RequestMessageFunctionCall {
+function createBaseRequestMessageToolCallFunction(): RequestMessageToolCallFunction {
   return { name: '', arguments: '' };
 }
 
-export const RequestMessageFunctionCall = {
-  encode(message: RequestMessageFunctionCall, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+export const RequestMessageToolCallFunction = {
+  encode(message: RequestMessageToolCallFunction, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
     if (message.name !== '') {
       writer.uint32(10).string(message.name);
     }
@@ -575,10 +936,10 @@ export const RequestMessageFunctionCall = {
     return writer;
   },
 
-  decode(input: _m0.Reader | Uint8Array, length?: number): RequestMessageFunctionCall {
+  decode(input: _m0.Reader | Uint8Array, length?: number): RequestMessageToolCallFunction {
     const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRequestMessageFunctionCall();
+    const message = createBaseRequestMessageToolCallFunction();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -606,47 +967,47 @@ export const RequestMessageFunctionCall = {
   },
 
   // encodeTransform encodes a source of message objects.
-  // Transform<RequestMessageFunctionCall, Uint8Array>
+  // Transform<RequestMessageToolCallFunction, Uint8Array>
   async *encodeTransform(
     source:
-      | AsyncIterable<RequestMessageFunctionCall | RequestMessageFunctionCall[]>
-      | Iterable<RequestMessageFunctionCall | RequestMessageFunctionCall[]>,
+      | AsyncIterable<RequestMessageToolCallFunction | RequestMessageToolCallFunction[]>
+      | Iterable<RequestMessageToolCallFunction | RequestMessageToolCallFunction[]>,
   ): AsyncIterable<Uint8Array> {
     for await (const pkt of source) {
       if (globalThis.Array.isArray(pkt)) {
         for (const p of pkt as any) {
-          yield* [RequestMessageFunctionCall.encode(p).finish()];
+          yield* [RequestMessageToolCallFunction.encode(p).finish()];
         }
       } else {
-        yield* [RequestMessageFunctionCall.encode(pkt as any).finish()];
+        yield* [RequestMessageToolCallFunction.encode(pkt as any).finish()];
       }
     }
   },
 
   // decodeTransform decodes a source of encoded messages.
-  // Transform<Uint8Array, RequestMessageFunctionCall>
+  // Transform<Uint8Array, RequestMessageToolCallFunction>
   async *decodeTransform(
     source: AsyncIterable<Uint8Array | Uint8Array[]> | Iterable<Uint8Array | Uint8Array[]>,
-  ): AsyncIterable<RequestMessageFunctionCall> {
+  ): AsyncIterable<RequestMessageToolCallFunction> {
     for await (const pkt of source) {
       if (globalThis.Array.isArray(pkt)) {
         for (const p of pkt as any) {
-          yield* [RequestMessageFunctionCall.decode(p)];
+          yield* [RequestMessageToolCallFunction.decode(p)];
         }
       } else {
-        yield* [RequestMessageFunctionCall.decode(pkt as any)];
+        yield* [RequestMessageToolCallFunction.decode(pkt as any)];
       }
     }
   },
 
-  fromJSON(object: any): RequestMessageFunctionCall {
+  fromJSON(object: any): RequestMessageToolCallFunction {
     return {
       name: isSet(object.name) ? globalThis.String(object.name) : '',
       arguments: isSet(object.arguments) ? globalThis.String(object.arguments) : '',
     };
   },
 
-  toJSON(message: RequestMessageFunctionCall): unknown {
+  toJSON(message: RequestMessageToolCallFunction): unknown {
     const obj: any = {};
     if (message.name !== '') {
       obj.name = message.name;
@@ -657,291 +1018,15 @@ export const RequestMessageFunctionCall = {
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<RequestMessageFunctionCall>, I>>(base?: I): RequestMessageFunctionCall {
-    return RequestMessageFunctionCall.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<RequestMessageToolCallFunction>, I>>(base?: I): RequestMessageToolCallFunction {
+    return RequestMessageToolCallFunction.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<RequestMessageFunctionCall>, I>>(object: I): RequestMessageFunctionCall {
-    const message = createBaseRequestMessageFunctionCall();
+  fromPartial<I extends Exact<DeepPartial<RequestMessageToolCallFunction>, I>>(
+    object: I,
+  ): RequestMessageToolCallFunction {
+    const message = createBaseRequestMessageToolCallFunction();
     message.name = object.name ?? '';
     message.arguments = object.arguments ?? '';
-    return message;
-  },
-};
-
-function createBaseOpenAIRequest(): OpenAIRequest {
-  return {
-    model: '',
-    frequencyPenalty: undefined,
-    maxTokens: undefined,
-    presencePenalty: undefined,
-    temperature: undefined,
-  };
-}
-
-export const OpenAIRequest = {
-  encode(message: OpenAIRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.model !== '') {
-      writer.uint32(10).string(message.model);
-    }
-    if (message.frequencyPenalty !== undefined) {
-      writer.uint32(21).float(message.frequencyPenalty);
-    }
-    if (message.maxTokens !== undefined) {
-      writer.uint32(24).int32(message.maxTokens);
-    }
-    if (message.presencePenalty !== undefined) {
-      writer.uint32(37).float(message.presencePenalty);
-    }
-    if (message.temperature !== undefined) {
-      writer.uint32(53).float(message.temperature);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): OpenAIRequest {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseOpenAIRequest();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.model = reader.string();
-          continue;
-        case 2:
-          if (tag !== 21) {
-            break;
-          }
-
-          message.frequencyPenalty = reader.float();
-          continue;
-        case 3:
-          if (tag !== 24) {
-            break;
-          }
-
-          message.maxTokens = reader.int32();
-          continue;
-        case 4:
-          if (tag !== 37) {
-            break;
-          }
-
-          message.presencePenalty = reader.float();
-          continue;
-        case 6:
-          if (tag !== 53) {
-            break;
-          }
-
-          message.temperature = reader.float();
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  // encodeTransform encodes a source of message objects.
-  // Transform<OpenAIRequest, Uint8Array>
-  async *encodeTransform(
-    source: AsyncIterable<OpenAIRequest | OpenAIRequest[]> | Iterable<OpenAIRequest | OpenAIRequest[]>,
-  ): AsyncIterable<Uint8Array> {
-    for await (const pkt of source) {
-      if (globalThis.Array.isArray(pkt)) {
-        for (const p of pkt as any) {
-          yield* [OpenAIRequest.encode(p).finish()];
-        }
-      } else {
-        yield* [OpenAIRequest.encode(pkt as any).finish()];
-      }
-    }
-  },
-
-  // decodeTransform decodes a source of encoded messages.
-  // Transform<Uint8Array, OpenAIRequest>
-  async *decodeTransform(
-    source: AsyncIterable<Uint8Array | Uint8Array[]> | Iterable<Uint8Array | Uint8Array[]>,
-  ): AsyncIterable<OpenAIRequest> {
-    for await (const pkt of source) {
-      if (globalThis.Array.isArray(pkt)) {
-        for (const p of pkt as any) {
-          yield* [OpenAIRequest.decode(p)];
-        }
-      } else {
-        yield* [OpenAIRequest.decode(pkt as any)];
-      }
-    }
-  },
-
-  fromJSON(object: any): OpenAIRequest {
-    return {
-      model: isSet(object.model) ? globalThis.String(object.model) : '',
-      frequencyPenalty: isSet(object.frequencyPenalty) ? globalThis.Number(object.frequencyPenalty) : undefined,
-      maxTokens: isSet(object.maxTokens) ? globalThis.Number(object.maxTokens) : undefined,
-      presencePenalty: isSet(object.presencePenalty) ? globalThis.Number(object.presencePenalty) : undefined,
-      temperature: isSet(object.temperature) ? globalThis.Number(object.temperature) : undefined,
-    };
-  },
-
-  toJSON(message: OpenAIRequest): unknown {
-    const obj: any = {};
-    if (message.model !== '') {
-      obj.model = message.model;
-    }
-    if (message.frequencyPenalty !== undefined) {
-      obj.frequencyPenalty = message.frequencyPenalty;
-    }
-    if (message.maxTokens !== undefined) {
-      obj.maxTokens = Math.round(message.maxTokens);
-    }
-    if (message.presencePenalty !== undefined) {
-      obj.presencePenalty = message.presencePenalty;
-    }
-    if (message.temperature !== undefined) {
-      obj.temperature = message.temperature;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<OpenAIRequest>, I>>(base?: I): OpenAIRequest {
-    return OpenAIRequest.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<OpenAIRequest>, I>>(object: I): OpenAIRequest {
-    const message = createBaseOpenAIRequest();
-    message.model = object.model ?? '';
-    message.frequencyPenalty = object.frequencyPenalty ?? undefined;
-    message.maxTokens = object.maxTokens ?? undefined;
-    message.presencePenalty = object.presencePenalty ?? undefined;
-    message.temperature = object.temperature ?? undefined;
-    return message;
-  },
-};
-
-function createBaseGeminiRequest(): GeminiRequest {
-  return { model: '', maxOutputTokens: undefined, temperature: undefined };
-}
-
-export const GeminiRequest = {
-  encode(message: GeminiRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.model !== '') {
-      writer.uint32(10).string(message.model);
-    }
-    if (message.maxOutputTokens !== undefined) {
-      writer.uint32(16).int32(message.maxOutputTokens);
-    }
-    if (message.temperature !== undefined) {
-      writer.uint32(29).float(message.temperature);
-    }
-    return writer;
-  },
-
-  decode(input: _m0.Reader | Uint8Array, length?: number): GeminiRequest {
-    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGeminiRequest();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1:
-          if (tag !== 10) {
-            break;
-          }
-
-          message.model = reader.string();
-          continue;
-        case 2:
-          if (tag !== 16) {
-            break;
-          }
-
-          message.maxOutputTokens = reader.int32();
-          continue;
-        case 3:
-          if (tag !== 29) {
-            break;
-          }
-
-          message.temperature = reader.float();
-          continue;
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skipType(tag & 7);
-    }
-    return message;
-  },
-
-  // encodeTransform encodes a source of message objects.
-  // Transform<GeminiRequest, Uint8Array>
-  async *encodeTransform(
-    source: AsyncIterable<GeminiRequest | GeminiRequest[]> | Iterable<GeminiRequest | GeminiRequest[]>,
-  ): AsyncIterable<Uint8Array> {
-    for await (const pkt of source) {
-      if (globalThis.Array.isArray(pkt)) {
-        for (const p of pkt as any) {
-          yield* [GeminiRequest.encode(p).finish()];
-        }
-      } else {
-        yield* [GeminiRequest.encode(pkt as any).finish()];
-      }
-    }
-  },
-
-  // decodeTransform decodes a source of encoded messages.
-  // Transform<Uint8Array, GeminiRequest>
-  async *decodeTransform(
-    source: AsyncIterable<Uint8Array | Uint8Array[]> | Iterable<Uint8Array | Uint8Array[]>,
-  ): AsyncIterable<GeminiRequest> {
-    for await (const pkt of source) {
-      if (globalThis.Array.isArray(pkt)) {
-        for (const p of pkt as any) {
-          yield* [GeminiRequest.decode(p)];
-        }
-      } else {
-        yield* [GeminiRequest.decode(pkt as any)];
-      }
-    }
-  },
-
-  fromJSON(object: any): GeminiRequest {
-    return {
-      model: isSet(object.model) ? globalThis.String(object.model) : '',
-      maxOutputTokens: isSet(object.maxOutputTokens) ? globalThis.Number(object.maxOutputTokens) : undefined,
-      temperature: isSet(object.temperature) ? globalThis.Number(object.temperature) : undefined,
-    };
-  },
-
-  toJSON(message: GeminiRequest): unknown {
-    const obj: any = {};
-    if (message.model !== '') {
-      obj.model = message.model;
-    }
-    if (message.maxOutputTokens !== undefined) {
-      obj.maxOutputTokens = Math.round(message.maxOutputTokens);
-    }
-    if (message.temperature !== undefined) {
-      obj.temperature = message.temperature;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<GeminiRequest>, I>>(base?: I): GeminiRequest {
-    return GeminiRequest.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<GeminiRequest>, I>>(object: I): GeminiRequest {
-    const message = createBaseGeminiRequest();
-    message.model = object.model ?? '';
-    message.maxOutputTokens = object.maxOutputTokens ?? undefined;
-    message.temperature = object.temperature ?? undefined;
     return message;
   },
 };
@@ -950,13 +1035,11 @@ function createBaseCompletionRequest(): CompletionRequest {
   return {
     resource: '',
     workload: '',
-    provider: '',
     stream: false,
     messages: [],
-    functions: [],
-    functionCall: undefined,
-    openai: undefined,
-    gemini: undefined,
+    tools: [],
+    toolChoice: undefined,
+    config: undefined,
   };
 }
 
@@ -968,26 +1051,20 @@ export const CompletionRequest = {
     if (message.workload !== '') {
       writer.uint32(18).string(message.workload);
     }
-    if (message.provider !== '') {
-      writer.uint32(26).string(message.provider);
-    }
-    if (message.stream === true) {
-      writer.uint32(32).bool(message.stream);
+    if (message.stream !== false) {
+      writer.uint32(24).bool(message.stream);
     }
     for (const v of message.messages) {
-      RequestMessage.encode(v!, writer.uint32(42).fork()).ldelim();
+      RequestMessage.encode(v!, writer.uint32(34).fork()).ldelim();
     }
-    for (const v of message.functions) {
-      RequestFunctions.encode(v!, writer.uint32(50).fork()).ldelim();
+    for (const v of message.tools) {
+      RequestTools.encode(v!, writer.uint32(42).fork()).ldelim();
     }
-    if (message.functionCall !== undefined) {
-      RequestFunctionCall.encode(message.functionCall, writer.uint32(58).fork()).ldelim();
+    if (message.toolChoice !== undefined) {
+      RequestToolChoice.encode(message.toolChoice, writer.uint32(50).fork()).ldelim();
     }
-    if (message.openai !== undefined) {
-      OpenAIRequest.encode(message.openai, writer.uint32(66).fork()).ldelim();
-    }
-    if (message.gemini !== undefined) {
-      GeminiRequest.encode(message.gemini, writer.uint32(74).fork()).ldelim();
+    if (message.config !== undefined) {
+      Struct.encode(Struct.wrap(message.config), writer.uint32(58).fork()).ldelim();
     }
     return writer;
   },
@@ -1014,53 +1091,39 @@ export const CompletionRequest = {
           message.workload = reader.string();
           continue;
         case 3:
-          if (tag !== 26) {
-            break;
-          }
-
-          message.provider = reader.string();
-          continue;
-        case 4:
-          if (tag !== 32) {
+          if (tag !== 24) {
             break;
           }
 
           message.stream = reader.bool();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.messages.push(RequestMessage.decode(reader, reader.uint32()));
           continue;
         case 5:
           if (tag !== 42) {
             break;
           }
 
-          message.messages.push(RequestMessage.decode(reader, reader.uint32()));
+          message.tools.push(RequestTools.decode(reader, reader.uint32()));
           continue;
         case 6:
           if (tag !== 50) {
             break;
           }
 
-          message.functions.push(RequestFunctions.decode(reader, reader.uint32()));
+          message.toolChoice = RequestToolChoice.decode(reader, reader.uint32());
           continue;
         case 7:
           if (tag !== 58) {
             break;
           }
 
-          message.functionCall = RequestFunctionCall.decode(reader, reader.uint32());
-          continue;
-        case 8:
-          if (tag !== 66) {
-            break;
-          }
-
-          message.openai = OpenAIRequest.decode(reader, reader.uint32());
-          continue;
-        case 9:
-          if (tag !== 74) {
-            break;
-          }
-
-          message.gemini = GeminiRequest.decode(reader, reader.uint32());
+          message.config = Struct.unwrap(Struct.decode(reader, reader.uint32()));
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -1107,17 +1170,13 @@ export const CompletionRequest = {
     return {
       resource: isSet(object.resource) ? globalThis.String(object.resource) : '',
       workload: isSet(object.workload) ? globalThis.String(object.workload) : '',
-      provider: isSet(object.provider) ? globalThis.String(object.provider) : '',
       stream: isSet(object.stream) ? globalThis.Boolean(object.stream) : false,
       messages: globalThis.Array.isArray(object?.messages)
         ? object.messages.map((e: any) => RequestMessage.fromJSON(e))
         : [],
-      functions: globalThis.Array.isArray(object?.functions)
-        ? object.functions.map((e: any) => RequestFunctions.fromJSON(e))
-        : [],
-      functionCall: isSet(object.functionCall) ? RequestFunctionCall.fromJSON(object.functionCall) : undefined,
-      openai: isSet(object.openai) ? OpenAIRequest.fromJSON(object.openai) : undefined,
-      gemini: isSet(object.gemini) ? GeminiRequest.fromJSON(object.gemini) : undefined,
+      tools: globalThis.Array.isArray(object?.tools) ? object.tools.map((e: any) => RequestTools.fromJSON(e)) : [],
+      toolChoice: isSet(object.toolChoice) ? RequestToolChoice.fromJSON(object.toolChoice) : undefined,
+      config: isObject(object.config) ? object.config : undefined,
     };
   },
 
@@ -1129,26 +1188,20 @@ export const CompletionRequest = {
     if (message.workload !== '') {
       obj.workload = message.workload;
     }
-    if (message.provider !== '') {
-      obj.provider = message.provider;
-    }
-    if (message.stream === true) {
+    if (message.stream !== false) {
       obj.stream = message.stream;
     }
     if (message.messages?.length) {
       obj.messages = message.messages.map((e) => RequestMessage.toJSON(e));
     }
-    if (message.functions?.length) {
-      obj.functions = message.functions.map((e) => RequestFunctions.toJSON(e));
+    if (message.tools?.length) {
+      obj.tools = message.tools.map((e) => RequestTools.toJSON(e));
     }
-    if (message.functionCall !== undefined) {
-      obj.functionCall = RequestFunctionCall.toJSON(message.functionCall);
+    if (message.toolChoice !== undefined) {
+      obj.toolChoice = RequestToolChoice.toJSON(message.toolChoice);
     }
-    if (message.openai !== undefined) {
-      obj.openai = OpenAIRequest.toJSON(message.openai);
-    }
-    if (message.gemini !== undefined) {
-      obj.gemini = GeminiRequest.toJSON(message.gemini);
+    if (message.config !== undefined) {
+      obj.config = message.config;
     }
     return obj;
   },
@@ -1160,31 +1213,20 @@ export const CompletionRequest = {
     const message = createBaseCompletionRequest();
     message.resource = object.resource ?? '';
     message.workload = object.workload ?? '';
-    message.provider = object.provider ?? '';
     message.stream = object.stream ?? false;
     message.messages = object.messages?.map((e) => RequestMessage.fromPartial(e)) || [];
-    message.functions = object.functions?.map((e) => RequestFunctions.fromPartial(e)) || [];
-    message.functionCall =
-      object.functionCall !== undefined && object.functionCall !== null
-        ? RequestFunctionCall.fromPartial(object.functionCall)
+    message.tools = object.tools?.map((e) => RequestTools.fromPartial(e)) || [];
+    message.toolChoice =
+      object.toolChoice !== undefined && object.toolChoice !== null
+        ? RequestToolChoice.fromPartial(object.toolChoice)
         : undefined;
-    message.openai =
-      object.openai !== undefined && object.openai !== null ? OpenAIRequest.fromPartial(object.openai) : undefined;
-    message.gemini =
-      object.gemini !== undefined && object.gemini !== null ? GeminiRequest.fromPartial(object.gemini) : undefined;
+    message.config = object.config ?? undefined;
     return message;
   },
 };
 
 function createBaseCompletionResponse(): CompletionResponse {
-  return {
-    id: '',
-    message: undefined,
-    role: '',
-    functionCall: undefined,
-    usage: undefined,
-    responseTimestamp: undefined,
-  };
+  return { id: '', message: undefined, role: '', toolCalls: [], usage: undefined, responseTimestamp: undefined };
 }
 
 export const CompletionResponse = {
@@ -1198,8 +1240,8 @@ export const CompletionResponse = {
     if (message.role !== '') {
       writer.uint32(26).string(message.role);
     }
-    if (message.functionCall !== undefined) {
-      RequestMessageFunctionCall.encode(message.functionCall, writer.uint32(34).fork()).ldelim();
+    for (const v of message.toolCalls) {
+      RequestMessageToolCall.encode(v!, writer.uint32(34).fork()).ldelim();
     }
     if (message.usage !== undefined) {
       CompletionUsage.encode(message.usage, writer.uint32(42).fork()).ldelim();
@@ -1243,7 +1285,7 @@ export const CompletionResponse = {
             break;
           }
 
-          message.functionCall = RequestMessageFunctionCall.decode(reader, reader.uint32());
+          message.toolCalls.push(RequestMessageToolCall.decode(reader, reader.uint32()));
           continue;
         case 5:
           if (tag !== 42) {
@@ -1307,7 +1349,9 @@ export const CompletionResponse = {
       id: isSet(object.id) ? globalThis.String(object.id) : '',
       message: isSet(object.message) ? globalThis.String(object.message) : undefined,
       role: isSet(object.role) ? globalThis.String(object.role) : '',
-      functionCall: isSet(object.functionCall) ? RequestMessageFunctionCall.fromJSON(object.functionCall) : undefined,
+      toolCalls: globalThis.Array.isArray(object?.toolCalls)
+        ? object.toolCalls.map((e: any) => RequestMessageToolCall.fromJSON(e))
+        : [],
       usage: isSet(object.usage) ? CompletionUsage.fromJSON(object.usage) : undefined,
       responseTimestamp: isSet(object.responseTimestamp) ? globalThis.Number(object.responseTimestamp) : undefined,
     };
@@ -1324,8 +1368,8 @@ export const CompletionResponse = {
     if (message.role !== '') {
       obj.role = message.role;
     }
-    if (message.functionCall !== undefined) {
-      obj.functionCall = RequestMessageFunctionCall.toJSON(message.functionCall);
+    if (message.toolCalls?.length) {
+      obj.toolCalls = message.toolCalls.map((e) => RequestMessageToolCall.toJSON(e));
     }
     if (message.usage !== undefined) {
       obj.usage = CompletionUsage.toJSON(message.usage);
@@ -1344,10 +1388,7 @@ export const CompletionResponse = {
     message.id = object.id ?? '';
     message.message = object.message ?? undefined;
     message.role = object.role ?? '';
-    message.functionCall =
-      object.functionCall !== undefined && object.functionCall !== null
-        ? RequestMessageFunctionCall.fromPartial(object.functionCall)
-        : undefined;
+    message.toolCalls = object.toolCalls?.map((e) => RequestMessageToolCall.fromPartial(e)) || [];
     message.usage =
       object.usage !== undefined && object.usage !== null ? CompletionUsage.fromPartial(object.usage) : undefined;
     message.responseTimestamp = object.responseTimestamp ?? undefined;
@@ -1508,6 +1549,7 @@ export const CompletionServiceClient = makeGenericClientConstructor(
 ) as unknown as {
   new (address: string, credentials: ChannelCredentials, options?: Partial<ClientOptions>): CompletionServiceClient;
   service: typeof CompletionServiceService;
+  serviceName: string;
 };
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
@@ -1530,6 +1572,9 @@ export type Exact<P, I extends P> = P extends Builtin
 function longToNumber(long: Long): number {
   if (long.gt(globalThis.Number.MAX_SAFE_INTEGER)) {
     throw new globalThis.Error('Value is larger than Number.MAX_SAFE_INTEGER');
+  }
+  if (long.lt(globalThis.Number.MIN_SAFE_INTEGER)) {
+    throw new globalThis.Error('Value is smaller than Number.MIN_SAFE_INTEGER');
   }
   return long.toNumber();
 }
