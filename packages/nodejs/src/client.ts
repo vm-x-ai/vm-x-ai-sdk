@@ -1,7 +1,8 @@
 import { Metadata, credentials } from '@grpc/grpc-js';
 import type { VMXClientAuthProvider } from './auth';
-import type { CompletionRequest, CompletionResponse } from './proto-types/completion/completion';
+import type { CompletionResponse, RequestToolChoice, RequestToolChoiceItem } from './proto-types/completion/completion';
 import { CompletionServiceClient } from './proto-types/completion/completion';
+import type { CompletionRequest } from './types';
 
 export type VMXClientOptions = {
   workspaceId: string;
@@ -32,7 +33,13 @@ export class VMXClient {
     const call = this.completionClient.create(
       {
         ...request,
+        tools: request.tools ?? [],
+        toolChoice: this.parseToolChoice(request.toolChoice),
         stream,
+        messages: request.messages.map((message) => ({
+          ...message,
+          toolCalls: message.toolCalls ?? [],
+        })),
       },
       grpcMetadata,
     );
@@ -46,5 +53,21 @@ export class VMXClient {
     }
 
     throw new Error('unreachable');
+  }
+
+  private parseToolChoice(toolChoice?: 'auto' | 'none' | RequestToolChoiceItem): RequestToolChoice {
+    if (toolChoice === 'auto') {
+      return {
+        auto: true,
+      };
+    } else if (toolChoice === 'none') {
+      return {
+        none: true,
+      };
+    } else {
+      return {
+        tool: toolChoice,
+      };
+    }
   }
 }

@@ -1,54 +1,48 @@
 import { VMXClient, VMXClientOAuth } from '@vm-x-ai/sdk';
 
-const client = new VMXClient({
-  domain: 'env-abc123.clnt.vm-x.ai',
-  environmentId: 'env-abv123',
-  workspaceId: 'ws-abc123',
-  auth: new VMXClientOAuth({
-    clientId: 'clientId',
-    clientSecret: 'clientSecret',
-  }),
-});
+const main = async () => {
+  const client = new VMXClient({
+    domain: 'env-abc123.clnt.dev.vm-x.ai',
+    environmentId: 'env-abc123',
+    workspaceId: 'ws-abc123',
+    auth: new VMXClientOAuth({
+      clientId: 'abc123',
+      clientSecret: 'abc123',
+    }),
+  });
 
-// Streaming
-const streamingResponse = await client.completion({
-  messages: [
-    {
-      role: 'assistant',
-      content: 'Hey there!',
-    },
-  ],
-  functions: [],
-  provider: 'openai',
-  resource: 'my-resource',
-  workload: 'my-workload',
-  openai: {
-    model: 'gpt-3.5-turbo',
-  },
-});
-
-for await (const message of streamingResponse) {
-  console.log(message.message);
-}
-
-// Non-streaming
-const nonStreamingResponse = await client.completion(
-  {
+  // Streaming
+  const streamingResponse = await client.completion({
     messages: [
       {
-        role: 'assistant',
+        role: 'user',
         content: 'Hey there!',
       },
     ],
-    functions: [],
-    provider: 'openai',
-    resource: 'my-resource',
-    workload: 'my-workload',
-    openai: {
-      model: 'gpt-3.5-turbo',
-    },
-  },
-  false,
-);
+    resource: 'resource1-openai-gpt-3-5-turbo',
+    workload: 'high1',
+  });
 
-console.log(nonStreamingResponse.message);
+  for await (const message of streamingResponse) {
+    console.log(message.message);
+  }
+
+  // Non-streaming
+  const nonStreamingResponse = await client.completion(
+    {
+      messages: [
+        {
+          role: 'user',
+          content: 'Hey there!',
+        },
+      ],
+      resource: 'resource1-openai-gpt-3-5-turbo',
+      workload: 'high1',
+    },
+    false,
+  );
+
+  console.log(nonStreamingResponse.message);
+};
+
+main().then(() => console.log('done'));

@@ -4,16 +4,15 @@ from vmxai.auth.oauth import VMXClientOAuth
 from vmxai.auth.provider import VMXClientAuthProvider
 from vmxai.client import VMXClient
 from vmxai.protos.completion.completion_pb2 import (
-    CompletionRequest,
     CompletionResponse,
-    GeminiRequest,
-    OpenAIRequest,
-    RequestFunctionCall,
-    RequestFunctionCallName,
-    RequestFunctions,
-    RequestMessage,
-    RequestMessageFunctionCall,
+    CompletionUsage,
+    RequestMessageToolCall,
+    RequestMessageToolCallFunction,
+    RequestToolChoiceFunction,
+    RequestToolChoiceItem,
+    RequestTools,
 )
+from vmxai.types import CompletionRequest, RequestMessage
 
 __all__ = [
     VMXClient,
@@ -21,11 +20,11 @@ __all__ = [
     VMXClientOAuth,
     CompletionRequest,
     CompletionResponse,
+    CompletionUsage,
     RequestMessage,
-    RequestMessageFunctionCall,
-    RequestFunctions,
-    RequestFunctionCall,
-    RequestFunctionCallName,
-    OpenAIRequest,
-    GeminiRequest,
+    RequestToolChoiceItem,
+    RequestToolChoiceFunction,
+    RequestTools,
+    RequestMessageToolCall,
+    RequestMessageToolCallFunction
 ]
