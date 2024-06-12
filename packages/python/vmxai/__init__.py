@@ -1,5 +1,6 @@
 """VM-X Python SDK"""
 
+from vmxai.auth.api_key import VMXClientAPIKey
 from vmxai.auth.oauth import VMXClientOAuth
 from vmxai.auth.provider import VMXClientAuthProvider
 from vmxai.client import VMXClient
@@ -18,6 +19,7 @@ __all__ = [
     VMXClient,
     VMXClientAuthProvider,
     VMXClientOAuth,
+    VMXClientAPIKey,
     CompletionRequest,
     CompletionResponse,
     CompletionUsage,

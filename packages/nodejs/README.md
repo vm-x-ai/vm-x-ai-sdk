@@ -24,30 +24,29 @@ yarn add @vm-x-ai/sdk
 import { VMXClient, VMXClientOAuth } from '@vm-x-ai/sdk';
 
 const client = new VMXClient({
-  domain: 'env-abc123.clnt.vm-x.ai',
-  environmentId: 'env-abv123',
+  domain: 'env-abc123.clnt.dev.vm-x.ai',
+  environmentId: 'env-abc123',
   workspaceId: 'ws-abc123',
+  // Authentication options
+  // OAuth
   auth: new VMXClientOAuth({
-    clientId: 'clientId',
-    clientSecret: 'clientSecret',
+    clientId: 'abc123',
+    clientSecret: 'abc123',
   }),
+  // or API Key
+  apiKey: 'abc123',
 });
 
 // Streaming
 const streamingResponse = await client.completion({
   messages: [
     {
-      role: 'assistant',
+      role: 'user',
       content: 'Hey there!',
     },
   ],
-  functions: [],
-  provider: 'openai',
-  resource: 'my-resource',
-  workload: 'my-workload',
-  openai: {
-    model: 'gpt-3.5-turbo',
-  },
+  resource: 'resource1-openai-gpt-3-5-turbo',
+  workload: 'high1',
 });
 
 for await (const message of streamingResponse) {
@@ -59,17 +58,12 @@ const nonStreamingResponse = await client.completion(
   {
     messages: [
       {
-        role: 'assistant',
+        role: 'user',
         content: 'Hey there!',
       },
     ],
-    functions: [],
-    provider: 'openai',
-    resource: 'my-resource',
-    workload: 'my-workload',
-    openai: {
-      model: 'gpt-3.5-turbo',
-    },
+    resource: 'resource1-openai-gpt-3-5-turbo',
+    workload: 'high1',
   },
   false,
 );

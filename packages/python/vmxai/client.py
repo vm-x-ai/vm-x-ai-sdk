@@ -4,6 +4,7 @@ from typing import Iterable, Literal, Union, overload
 import grpc
 import grpc._grpcio_metadata
 
+from vmxai.auth.api_key import VMXClientAPIKey
 from vmxai.auth.provider import VMXClientAuthProvider
 from vmxai.protos.completion.completion_pb2 import (
     CompletionRequest as GrpcCompletionRequest,
@@ -23,11 +24,26 @@ from vmxai.types import CompletionRequest
 
 
 class VMXClient:
-    def __init__(self, workspace_id: str, environment_id: str, domain: str, auth: VMXClientAuthProvider):
+    def __init__(
+        self,
+        workspace_id: str,
+        environment_id: str,
+        domain: str,
+        auth: VMXClientAuthProvider = None,
+        api_key: str = None,
+    ):
         self.workspace_id = workspace_id
         self.environment_id = environment_id
         self.domain = domain
-        self.auth = auth
+        if not auth and not api_key:
+            raise ValueError("Either auth or api_key must be provided")
+
+        if api_key:
+            self.auth = VMXClientAPIKey(api_key)
+        else:
+            self.auth = auth
+
+        self.api_key = api_key
 
         channel = grpc.secure_channel(f"grpc.{self.domain}", grpc.ssl_channel_credentials())
 

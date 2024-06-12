@@ -5,10 +5,14 @@ const main = async () => {
     domain: 'env-abc123.clnt.dev.vm-x.ai',
     environmentId: 'env-abc123',
     workspaceId: 'ws-abc123',
+    // Authentication options
+    // OAuth
     auth: new VMXClientOAuth({
       clientId: 'abc123',
       clientSecret: 'abc123',
     }),
+    // or API Key
+    apiKey: 'abc123',
   });
 
   // Streaming
