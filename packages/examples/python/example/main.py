@@ -5,10 +5,14 @@ client = VMXClient(
     domain="env-abc123.clnt.dev.vm-x.ai",
     environment_id="env-abc123",
     workspace_id="ws-abc123",
+    # Authentication options
+    # OAuth Client credentials
     auth=VMXClientOAuth(
         client_id="abc123",
         client_secret="abc123",
     ),
+    # Or API Key
+    api_key="abc123",
 )
 
 # Streaming

@@ -1,5 +1,5 @@
 import { Metadata, credentials } from '@grpc/grpc-js';
-import type { VMXClientAuthProvider } from './auth';
+import { VMXClientAPIKey, type VMXClientAuthProvider } from './auth';
 import type { CompletionResponse, RequestToolChoice, RequestToolChoiceItem } from './proto-types/completion/completion';
 import { CompletionServiceClient } from './proto-types/completion/completion';
 import type { CompletionRequest } from './types';
@@ -8,8 +8,14 @@ export type VMXClientOptions = {
   workspaceId: string;
   environmentId: string;
   domain: string;
-  auth: VMXClientAuthProvider;
-};
+} & (
+  | {
+      apiKey: string;
+    }
+  | {
+      auth: VMXClientAuthProvider;
+    }
+);
 
 export class VMXClient {
   private completionClient: CompletionServiceClient;
@@ -18,6 +24,10 @@ export class VMXClient {
     this.completionClient = new CompletionServiceClient(`grpc.${this.options.domain}`, credentials.createSsl(), {
       'grpc.enable_retries': 3,
     });
+
+    if (!('auth' in this.options) && !('apiKey' in this.options)) {
+      throw new Error('Either `auth` or `apiKey` must be provided');
+    }
   }
 
   public async completion<
@@ -29,7 +39,7 @@ export class VMXClient {
       grpcMetadata.add('x-amzn-trace-id', process.env._X_AMZN_TRACE_ID as string);
     }
 
-    await this.options.auth.injectCredentials(this, grpcMetadata);
+    await this.getAuthProvider().injectCredentials(this, grpcMetadata);
     const call = this.completionClient.create(
       {
         ...request,
@@ -53,6 +63,16 @@ export class VMXClient {
     }
 
     throw new Error('unreachable');
+  }
+
+  private getAuthProvider(): VMXClientAuthProvider {
+    if ('apiKey' in this.options) {
+      return new VMXClientAPIKey({
+        apiKey: this.options.apiKey,
+      });
+    } else {
+      return this.options.auth;
+    }
   }
 
   private parseToolChoice(toolChoice?: 'auto' | 'none' | RequestToolChoiceItem): RequestToolChoice {

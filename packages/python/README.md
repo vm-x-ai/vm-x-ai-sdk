@@ -17,31 +17,57 @@ poetry add vm-x-ai-sdk
 ## Usage
 
 ```python
-from vmxai import CompletionRequest, OpenAIRequest, RequestMessage, VMXClient, VMXClientOAuth
+
+from vmxai import CompletionRequest, RequestMessage, VMXClient, VMXClientOAuth
 
 client = VMXClient(
+    domain="env-abc123.clnt.dev.vm-x.ai",
+    environment_id="env-abc123",
     workspace_id="ws-abc123",
-    environment_id="env-abv123",
-    domain="env-abc123.clnt.vm-x.ai",
+    # Authentication options
+    # OAuth Client credentials
     auth=VMXClientOAuth(
-        client_id="clientId", client_secret="clientSecret"
+        client_id="abc123",
+        client_secret="abc123",
+    ),
+    # Or API Key
+    api_key="abc123",
+)
+
+# Streaming
+streaming_response = client.completion(
+    request=CompletionRequest(
+        resource="resource1-openai-gpt-3-5-turbo",
+        workload="high1",
+        messages=[
+            RequestMessage(
+                role="user",
+                content="Hey there!",
+            )
+        ],
     ),
 )
 
-result = client.completion(
-    CompletionRequest(
-        provider="openai",
-        resource="my-resource",
-        workload="my-workload",
-        messages=[RequestMessage(role="user", content="hey")],
-        functions=[],
-        openai=OpenAIRequest(model="gpt-3.5-turbo"),
-    ),
-    stream=True,
-)
-
-for message in result:
+for message in streaming_response:
     print(message.message)
+
+
+# Non-Streaming
+response = client.completion(
+    request=CompletionRequest(
+        resource="resource1-openai-gpt-3-5-turbo",
+        workload="high1",
+        messages=[
+            RequestMessage(
+                role="user",
+                content="Hey there!",
+            )
+        ],
+    ),
+    stream=False,
+)
+
+print(response.message)
 
 ```
 
