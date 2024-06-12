@@ -1,3 +1,9 @@
+## [0.4.0](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/python-v0.3.0...python-v0.4.0) (2024-06-12)
+
+### Features
+
+- add support for api key auth method ([#7](https://github.com/vm-x-ai/vm-x-ai-sdk/issues/7)) ([7d1d7db](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/7d1d7dbcec523c01da0ed6e0093004f50c47afe9))
+
 ## [0.3.0](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/python-v0.2.0...python-v0.3.0) (2024-06-07)
 
 ### Features
