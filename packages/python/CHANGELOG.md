@@ -1,3 +1,9 @@
+## [0.4.1](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/python-v0.4.0...python-v0.4.1) (2024-06-24)
+
+### Bug Fixes
+
+- **python:** function calling struct types ([#8](https://github.com/vm-x-ai/vm-x-ai-sdk/issues/8)) ([325ec62](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/325ec62a4da038c46e8653b43aa4cd0e4027ff4c))
+
 ## [0.4.0](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/python-v0.3.0...python-v0.4.0) (2024-06-12)
 
 ### Features
