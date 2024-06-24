@@ -3,6 +3,7 @@ from typing import Iterable, Literal, Union, overload
 
 import grpc
 import grpc._grpcio_metadata
+from google.protobuf.struct_pb2 import Struct
 
 from vmxai.auth.api_key import VMXClientAPIKey
 from vmxai.auth.provider import VMXClientAuthProvider
@@ -19,8 +20,14 @@ from vmxai.protos.completion.completion_pb2 import (
 from vmxai.protos.completion.completion_pb2 import (
     RequestToolChoice as GrpcRequestToolChoice,
 )
+from vmxai.protos.completion.completion_pb2 import (
+    RequestToolFunction as GrpcRequestToolFunction,
+)
+from vmxai.protos.completion.completion_pb2 import (
+    RequestTools as GrpcRequestTools,
+)
 from vmxai.protos.completion.completion_pb2_grpc import CompletionServiceStub
-from vmxai.types import CompletionRequest
+from vmxai.types import CompletionRequest, RequestTools
 
 
 class VMXClient:
@@ -66,12 +73,16 @@ class VMXClient:
             metadata.append(("x-amzn-trace-id", os.environ["_X_AMZN_TRACE_ID"]))
 
         self.auth.inject_credentials(self, metadata)
+        config = Struct()
+        if request.config:
+            config.update(request.config)
+
         grpc_request = GrpcCompletionRequest(
             workload=request.workload,
             resource=request.resource,
-            config=request.config,
+            config=config,
             stream=stream,
-            tools=request.tools or [],
+            tools=self._parse_tools(request.tools),
             tool_choice=self._parse_tool_choice(request.tool_choice),
             messages=[
                 GrpcRequestMessage(
@@ -90,6 +101,24 @@ class VMXClient:
         else:
             for response in self.completion_client.create(grpc_request, metadata=metadata):
                 return response
+
+    def _parse_tools(self, tools: list[RequestTools]) -> list[GrpcRequestTools]:
+        result: list[GrpcRequestTools] = []
+        for tool in tools or []:
+            grpc_function_params = Struct()
+            grpc_function_params.update(tool.function.parameters)
+
+            grpc_tool = GrpcRequestTools(
+                type=tool.type,
+                function=GrpcRequestToolFunction(
+                    name=tool.function.name,
+                    description=tool.function.description,
+                    parameters=grpc_function_params
+                ),
+            )
+            result.append(grpc_tool)
+
+        return result
 
     def _parse_tool_choice(
         self, tool_choice: Union[Literal["auto", "none"], RequestToolChoiceItem]

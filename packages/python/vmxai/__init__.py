@@ -11,9 +11,8 @@ from vmxai.protos.completion.completion_pb2 import (
     RequestMessageToolCallFunction,
     RequestToolChoiceFunction,
     RequestToolChoiceItem,
-    RequestTools,
 )
-from vmxai.types import CompletionRequest, RequestMessage
+from vmxai.types import CompletionRequest, RequestMessage, RequestToolFunction, RequestTools
 
 __all__ = [
     VMXClient,
@@ -28,5 +27,6 @@ __all__ = [
     RequestToolChoiceFunction,
     RequestTools,
     RequestMessageToolCall,
-    RequestMessageToolCallFunction
+    RequestMessageToolCallFunction,
+    RequestToolFunction,
 ]

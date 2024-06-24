@@ -1,7 +1,20 @@
 from dataclasses import dataclass, field
 from typing import Literal, Optional, Union
 
-from vmxai.protos.completion.completion_pb2 import RequestMessageToolCall, RequestToolChoiceItem, RequestTools
+from vmxai.protos.completion.completion_pb2 import RequestMessageToolCall, RequestToolChoiceItem
+
+
+@dataclass
+class RequestToolFunction:
+    name: str
+    description: str
+    parameters: dict
+
+
+@dataclass
+class RequestTools:
+    type: Literal["function"]
+    function: RequestToolFunction
 
 
 @dataclass
