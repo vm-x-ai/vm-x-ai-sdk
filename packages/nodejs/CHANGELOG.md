@@ -1,11 +1,8 @@
-
-
 ## [0.4.0](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/nodejs-v0.3.0...nodejs-v0.4.0) (2024-07-05)
-
 
 ### Features
 
-* add multi-answer support for completion service ([#9](https://github.com/vm-x-ai/vm-x-ai-sdk/issues/9)) ([bae9161](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/bae9161607607b0870f5d9229058dd8d3b505351))
+- add multi-answer support for completion service ([#9](https://github.com/vm-x-ai/vm-x-ai-sdk/issues/9)) ([bae9161](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/bae9161607607b0870f5d9229058dd8d3b505351))
 
 ## [0.3.0](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/nodejs-v0.2.0...nodejs-v0.3.0) (2024-06-12)
 

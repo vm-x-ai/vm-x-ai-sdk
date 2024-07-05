@@ -1,3 +1,9 @@
+## [0.5.1](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/python-v0.5.0...python-v0.5.1) (2024-07-05)
+
+### Bug Fixes
+
+- **python:** make secure_channel default true ([10e8bf1](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/10e8bf1edb99b7e4255da0b417164812b5ba3a63))
+
 ## [0.5.0](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/python-v0.4.1...python-v0.5.0) (2024-07-05)
 
 ### Features
