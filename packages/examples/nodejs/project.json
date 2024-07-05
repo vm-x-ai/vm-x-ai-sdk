@@ -11,13 +11,20 @@
       "options": {
         "outputPath": "dist/packages/examples/nodejs",
         "main": "packages/examples/nodejs/src/index.ts",
-        "tsConfig": "packages/examples/nodejs/tsconfig.lib.json",
+        "tsConfig": "packages/examples/nodejs/tsconfig.json",
         "assets": []
       }
     },
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
+    },
+    "examples": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx ts-node -r tsconfig-paths/register src/{args.filename}",
+        "cwd": "packages/examples/nodejs"
+      }
     }
   }
 }

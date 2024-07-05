@@ -1,77 +1,154 @@
 import { Metadata, credentials } from '@grpc/grpc-js';
-import { VMXClientAPIKey, type VMXClientAuthProvider } from './auth';
-import type { CompletionResponse, RequestToolChoice, RequestToolChoiceItem } from './proto-types/completion/completion';
+import { v4 as uuidv4 } from 'uuid';
+import { VMXClientAPIKey, VMXClientOAuth, type VMXClientAuthProvider } from './auth';
+import type {
+  CompletionResponse,
+  RequestToolChoice,
+  RequestToolChoiceItem,
+  CompletionRequest as GrpcCompletionRequest,
+} from './proto-types/completion/completion';
 import { CompletionServiceClient } from './proto-types/completion/completion';
 import type { CompletionRequest } from './types';
 
 export type VMXClientOptions = {
-  workspaceId: string;
-  environmentId: string;
-  domain: string;
-} & (
-  | {
-      apiKey: string;
-    }
-  | {
-      auth: VMXClientAuthProvider;
-    }
-);
+  domain?: string;
+  apiKey?: string;
+  auth?: VMXClientAuthProvider;
+  secureChannel?: boolean;
+};
 
 export class VMXClient {
   private completionClient: CompletionServiceClient;
+  public domain: string;
 
-  constructor(public readonly options: VMXClientOptions) {
-    this.completionClient = new CompletionServiceClient(`grpc.${this.options.domain}`, credentials.createSsl(), {
-      'grpc.enable_retries': 3,
-    });
+  constructor(public readonly options?: VMXClientOptions) {
+    const domain = this.options?.domain ?? process.env.VMX_DOMAIN;
 
-    if (!('auth' in this.options) && !('apiKey' in this.options)) {
-      throw new Error('Either `auth` or `apiKey` must be provided');
+    if (!domain) {
+      throw new Error('`domain` must be provided or `VMX_DOMAIN` environment variable must be set');
     }
+
+    this.domain = domain;
+
+    const secureChannel = this.options?.secureChannel ?? process.env.VMX_SECURE_CHANNEL !== 'false';
+
+    this.completionClient = new CompletionServiceClient(
+      secureChannel ? `grpc.${this.domain}` : this.domain,
+      secureChannel ? credentials.createSsl() : credentials.createInsecure(),
+      {
+        'grpc.enable_retries': 3,
+      },
+    );
   }
 
   public async completion<
     TStream extends boolean = true,
-    TResult = TStream extends true ? AsyncIterable<CompletionResponse> : CompletionResponse,
-  >(request: Omit<CompletionRequest, 'stream'>, stream: TStream = true as TStream): Promise<TResult> {
+    TMultiAnswer extends boolean = false,
+    TResult = TStream extends true
+      ? TMultiAnswer extends true
+        ? Promise<AsyncIterable<CompletionResponse>>[]
+        : AsyncIterable<CompletionResponse>
+      : TMultiAnswer extends true
+        ? Promise<CompletionResponse>[]
+        : CompletionResponse,
+  >({
+    request,
+    stream = true as TStream,
+    multiAnswer = false as TMultiAnswer,
+    answerCount,
+  }: {
+    request: Omit<CompletionRequest, 'stream'>;
+    stream?: TStream;
+    multiAnswer?: TMultiAnswer;
+    answerCount?: number;
+  }): Promise<TResult> {
     const grpcMetadata = new Metadata();
     if (process.env._X_AMZN_TRACE_ID) {
       grpcMetadata.add('x-amzn-trace-id', process.env._X_AMZN_TRACE_ID as string);
     }
 
-    await this.getAuthProvider().injectCredentials(this, grpcMetadata);
-    const call = this.completionClient.create(
-      {
-        ...request,
-        tools: request.tools ?? [],
-        toolChoice: this.parseToolChoice(request.toolChoice),
-        stream,
-        messages: request.messages.map((message) => ({
-          ...message,
-          toolCalls: message.toolCalls ?? [],
-        })),
-      },
-      grpcMetadata,
-    );
+    grpcMetadata.add('correlation-id', uuidv4());
 
-    if (stream) {
-      return call as TResult;
+    await this.getAuthProvider().injectCredentials(this, grpcMetadata);
+    const grpcRequest = {
+      ...request,
+      tools: request.tools ?? [],
+      toolChoice: this.parseToolChoice(request.toolChoice),
+      stream,
+      messages: request.messages.map((message) => ({
+        ...message,
+        toolCalls: message.toolCalls ?? [],
+      })),
+    };
+
+    if (multiAnswer) {
+      const count = answerCount ?? (await this.fetchResourceProviderCount(request, grpcMetadata));
+      return Array(count)
+        .fill(0)
+        .map(async (_, index) => this.call({ index, ...grpcRequest }, grpcMetadata)) as TResult;
+    } else {
+      return this.call(grpcRequest, grpcMetadata) as TResult;
+    }
+  }
+
+  private async call(
+    grpcRequest: GrpcCompletionRequest,
+    metadata: Metadata,
+  ): Promise<CompletionResponse | AsyncIterable<CompletionResponse>> {
+    const call = this.completionClient.create(grpcRequest, metadata);
+
+    if (grpcRequest.stream) {
+      return call as AsyncIterable<CompletionResponse>;
     } else {
       for await (const response of call as AsyncIterable<CompletionResponse>) {
-        return response as TResult;
+        return response as CompletionResponse;
       }
     }
 
     throw new Error('unreachable');
   }
 
+  private async fetchResourceProviderCount(
+    request: Omit<CompletionRequest, 'stream'>,
+    grpcMetadata: Metadata,
+  ): Promise<number> {
+    return await new Promise<number>((resolve, reject) =>
+      this.completionClient.getResourceProviderCount(
+        {
+          resource: request.resource,
+        },
+        grpcMetadata,
+        (error, response) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(response.count);
+          }
+        },
+      ),
+    );
+  }
+
   private getAuthProvider(): VMXClientAuthProvider {
-    if ('apiKey' in this.options) {
+    if (this.options?.apiKey) {
       return new VMXClientAPIKey({
         apiKey: this.options.apiKey,
       });
-    } else {
+    } else if (process.env.VMX_API_KEY) {
+      return new VMXClientAPIKey({
+        apiKey: process.env.VMX_API_KEY,
+      });
+    } else if (this.options?.auth) {
       return this.options.auth;
+    } else if (process.env.VMX_OAUTH_CLIENT_ID && process.env.VMX_OAUTH_CLIENT_SECRET) {
+      return new VMXClientOAuth({
+        clientId: process.env.VMX_OAUTH_CLIENT_ID,
+        clientSecret: process.env.VMX_OAUTH_CLIENT_SECRET,
+      });
+    } else {
+      throw new Error(
+        '`apiKey` or `auth` must be provided or `VMX_API_KEY` or `VMX_OAUTH_CLIENT_ID` and `VMX_OAUTH_CLIENT_SECRET` environment variables must be set',
+      );
     }
   }
 

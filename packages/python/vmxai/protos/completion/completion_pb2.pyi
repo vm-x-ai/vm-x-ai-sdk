@@ -6,6 +6,70 @@ from typing import ClassVar as _ClassVar, Iterable as _Iterable, Mapping as _Map
 
 DESCRIPTOR: _descriptor.FileDescriptor
 
+class GetResourceProviderCountRequest(_message.Message):
+    __slots__ = ("resource",)
+    RESOURCE_FIELD_NUMBER: _ClassVar[int]
+    resource: str
+    def __init__(self, resource: _Optional[str] = ...) -> None: ...
+
+class GetResourceProviderCountResponse(_message.Message):
+    __slots__ = ("count",)
+    COUNT_FIELD_NUMBER: _ClassVar[int]
+    count: int
+    def __init__(self, count: _Optional[int] = ...) -> None: ...
+
+class CompletionRequest(_message.Message):
+    __slots__ = ("index", "resource", "workload", "stream", "messages", "tools", "tool_choice", "config")
+    INDEX_FIELD_NUMBER: _ClassVar[int]
+    RESOURCE_FIELD_NUMBER: _ClassVar[int]
+    WORKLOAD_FIELD_NUMBER: _ClassVar[int]
+    STREAM_FIELD_NUMBER: _ClassVar[int]
+    MESSAGES_FIELD_NUMBER: _ClassVar[int]
+    TOOLS_FIELD_NUMBER: _ClassVar[int]
+    TOOL_CHOICE_FIELD_NUMBER: _ClassVar[int]
+    CONFIG_FIELD_NUMBER: _ClassVar[int]
+    index: int
+    resource: str
+    workload: str
+    stream: bool
+    messages: _containers.RepeatedCompositeFieldContainer[RequestMessage]
+    tools: _containers.RepeatedCompositeFieldContainer[RequestTools]
+    tool_choice: RequestToolChoice
+    config: _struct_pb2.Struct
+    def __init__(self, index: _Optional[int] = ..., resource: _Optional[str] = ..., workload: _Optional[str] = ..., stream: bool = ..., messages: _Optional[_Iterable[_Union[RequestMessage, _Mapping]]] = ..., tools: _Optional[_Iterable[_Union[RequestTools, _Mapping]]] = ..., tool_choice: _Optional[_Union[RequestToolChoice, _Mapping]] = ..., config: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ...) -> None: ...
+
+class RequestMessage(_message.Message):
+    __slots__ = ("name", "role", "content", "tool_calls", "tool_call_id")
+    NAME_FIELD_NUMBER: _ClassVar[int]
+    ROLE_FIELD_NUMBER: _ClassVar[int]
+    CONTENT_FIELD_NUMBER: _ClassVar[int]
+    TOOL_CALLS_FIELD_NUMBER: _ClassVar[int]
+    TOOL_CALL_ID_FIELD_NUMBER: _ClassVar[int]
+    name: str
+    role: str
+    content: str
+    tool_calls: _containers.RepeatedCompositeFieldContainer[RequestMessageToolCall]
+    tool_call_id: str
+    def __init__(self, name: _Optional[str] = ..., role: _Optional[str] = ..., content: _Optional[str] = ..., tool_calls: _Optional[_Iterable[_Union[RequestMessageToolCall, _Mapping]]] = ..., tool_call_id: _Optional[str] = ...) -> None: ...
+
+class RequestMessageToolCall(_message.Message):
+    __slots__ = ("id", "type", "function")
+    ID_FIELD_NUMBER: _ClassVar[int]
+    TYPE_FIELD_NUMBER: _ClassVar[int]
+    FUNCTION_FIELD_NUMBER: _ClassVar[int]
+    id: str
+    type: str
+    function: RequestMessageToolCallFunction
+    def __init__(self, id: _Optional[str] = ..., type: _Optional[str] = ..., function: _Optional[_Union[RequestMessageToolCallFunction, _Mapping]] = ...) -> None: ...
+
+class RequestMessageToolCallFunction(_message.Message):
+    __slots__ = ("name", "arguments")
+    NAME_FIELD_NUMBER: _ClassVar[int]
+    ARGUMENTS_FIELD_NUMBER: _ClassVar[int]
+    name: str
+    arguments: str
+    def __init__(self, name: _Optional[str] = ..., arguments: _Optional[str] = ...) -> None: ...
+
 class RequestTools(_message.Message):
     __slots__ = ("type", "function")
     TYPE_FIELD_NUMBER: _ClassVar[int]
@@ -48,71 +112,23 @@ class RequestToolChoiceFunction(_message.Message):
     name: str
     def __init__(self, name: _Optional[str] = ...) -> None: ...
 
-class RequestMessage(_message.Message):
-    __slots__ = ("name", "role", "content", "tool_calls", "tool_call_id")
-    NAME_FIELD_NUMBER: _ClassVar[int]
-    ROLE_FIELD_NUMBER: _ClassVar[int]
-    CONTENT_FIELD_NUMBER: _ClassVar[int]
-    TOOL_CALLS_FIELD_NUMBER: _ClassVar[int]
-    TOOL_CALL_ID_FIELD_NUMBER: _ClassVar[int]
-    name: str
-    role: str
-    content: str
-    tool_calls: _containers.RepeatedCompositeFieldContainer[RequestMessageToolCall]
-    tool_call_id: str
-    def __init__(self, name: _Optional[str] = ..., role: _Optional[str] = ..., content: _Optional[str] = ..., tool_calls: _Optional[_Iterable[_Union[RequestMessageToolCall, _Mapping]]] = ..., tool_call_id: _Optional[str] = ...) -> None: ...
-
-class RequestMessageToolCall(_message.Message):
-    __slots__ = ("id", "type", "function")
-    ID_FIELD_NUMBER: _ClassVar[int]
-    TYPE_FIELD_NUMBER: _ClassVar[int]
-    FUNCTION_FIELD_NUMBER: _ClassVar[int]
-    id: str
-    type: str
-    function: RequestMessageToolCallFunction
-    def __init__(self, id: _Optional[str] = ..., type: _Optional[str] = ..., function: _Optional[_Union[RequestMessageToolCallFunction, _Mapping]] = ...) -> None: ...
-
-class RequestMessageToolCallFunction(_message.Message):
-    __slots__ = ("name", "arguments")
-    NAME_FIELD_NUMBER: _ClassVar[int]
-    ARGUMENTS_FIELD_NUMBER: _ClassVar[int]
-    name: str
-    arguments: str
-    def __init__(self, name: _Optional[str] = ..., arguments: _Optional[str] = ...) -> None: ...
-
-class CompletionRequest(_message.Message):
-    __slots__ = ("resource", "workload", "stream", "messages", "tools", "tool_choice", "config")
-    RESOURCE_FIELD_NUMBER: _ClassVar[int]
-    WORKLOAD_FIELD_NUMBER: _ClassVar[int]
-    STREAM_FIELD_NUMBER: _ClassVar[int]
-    MESSAGES_FIELD_NUMBER: _ClassVar[int]
-    TOOLS_FIELD_NUMBER: _ClassVar[int]
-    TOOL_CHOICE_FIELD_NUMBER: _ClassVar[int]
-    CONFIG_FIELD_NUMBER: _ClassVar[int]
-    resource: str
-    workload: str
-    stream: bool
-    messages: _containers.RepeatedCompositeFieldContainer[RequestMessage]
-    tools: _containers.RepeatedCompositeFieldContainer[RequestTools]
-    tool_choice: RequestToolChoice
-    config: _struct_pb2.Struct
-    def __init__(self, resource: _Optional[str] = ..., workload: _Optional[str] = ..., stream: bool = ..., messages: _Optional[_Iterable[_Union[RequestMessage, _Mapping]]] = ..., tools: _Optional[_Iterable[_Union[RequestTools, _Mapping]]] = ..., tool_choice: _Optional[_Union[RequestToolChoice, _Mapping]] = ..., config: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ...) -> None: ...
-
 class CompletionResponse(_message.Message):
-    __slots__ = ("id", "message", "role", "tool_calls", "usage", "response_timestamp")
+    __slots__ = ("id", "message", "role", "tool_calls", "usage", "response_timestamp", "metadata")
     ID_FIELD_NUMBER: _ClassVar[int]
     MESSAGE_FIELD_NUMBER: _ClassVar[int]
     ROLE_FIELD_NUMBER: _ClassVar[int]
     TOOL_CALLS_FIELD_NUMBER: _ClassVar[int]
     USAGE_FIELD_NUMBER: _ClassVar[int]
     RESPONSE_TIMESTAMP_FIELD_NUMBER: _ClassVar[int]
+    METADATA_FIELD_NUMBER: _ClassVar[int]
     id: str
     message: str
     role: str
     tool_calls: _containers.RepeatedCompositeFieldContainer[RequestMessageToolCall]
     usage: CompletionUsage
     response_timestamp: int
-    def __init__(self, id: _Optional[str] = ..., message: _Optional[str] = ..., role: _Optional[str] = ..., tool_calls: _Optional[_Iterable[_Union[RequestMessageToolCall, _Mapping]]] = ..., usage: _Optional[_Union[CompletionUsage, _Mapping]] = ..., response_timestamp: _Optional[int] = ...) -> None: ...
+    metadata: CompletionResponseMetadata
+    def __init__(self, id: _Optional[str] = ..., message: _Optional[str] = ..., role: _Optional[str] = ..., tool_calls: _Optional[_Iterable[_Union[RequestMessageToolCall, _Mapping]]] = ..., usage: _Optional[_Union[CompletionUsage, _Mapping]] = ..., response_timestamp: _Optional[int] = ..., metadata: _Optional[_Union[CompletionResponseMetadata, _Mapping]] = ...) -> None: ...
 
 class CompletionUsage(_message.Message):
     __slots__ = ("prompt", "completion", "total")
@@ -123,3 +139,23 @@ class CompletionUsage(_message.Message):
     completion: int
     total: int
     def __init__(self, prompt: _Optional[int] = ..., completion: _Optional[int] = ..., total: _Optional[int] = ...) -> None: ...
+
+class CompletionResponseMetadata(_message.Message):
+    __slots__ = ("index", "provider", "model", "done", "success", "error_message", "error_code", "error_reason")
+    INDEX_FIELD_NUMBER: _ClassVar[int]
+    PROVIDER_FIELD_NUMBER: _ClassVar[int]
+    MODEL_FIELD_NUMBER: _ClassVar[int]
+    DONE_FIELD_NUMBER: _ClassVar[int]
+    SUCCESS_FIELD_NUMBER: _ClassVar[int]
+    ERROR_MESSAGE_FIELD_NUMBER: _ClassVar[int]
+    ERROR_CODE_FIELD_NUMBER: _ClassVar[int]
+    ERROR_REASON_FIELD_NUMBER: _ClassVar[int]
+    index: int
+    provider: str
+    model: str
+    done: bool
+    success: bool
+    error_message: str
+    error_code: int
+    error_reason: str
+    def __init__(self, index: _Optional[int] = ..., provider: _Optional[str] = ..., model: _Optional[str] = ..., done: bool = ..., success: bool = ..., error_message: _Optional[str] = ..., error_code: _Optional[int] = ..., error_reason: _Optional[str] = ...) -> None: ...

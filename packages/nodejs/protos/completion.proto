@@ -6,6 +6,48 @@ import "google/protobuf/struct.proto";
 
 service CompletionService {
   rpc create (CompletionRequest) returns (stream CompletionResponse);
+  rpc getResourceProviderCount (GetResourceProviderCountRequest) returns (GetResourceProviderCountResponse);
+}
+
+// getResourceProviderCount: Request Types
+message GetResourceProviderCountRequest {
+  string resource = 1;
+}
+
+// getResourceProviderCount: Response Types
+message GetResourceProviderCountResponse {
+  int32 count = 1;
+}
+
+// create: Request Types
+message CompletionRequest {
+  optional int32 index = 1;
+  string resource = 2;
+  string workload = 3;
+  bool stream = 4;
+  repeated RequestMessage messages = 5;
+  repeated RequestTools tools = 6;
+  optional RequestToolChoice tool_choice = 7;
+  optional google.protobuf.Struct config = 8;
+}
+
+message RequestMessage {
+  optional string name = 1;
+  string role = 2;
+  optional string content = 3;
+  repeated RequestMessageToolCall tool_calls = 4;
+  optional string tool_call_id = 5;
+}
+
+message RequestMessageToolCall {
+  string id = 1;
+  string type = 2;
+  RequestMessageToolCallFunction function = 3;
+}
+
+message RequestMessageToolCallFunction {
+  string name = 1;
+  string arguments = 2;
 }
 
 message RequestTools {
@@ -36,35 +78,7 @@ message RequestToolChoiceFunction {
   string name = 1;
 }
 
-message RequestMessage {
-  optional string name = 1;
-  string role = 2;
-  optional string content = 3;
-  repeated RequestMessageToolCall tool_calls = 4;
-  optional string tool_call_id = 5;
-}
-
-message RequestMessageToolCall {
-  string id = 1;
-  string type = 2;
-  RequestMessageToolCallFunction function = 3;
-}
-
-message RequestMessageToolCallFunction {
-  string name = 1;
-  string arguments = 2;
-}
-
-message CompletionRequest {
-  string resource = 1;
-  string workload = 2;
-  bool stream = 3;
-  repeated RequestMessage messages = 4;
-  repeated RequestTools tools = 5;
-  optional RequestToolChoice tool_choice = 6;
-  optional google.protobuf.Struct config = 7;
-}
-
+// create: Response Types
 message CompletionResponse {
   string id = 1;
   optional string message = 2;
@@ -72,11 +86,23 @@ message CompletionResponse {
   repeated RequestMessageToolCall tool_calls = 4;
   optional CompletionUsage usage = 5;
   optional int64 response_timestamp = 6;
+  CompletionResponseMetadata metadata = 7;
 }
 
 message CompletionUsage {
   int32 prompt = 1;
   int32 completion = 2;
   int32 total = 3;
+}
+
+message CompletionResponseMetadata {
+  int32 index = 1;
+  string provider = 2;
+  string model = 3;
+  bool done = 4;
+  bool success = 5;
+  optional string error_message = 6;
+  optional int32 error_code = 7;
+  optional string error_reason = 8;
 }
 
