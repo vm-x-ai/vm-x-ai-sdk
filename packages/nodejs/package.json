@@ -25,7 +25,8 @@
     "axios": "1.7.2",
     "cache-manager": "^5.3.1",
     "long": "^5.2.3",
-    "protobufjs": "^7.2.5"
+    "protobufjs": "^7.2.5",
+    "uuid": "^10.0.0"
   },
   "main": "./src/index.js",
   "typings": "./src/index.d.ts",

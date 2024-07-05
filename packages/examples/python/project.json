@@ -11,6 +11,13 @@
         "cwd": "packages/examples/python"
       }
     },
+    "examples": {
+      "executor": "@nxlv/python:run-commands",
+      "options": {
+        "command": "python example/{args.filename}",
+        "cwd": "packages/examples/python"
+      }
+    },
     "add": {
       "executor": "@nxlv/python:add",
       "options": {}

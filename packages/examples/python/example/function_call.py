@@ -1,3 +1,4 @@
+
 from vmxai import (
     CompletionRequest,
     RequestMessage,
@@ -6,58 +7,9 @@ from vmxai import (
     RequestToolFunction,
     RequestTools,
     VMXClient,
-    VMXClientOAuth,
 )
 
-client = VMXClient(
-    domain="env-abc123.clnt.dev.vm-x.ai",
-    environment_id="env-abc123",
-    workspace_id="ws-abc123",
-    # Authentication options
-    # OAuth Client credentials
-    auth=VMXClientOAuth(
-        client_id="abc123",
-        client_secret="abc123",
-    ),
-    # Or API Key
-    api_key="abc123",
-)
-
-# Streaming
-streaming_response = client.completion(
-    request=CompletionRequest(
-        resource="default",
-        workload="default",
-        messages=[
-            RequestMessage(
-                role="user",
-                content="Hey there!",
-            )
-        ],
-    ),
-)
-
-for message in streaming_response:
-    print(message.message, end="")
-
-
-# Non-Streaming
-response = client.completion(
-    request=CompletionRequest(
-        resource="default",
-        workload="default",
-        messages=[
-            RequestMessage(
-                role="user",
-                content="Hey there!",
-            )
-        ],
-    ),
-    stream=False,
-)
-
-print("\n")
-print(response.message)
+client = VMXClient()
 
 # Function Calling
 function_response = client.completion(
@@ -87,8 +39,12 @@ function_response = client.completion(
     ),
 )
 
+print("Function Response")
+print("#" * 100)
 for message in function_response:
     print(message, end="")
+
+print("\n" * 2)
 
 # Function Calling Callback
 function_response_callback = client.completion(
@@ -117,23 +73,17 @@ function_response_callback = client.completion(
                         id="call_NsFzeGVbAWl5bor6RrUDCvTv",
                         type="function",
                         function=RequestMessageToolCallFunction(name="get_weather", arguments='{"city": "San Diego"}'),
-                    )
+                    ),
                 ],
             ),
             RequestMessage(
-                role="tool",
-                content="The temperature in Dallas is 81F",
-                tool_call_id="call_NLcWB6VCdG6x9UW6xrGVTTTR"
+                role="tool", content="The temperature in Dallas is 81F", tool_call_id="call_NLcWB6VCdG6x9UW6xrGVTTTR"
             ),
             RequestMessage(
-                role="tool",
-                content="The temperature in New York is 78F",
-                tool_call_id="call_6RDTuEDsaHvWr8XjwDXx4UjX"
+                role="tool", content="The temperature in New York is 78F", tool_call_id="call_6RDTuEDsaHvWr8XjwDXx4UjX"
             ),
             RequestMessage(
-                role="tool",
-                content="The temperature in San Diego is 68F",
-                tool_call_id="call_NsFzeGVbAWl5bor6RrUDCvTv"
+                role="tool", content="The temperature in San Diego is 68F", tool_call_id="call_NsFzeGVbAWl5bor6RrUDCvTv"
             ),
         ],
         tools=[
@@ -153,5 +103,9 @@ function_response_callback = client.completion(
     ),
 )
 
+print("Function Callback Response")
+print("#" * 100)
 for message in function_response_callback:
     print(message.message, end="")
+
+print("\n" * 2)

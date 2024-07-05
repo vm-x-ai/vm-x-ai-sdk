@@ -19,12 +19,23 @@ class CompletionServiceStub(object):
                 request_serializer=vmxai_dot_protos_dot_completion_dot_completion__pb2.CompletionRequest.SerializeToString,
                 response_deserializer=vmxai_dot_protos_dot_completion_dot_completion__pb2.CompletionResponse.FromString,
                 )
+        self.getResourceProviderCount = channel.unary_unary(
+                '/llm.chat.CompletionService/getResourceProviderCount',
+                request_serializer=vmxai_dot_protos_dot_completion_dot_completion__pb2.GetResourceProviderCountRequest.SerializeToString,
+                response_deserializer=vmxai_dot_protos_dot_completion_dot_completion__pb2.GetResourceProviderCountResponse.FromString,
+                )
 
 
 class CompletionServiceServicer(object):
     """Missing associated documentation comment in .proto file."""
 
     def create(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
+    def getResourceProviderCount(self, request, context):
         """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
@@ -37,6 +48,11 @@ def add_CompletionServiceServicer_to_server(servicer, server):
                     servicer.create,
                     request_deserializer=vmxai_dot_protos_dot_completion_dot_completion__pb2.CompletionRequest.FromString,
                     response_serializer=vmxai_dot_protos_dot_completion_dot_completion__pb2.CompletionResponse.SerializeToString,
+            ),
+            'getResourceProviderCount': grpc.unary_unary_rpc_method_handler(
+                    servicer.getResourceProviderCount,
+                    request_deserializer=vmxai_dot_protos_dot_completion_dot_completion__pb2.GetResourceProviderCountRequest.FromString,
+                    response_serializer=vmxai_dot_protos_dot_completion_dot_completion__pb2.GetResourceProviderCountResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -62,5 +78,22 @@ class CompletionService(object):
         return grpc.experimental.unary_stream(request, target, '/llm.chat.CompletionService/create',
             vmxai_dot_protos_dot_completion_dot_completion__pb2.CompletionRequest.SerializeToString,
             vmxai_dot_protos_dot_completion_dot_completion__pb2.CompletionResponse.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def getResourceProviderCount(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/llm.chat.CompletionService/getResourceProviderCount',
+            vmxai_dot_protos_dot_completion_dot_completion__pb2.GetResourceProviderCountRequest.SerializeToString,
+            vmxai_dot_protos_dot_completion_dot_completion__pb2.GetResourceProviderCountResponse.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

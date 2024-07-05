@@ -25,7 +25,7 @@ export class VMXClientOAuth<TCacheStore extends Store = MemoryStore> implements 
   }
 
   public async injectCredentials(client: VMXClient, grpcMetadata: Metadata): Promise<void> {
-    const token = await this.getOAuthToken(client.options.domain);
+    const token = await this.getOAuthToken(client.domain);
 
     grpcMetadata.add('Authorization', `Bearer ${token}`);
   }
