@@ -42,7 +42,7 @@ class VMXClient:
         domain: str = os.getenv("VMX_DOMAIN", None),
         auth: VMXClientAuthProvider = None,
         api_key: str = os.getenv("VMX_API_KEY", None),
-        secure_channel: bool = os.getenv("VMX_SECURE_CHANNEL", "false").lower() == "true",
+        secure_channel: bool = os.getenv("VMX_SECURE_CHANNEL", "true").lower() == "true",
     ):
         if not domain:
             raise AttributeError(
