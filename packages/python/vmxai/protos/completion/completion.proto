@@ -101,8 +101,10 @@ message CompletionResponseMetadata {
   string model = 3;
   bool done = 4;
   bool success = 5;
-  optional string error_message = 6;
-  optional int32 error_code = 7;
-  optional string error_reason = 8;
+  bool fallback = 6;
+  int32 fallback_attempts = 7;
+  optional string error_message = 8;
+  optional int32 error_code = 9;
+  optional string error_reason = 10;
 }
 

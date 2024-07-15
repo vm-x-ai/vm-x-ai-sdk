@@ -59,6 +59,13 @@
           "vendorChunk": false
         }
       }
+    },
+    "proto-gen": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "buf generate",
+        "cwd": "packages/nodejs/protos"
+      }
     }
   }
 }
