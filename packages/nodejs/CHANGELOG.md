@@ -1,3 +1,9 @@
+## [0.5.0](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/nodejs-v0.4.0...nodejs-v0.5.0) (2024-07-15)
+
+### Features
+
+- add support for fallback requests ([#10](https://github.com/vm-x-ai/vm-x-ai-sdk/issues/10)) ([e85cac5](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/e85cac5953b80d5d67636582a046515b0887c364))
+
 ## [0.4.0](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/nodejs-v0.3.0...nodejs-v0.4.0) (2024-07-05)
 
 ### Features
