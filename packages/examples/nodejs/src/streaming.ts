@@ -18,6 +18,8 @@ const main = async () => {
   for await (const message of response) {
     process.stdout.write(message.message || '');
   }
+
+  process.stdout.write('\n');
 };
 
 main().finally(() => process.exit(0));
