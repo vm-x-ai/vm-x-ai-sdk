@@ -1,3 +1,12 @@
+
+
+## [0.7.0](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/python-v0.6.0...python-v0.7.0) (2024-08-01)
+
+
+### Features
+
+* remove workload from nodejs and python SDKs ([#11](https://github.com/vm-x-ai/vm-x-ai-sdk/issues/11)) ([9b60268](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/9b60268732f6c0822659ac0c6420b2857acfb873))
+
 ## [0.6.0](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/python-v0.5.1...python-v0.6.0) (2024-07-15)
 
 ### Features
