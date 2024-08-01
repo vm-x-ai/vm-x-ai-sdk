@@ -19,24 +19,24 @@ class GetResourceProviderCountResponse(_message.Message):
     def __init__(self, count: _Optional[int] = ...) -> None: ...
 
 class CompletionRequest(_message.Message):
-    __slots__ = ("index", "resource", "workload", "stream", "messages", "tools", "tool_choice", "config")
-    INDEX_FIELD_NUMBER: _ClassVar[int]
+    __slots__ = ("primary", "secondary_model_index", "resource", "stream", "messages", "tools", "tool_choice", "config")
+    PRIMARY_FIELD_NUMBER: _ClassVar[int]
+    SECONDARY_MODEL_INDEX_FIELD_NUMBER: _ClassVar[int]
     RESOURCE_FIELD_NUMBER: _ClassVar[int]
-    WORKLOAD_FIELD_NUMBER: _ClassVar[int]
     STREAM_FIELD_NUMBER: _ClassVar[int]
     MESSAGES_FIELD_NUMBER: _ClassVar[int]
     TOOLS_FIELD_NUMBER: _ClassVar[int]
     TOOL_CHOICE_FIELD_NUMBER: _ClassVar[int]
     CONFIG_FIELD_NUMBER: _ClassVar[int]
-    index: int
+    primary: bool
+    secondary_model_index: int
     resource: str
-    workload: str
     stream: bool
     messages: _containers.RepeatedCompositeFieldContainer[RequestMessage]
     tools: _containers.RepeatedCompositeFieldContainer[RequestTools]
     tool_choice: RequestToolChoice
     config: _struct_pb2.Struct
-    def __init__(self, index: _Optional[int] = ..., resource: _Optional[str] = ..., workload: _Optional[str] = ..., stream: bool = ..., messages: _Optional[_Iterable[_Union[RequestMessage, _Mapping]]] = ..., tools: _Optional[_Iterable[_Union[RequestTools, _Mapping]]] = ..., tool_choice: _Optional[_Union[RequestToolChoice, _Mapping]] = ..., config: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ...) -> None: ...
+    def __init__(self, primary: bool = ..., secondary_model_index: _Optional[int] = ..., resource: _Optional[str] = ..., stream: bool = ..., messages: _Optional[_Iterable[_Union[RequestMessage, _Mapping]]] = ..., tools: _Optional[_Iterable[_Union[RequestTools, _Mapping]]] = ..., tool_choice: _Optional[_Union[RequestToolChoice, _Mapping]] = ..., config: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ...) -> None: ...
 
 class RequestMessage(_message.Message):
     __slots__ = ("name", "role", "content", "tool_calls", "tool_call_id")
@@ -141,8 +141,9 @@ class CompletionUsage(_message.Message):
     def __init__(self, prompt: _Optional[int] = ..., completion: _Optional[int] = ..., total: _Optional[int] = ...) -> None: ...
 
 class CompletionResponseMetadata(_message.Message):
-    __slots__ = ("index", "provider", "model", "done", "success", "fallback", "fallback_attempts", "error_message", "error_code", "error_reason")
-    INDEX_FIELD_NUMBER: _ClassVar[int]
+    __slots__ = ("primary", "secondary_model_index", "provider", "model", "done", "success", "fallback", "fallback_attempts", "error_message", "error_code", "error_reason")
+    PRIMARY_FIELD_NUMBER: _ClassVar[int]
+    SECONDARY_MODEL_INDEX_FIELD_NUMBER: _ClassVar[int]
     PROVIDER_FIELD_NUMBER: _ClassVar[int]
     MODEL_FIELD_NUMBER: _ClassVar[int]
     DONE_FIELD_NUMBER: _ClassVar[int]
@@ -152,7 +153,8 @@ class CompletionResponseMetadata(_message.Message):
     ERROR_MESSAGE_FIELD_NUMBER: _ClassVar[int]
     ERROR_CODE_FIELD_NUMBER: _ClassVar[int]
     ERROR_REASON_FIELD_NUMBER: _ClassVar[int]
-    index: int
+    primary: bool
+    secondary_model_index: int
     provider: str
     model: str
     done: bool
@@ -162,4 +164,4 @@ class CompletionResponseMetadata(_message.Message):
     error_message: str
     error_code: int
     error_reason: str
-    def __init__(self, index: _Optional[int] = ..., provider: _Optional[str] = ..., model: _Optional[str] = ..., done: bool = ..., success: bool = ..., fallback: bool = ..., fallback_attempts: _Optional[int] = ..., error_message: _Optional[str] = ..., error_code: _Optional[int] = ..., error_reason: _Optional[str] = ...) -> None: ...
+    def __init__(self, primary: bool = ..., secondary_model_index: _Optional[int] = ..., provider: _Optional[str] = ..., model: _Optional[str] = ..., done: bool = ..., success: bool = ..., fallback: bool = ..., fallback_attempts: _Optional[int] = ..., error_message: _Optional[str] = ..., error_code: _Optional[int] = ..., error_reason: _Optional[str] = ...) -> None: ...

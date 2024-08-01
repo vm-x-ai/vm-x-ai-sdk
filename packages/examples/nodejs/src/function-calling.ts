@@ -13,7 +13,6 @@ const main = async () => {
         },
       ],
       resource: 'default',
-      workload: 'default',
       tools: [
         {
           type: 'function',
@@ -97,7 +96,6 @@ const main = async () => {
         },
       ],
       resource: 'default',
-      workload: 'default',
       tools: [
         {
           type: 'function',

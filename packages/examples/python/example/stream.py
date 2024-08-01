@@ -10,7 +10,6 @@ client = VMXClient()
 streaming_response = client.completion(
     request=CompletionRequest(
         resource="default",
-        workload="default",
         messages=[
             RequestMessage(
                 role="user",

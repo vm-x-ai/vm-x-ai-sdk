@@ -11,7 +11,6 @@ const main = async () => {
         },
       ],
       resource: 'default',
-      workload: 'default',
     },
     stream: false,
     multiAnswer: true,

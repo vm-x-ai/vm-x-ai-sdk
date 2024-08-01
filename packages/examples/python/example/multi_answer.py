@@ -48,7 +48,6 @@ async def multi_answer():
     resp1, resp2, resp3 = client.completion(
         request=CompletionRequest(
             resource="default",
-            workload="default",
             messages=[
                 RequestMessage(
                     role="user",
@@ -69,7 +68,6 @@ async def multi_answer():
     resp1, resp2, resp3 = client.completion(
         request=CompletionRequest(
             resource="default",
-            workload="default",
             messages=[
                 RequestMessage(
                     role="user",

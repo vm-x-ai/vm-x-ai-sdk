@@ -4,7 +4,7 @@ import type {
   RequestMessageToolCall,
   RequestToolChoiceItem,
   RequestTools,
-} from './proto-types/completion/completion';
+} from './proto-types/completion';
 
 export type CompletionRequest = Omit<BaseCompletionRequest, 'tools' | 'messages' | 'toolChoice'> & {
   tools?: RequestTools[];

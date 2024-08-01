@@ -15,7 +15,7 @@ import {
 } from '@grpc/grpc-js';
 import Long from 'long';
 import _m0 from 'protobufjs/minimal.js';
-import { Struct } from './google/protobuf/struct.js';
+import { Struct } from './google/protobuf/struct';
 
 export const protobufPackage = 'llm.chat';
 
@@ -31,9 +31,9 @@ export interface GetResourceProviderCountResponse {
 
 /** create: Request Types */
 export interface CompletionRequest {
-  index?: number | undefined;
+  primary?: boolean | undefined;
+  secondaryModelIndex?: number | undefined;
   resource: string;
-  workload: string;
   stream: boolean;
   messages: RequestMessage[];
   tools: RequestTools[];
@@ -104,7 +104,8 @@ export interface CompletionUsage {
 }
 
 export interface CompletionResponseMetadata {
-  index: number;
+  primary: boolean;
+  secondaryModelIndex?: number | undefined;
   provider: string;
   model: string;
   done: boolean;
@@ -306,9 +307,9 @@ export const GetResourceProviderCountResponse = {
 
 function createBaseCompletionRequest(): CompletionRequest {
   return {
-    index: undefined,
+    primary: undefined,
+    secondaryModelIndex: undefined,
     resource: '',
-    workload: '',
     stream: false,
     messages: [],
     tools: [],
@@ -319,14 +320,14 @@ function createBaseCompletionRequest(): CompletionRequest {
 
 export const CompletionRequest = {
   encode(message: CompletionRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.index !== undefined) {
-      writer.uint32(8).int32(message.index);
+    if (message.primary !== undefined) {
+      writer.uint32(8).bool(message.primary);
+    }
+    if (message.secondaryModelIndex !== undefined) {
+      writer.uint32(16).int32(message.secondaryModelIndex);
     }
     if (message.resource !== '') {
-      writer.uint32(18).string(message.resource);
-    }
-    if (message.workload !== '') {
-      writer.uint32(26).string(message.workload);
+      writer.uint32(26).string(message.resource);
     }
     if (message.stream !== false) {
       writer.uint32(32).bool(message.stream);
@@ -358,21 +359,21 @@ export const CompletionRequest = {
             break;
           }
 
-          message.index = reader.int32();
+          message.primary = reader.bool();
           continue;
         case 2:
-          if (tag !== 18) {
+          if (tag !== 16) {
             break;
           }
 
-          message.resource = reader.string();
+          message.secondaryModelIndex = reader.int32();
           continue;
         case 3:
           if (tag !== 26) {
             break;
           }
 
-          message.workload = reader.string();
+          message.resource = reader.string();
           continue;
         case 4:
           if (tag !== 32) {
@@ -452,9 +453,11 @@ export const CompletionRequest = {
 
   fromJSON(object: any): CompletionRequest {
     return {
-      index: isSet(object.index) ? globalThis.Number(object.index) : undefined,
+      primary: isSet(object.primary) ? globalThis.Boolean(object.primary) : undefined,
+      secondaryModelIndex: isSet(object.secondaryModelIndex)
+        ? globalThis.Number(object.secondaryModelIndex)
+        : undefined,
       resource: isSet(object.resource) ? globalThis.String(object.resource) : '',
-      workload: isSet(object.workload) ? globalThis.String(object.workload) : '',
       stream: isSet(object.stream) ? globalThis.Boolean(object.stream) : false,
       messages: globalThis.Array.isArray(object?.messages)
         ? object.messages.map((e: any) => RequestMessage.fromJSON(e))
@@ -467,14 +470,14 @@ export const CompletionRequest = {
 
   toJSON(message: CompletionRequest): unknown {
     const obj: any = {};
-    if (message.index !== undefined) {
-      obj.index = Math.round(message.index);
+    if (message.primary !== undefined) {
+      obj.primary = message.primary;
+    }
+    if (message.secondaryModelIndex !== undefined) {
+      obj.secondaryModelIndex = Math.round(message.secondaryModelIndex);
     }
     if (message.resource !== '') {
       obj.resource = message.resource;
-    }
-    if (message.workload !== '') {
-      obj.workload = message.workload;
     }
     if (message.stream !== false) {
       obj.stream = message.stream;
@@ -499,9 +502,9 @@ export const CompletionRequest = {
   },
   fromPartial<I extends Exact<DeepPartial<CompletionRequest>, I>>(object: I): CompletionRequest {
     const message = createBaseCompletionRequest();
-    message.index = object.index ?? undefined;
+    message.primary = object.primary ?? undefined;
+    message.secondaryModelIndex = object.secondaryModelIndex ?? undefined;
     message.resource = object.resource ?? '';
-    message.workload = object.workload ?? '';
     message.stream = object.stream ?? false;
     message.messages = object.messages?.map((e) => RequestMessage.fromPartial(e)) || [];
     message.tools = object.tools?.map((e) => RequestTools.fromPartial(e)) || [];
@@ -1779,7 +1782,8 @@ export const CompletionUsage = {
 
 function createBaseCompletionResponseMetadata(): CompletionResponseMetadata {
   return {
-    index: 0,
+    primary: false,
+    secondaryModelIndex: undefined,
     provider: '',
     model: '',
     done: false,
@@ -1794,35 +1798,38 @@ function createBaseCompletionResponseMetadata(): CompletionResponseMetadata {
 
 export const CompletionResponseMetadata = {
   encode(message: CompletionResponseMetadata, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
-    if (message.index !== 0) {
-      writer.uint32(8).int32(message.index);
+    if (message.primary !== false) {
+      writer.uint32(8).bool(message.primary);
+    }
+    if (message.secondaryModelIndex !== undefined) {
+      writer.uint32(16).int32(message.secondaryModelIndex);
     }
     if (message.provider !== '') {
-      writer.uint32(18).string(message.provider);
+      writer.uint32(26).string(message.provider);
     }
     if (message.model !== '') {
-      writer.uint32(26).string(message.model);
+      writer.uint32(34).string(message.model);
     }
     if (message.done !== false) {
-      writer.uint32(32).bool(message.done);
+      writer.uint32(40).bool(message.done);
     }
     if (message.success !== false) {
-      writer.uint32(40).bool(message.success);
+      writer.uint32(48).bool(message.success);
     }
     if (message.fallback !== false) {
-      writer.uint32(48).bool(message.fallback);
+      writer.uint32(56).bool(message.fallback);
     }
     if (message.fallbackAttempts !== 0) {
-      writer.uint32(56).int32(message.fallbackAttempts);
+      writer.uint32(64).int32(message.fallbackAttempts);
     }
     if (message.errorMessage !== undefined) {
-      writer.uint32(66).string(message.errorMessage);
+      writer.uint32(74).string(message.errorMessage);
     }
     if (message.errorCode !== undefined) {
-      writer.uint32(72).int32(message.errorCode);
+      writer.uint32(80).int32(message.errorCode);
     }
     if (message.errorReason !== undefined) {
-      writer.uint32(82).string(message.errorReason);
+      writer.uint32(90).string(message.errorReason);
     }
     return writer;
   },
@@ -1839,66 +1846,73 @@ export const CompletionResponseMetadata = {
             break;
           }
 
-          message.index = reader.int32();
+          message.primary = reader.bool();
           continue;
         case 2:
-          if (tag !== 18) {
+          if (tag !== 16) {
             break;
           }
 
-          message.provider = reader.string();
+          message.secondaryModelIndex = reader.int32();
           continue;
         case 3:
           if (tag !== 26) {
             break;
           }
 
-          message.model = reader.string();
+          message.provider = reader.string();
           continue;
         case 4:
-          if (tag !== 32) {
+          if (tag !== 34) {
             break;
           }
 
-          message.done = reader.bool();
+          message.model = reader.string();
           continue;
         case 5:
           if (tag !== 40) {
             break;
           }
 
-          message.success = reader.bool();
+          message.done = reader.bool();
           continue;
         case 6:
           if (tag !== 48) {
             break;
           }
 
-          message.fallback = reader.bool();
+          message.success = reader.bool();
           continue;
         case 7:
           if (tag !== 56) {
             break;
           }
 
-          message.fallbackAttempts = reader.int32();
+          message.fallback = reader.bool();
           continue;
         case 8:
-          if (tag !== 66) {
+          if (tag !== 64) {
+            break;
+          }
+
+          message.fallbackAttempts = reader.int32();
+          continue;
+        case 9:
+          if (tag !== 74) {
             break;
           }
 
           message.errorMessage = reader.string();
           continue;
-        case 9:
-          if (tag !== 72) {
+        case 10:
+          if (tag !== 80) {
             break;
           }
 
           message.errorCode = reader.int32();
           continue;
-        case 10:
-          if (tag !== 82) {
+        case 11:
+          if (tag !== 90) {
             break;
           }
 
@@ -1949,7 +1963,10 @@ export const CompletionResponseMetadata = {
 
   fromJSON(object: any): CompletionResponseMetadata {
     return {
-      index: isSet(object.index) ? globalThis.Number(object.index) : 0,
+      primary: isSet(object.primary) ? globalThis.Boolean(object.primary) : false,
+      secondaryModelIndex: isSet(object.secondaryModelIndex)
+        ? globalThis.Number(object.secondaryModelIndex)
+        : undefined,
       provider: isSet(object.provider) ? globalThis.String(object.provider) : '',
       model: isSet(object.model) ? globalThis.String(object.model) : '',
       done: isSet(object.done) ? globalThis.Boolean(object.done) : false,
@@ -1964,8 +1981,11 @@ export const CompletionResponseMetadata = {
 
   toJSON(message: CompletionResponseMetadata): unknown {
     const obj: any = {};
-    if (message.index !== 0) {
-      obj.index = Math.round(message.index);
+    if (message.primary !== false) {
+      obj.primary = message.primary;
+    }
+    if (message.secondaryModelIndex !== undefined) {
+      obj.secondaryModelIndex = Math.round(message.secondaryModelIndex);
     }
     if (message.provider !== '') {
       obj.provider = message.provider;
@@ -2002,7 +2022,8 @@ export const CompletionResponseMetadata = {
   },
   fromPartial<I extends Exact<DeepPartial<CompletionResponseMetadata>, I>>(object: I): CompletionResponseMetadata {
     const message = createBaseCompletionResponseMetadata();
-    message.index = object.index ?? 0;
+    message.primary = object.primary ?? false;
+    message.secondaryModelIndex = object.secondaryModelIndex ?? undefined;
     message.provider = object.provider ?? '';
     message.model = object.model ?? '';
     message.done = object.done ?? false;

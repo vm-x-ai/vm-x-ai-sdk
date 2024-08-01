@@ -21,9 +21,9 @@ message GetResourceProviderCountResponse {
 
 // create: Request Types
 message CompletionRequest {
-  optional int32 index = 1;
-  string resource = 2;
-  string workload = 3;
+  optional bool primary = 1;
+  optional int32 secondary_model_index = 2;
+  string resource = 3;
   bool stream = 4;
   repeated RequestMessage messages = 5;
   repeated RequestTools tools = 6;
@@ -96,15 +96,16 @@ message CompletionUsage {
 }
 
 message CompletionResponseMetadata {
-  int32 index = 1;
-  string provider = 2;
-  string model = 3;
-  bool done = 4;
-  bool success = 5;
-  bool fallback = 6;
-  int32 fallback_attempts = 7;
-  optional string error_message = 8;
-  optional int32 error_code = 9;
-  optional string error_reason = 10;
+  bool primary = 1;
+  optional int32 secondary_model_index = 2;
+  string provider = 3;
+  string model = 4;
+  bool done = 5;
+  bool success = 6;
+  bool fallback = 7;
+  int32 fallback_attempts = 8;
+  optional string error_message = 9;
+  optional int32 error_code = 10;
+  optional string error_reason = 11;
 }
 
