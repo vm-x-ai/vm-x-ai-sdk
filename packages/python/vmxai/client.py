@@ -155,7 +155,6 @@ class VMXClient:
             config.update(request.config)
 
         grpc_request = dict(
-            workload=request.workload,
             resource=request.resource,
             config=config,
             stream=stream,
@@ -210,8 +209,14 @@ class VMXClient:
         metadata: List[Tuple[str, str]],
         stream: bool,
     ):
+        primary = index == 0
+        secondary_model_index = index - 1 if index > 0 else None
+
         if stream:
-            return self.completion_client.create(GrpcCompletionRequest(index=index, **grpc_request), metadata=metadata)
+            return self.completion_client.create(
+                GrpcCompletionRequest(primary=primary, secondary_model_index=secondary_model_index, **grpc_request),
+                metadata=metadata,
+            )
         else:
             async with (
                 aio.secure_channel(f"grpc.{self.domain}", grpc.ssl_channel_credentials())
@@ -219,7 +224,8 @@ class VMXClient:
                 else aio.insecure_channel(self.domain)
             ) as channel:
                 result = CompletionServiceStub(channel).create(
-                    GrpcCompletionRequest(index=index, **grpc_request), metadata=metadata
+                    GrpcCompletionRequest(primary=primary, secondary_model_index=secondary_model_index, **grpc_request),
+                    metadata=metadata,
                 )
                 async for item in result:
                     return item

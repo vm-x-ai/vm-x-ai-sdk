@@ -6,8 +6,8 @@ import type {
   RequestToolChoice,
   RequestToolChoiceItem,
   CompletionRequest as GrpcCompletionRequest,
-} from './proto-types/completion/completion';
-import { CompletionServiceClient } from './proto-types/completion/completion';
+} from './proto-types/completion';
+import { CompletionServiceClient } from './proto-types/completion';
 import type { CompletionRequest } from './types';
 
 export type VMXClientOptions = {
@@ -85,7 +85,12 @@ export class VMXClient {
       const count = answerCount ?? (await this.fetchResourceProviderCount(request, grpcMetadata));
       return Array(count)
         .fill(0)
-        .map(async (_, index) => this.call({ index, ...grpcRequest }, grpcMetadata)) as TResult;
+        .map(async (_, index) =>
+          this.call(
+            { ...grpcRequest, primary: index === 0, secondaryModelIndex: index > 0 ? index - 1 : undefined },
+            grpcMetadata,
+          ),
+        ) as TResult;
     } else {
       return this.call(grpcRequest, grpcMetadata) as TResult;
     }

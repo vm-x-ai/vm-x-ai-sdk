@@ -15,7 +15,6 @@ client = VMXClient()
 function_response = client.completion(
     request=CompletionRequest(
         resource="default",
-        workload="default",
         messages=[
             RequestMessage(
                 role="user",
@@ -50,7 +49,6 @@ print("\n" * 2)
 function_response_callback = client.completion(
     request=CompletionRequest(
         resource="default",
-        workload="default",
         messages=[
             RequestMessage(
                 role="user",

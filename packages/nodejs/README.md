@@ -54,7 +54,6 @@ const main = async () => {
         },
       ],
       resource: 'default',
-      workload: 'default',
     },
     stream: false,
   });
@@ -79,7 +78,6 @@ const main = async () => {
         },
       ],
       resource: 'default',
-      workload: 'default',
     },
   });
 
@@ -107,7 +105,6 @@ const main = async () => {
         },
       ],
       resource: 'default',
-      workload: 'default',
       tools: [
         {
           type: 'function',
@@ -191,7 +188,6 @@ const main = async () => {
         },
       ],
       resource: 'default',
-      workload: 'default',
       tools: [
         {
           type: 'function',
@@ -242,7 +238,6 @@ const main = async () => {
         },
       ],
       resource: 'default',
-      workload: 'default',
     },
     multiAnswer: true,
   });
@@ -291,7 +286,6 @@ const main = async () => {
         },
       ],
       resource: 'default',
-      workload: 'default',
     },
     stream: false,
     multiAnswer: true,

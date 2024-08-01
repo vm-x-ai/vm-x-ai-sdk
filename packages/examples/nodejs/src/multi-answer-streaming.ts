@@ -12,7 +12,6 @@ const main = async () => {
         },
       ],
       resource: 'default',
-      workload: 'default',
     },
     multiAnswer: true,
   });
