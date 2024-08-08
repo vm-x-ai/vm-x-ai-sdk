@@ -11,10 +11,14 @@ readme = "README.md"
 package-mode = false
 
   [tool.poetry.dependencies]
-  python = ">=3.8,<4"
+  python = ">=3.8.1,<4"
 
     [tool.poetry.dependencies.vm-x-ai-sdk]
     path = "packages/python"
+    develop = true
+
+    [tool.poetry.dependencies.vm-x-ai-langchain]
+    path = "packages/langchain/python"
     develop = true
 
     [tool.poetry.dependencies.vm-x-ai-sdk-example]

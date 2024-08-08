@@ -1,0 +1,84 @@
+{
+  "name": "langchain-python",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/langchain/python/vmxai_langchain",
+  "targets": {
+    "lock": {
+      "executor": "@nxlv/python:run-commands",
+      "options": {
+        "command": "poetry lock --no-update",
+        "cwd": "packages/langchain/python"
+      }
+    },
+    "add": {
+      "executor": "@nxlv/python:add",
+      "options": {}
+    },
+    "update": {
+      "executor": "@nxlv/python:update",
+      "options": {}
+    },
+    "remove": {
+      "executor": "@nxlv/python:remove",
+      "options": {}
+    },
+    "build": {
+      "executor": "@nxlv/python:build",
+      "outputs": ["{projectRoot}/dist"],
+      "options": {
+        "outputPath": "packages/langchain/python/dist",
+        "publish": true,
+        "lockedVersions": false,
+        "bundleLocalDependencies": false
+      }
+    },
+    "install": {
+      "executor": "@nxlv/python:install",
+      "options": {
+        "silent": false,
+        "args": "",
+        "cacheDir": ".cache/pypoetry",
+        "verbose": false,
+        "debug": false
+      }
+    },
+    "lint": {
+      "executor": "@nxlv/python:ruff-check",
+      "outputs": [],
+      "options": {
+        "lintFilePatterns": ["vmxai_langchain", "tests"]
+      }
+    },
+    "test": {
+      "executor": "@nxlv/python:run-commands",
+      "outputs": [
+        "{workspaceRoot}/reports/packages/langchain/python/unittests",
+        "{workspaceRoot}/coverage/packages/langchain/python"
+      ],
+      "options": {
+        "command": "poetry run pytest tests/",
+        "cwd": "packages/langchain/python"
+      }
+    },
+    "release": {
+      "executor": "nx:run-commands",
+      "outputs": [],
+      "options": {
+        "command": "npx release-it --ci",
+        "cwd": "packages/langchain/python"
+      },
+      "dependsOn": ["^release"]
+    },
+    "publish": {
+      "executor": "nx:run-commands",
+      "outputs": [],
+      "options": {
+        "command": "poetry publish -vvv",
+        "cwd": "packages/langchain/python"
+      },
+      "dependsOn": ["build"]
+    }
+  },
+  "tags": ["sdk", "python", "langchain"]
+}
