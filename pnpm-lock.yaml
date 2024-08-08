@@ -80,8 +80,8 @@ devDependencies:
     specifier: 19.2.1
     version: 19.2.1(@swc/core@1.5.25)
   '@nxlv/python':
-    specifier: ^18.1.0
-    version: 18.1.0(@swc/core@1.5.25)
+    specifier: ^18.2.0
+    version: 18.2.0(@swc/core@1.5.25)
   '@release-it/bumper':
     specifier: ^6.0.1
     version: 6.0.1(release-it@17.3.0)
@@ -4451,8 +4451,8 @@ packages:
       - debug
     dev: true
 
-  /@nxlv/python@18.1.0(@swc/core@1.5.25):
-    resolution: {integrity: sha512-cfRxoUPTRTXukZO6eB7BDRR90pGmD6uMMFDDvBiyUoV09NzhGnk6znw+i4tPop5O+poTnf1MlYY2zkKS4TNI5A==}
+  /@nxlv/python@18.2.0(@swc/core@1.5.25):
+    resolution: {integrity: sha512-1JOP1VsvrafxuGjR0poSDxkn21sXjDsFBF12nyeu1kKJjrJuZmfBjEe4JnWiuBtfUeh9fAg27cAB1UyWlZImRw==}
     dependencies:
       '@iarna/toml': 2.2.5
       '@nx/devkit': 18.3.5(nx@18.3.5)

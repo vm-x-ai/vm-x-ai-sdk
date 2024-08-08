@@ -43,7 +43,10 @@ module.exports = {
     releaseName: `${packageName}-v${version}`,
   },
   hooks: {
-    'before:git:release': ['cd ../../..; pnpm nx format', 'poetry publish -vvv', 'git add --all'],
-    'after:bump': [`pnpm nx run ${packageName}:build`],
+    'before:git:release': [
+      'cd ../../..; pnpm nx format',
+      `cd ../../..; pnpm nx run ${packageName}:publish -vvv`,
+      'git add --all',
+    ],
   },
 };

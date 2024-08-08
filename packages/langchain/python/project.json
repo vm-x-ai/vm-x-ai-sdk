@@ -71,13 +71,9 @@
       "dependsOn": ["^release"]
     },
     "publish": {
-      "executor": "nx:run-commands",
+      "executor": "@nxlv/python:publish",
       "outputs": [],
-      "options": {
-        "command": "poetry publish -vvv",
-        "cwd": "packages/langchain/python"
-      },
-      "dependsOn": ["build"]
+      "options": {}
     }
   },
   "tags": ["sdk", "python", "langchain"]
