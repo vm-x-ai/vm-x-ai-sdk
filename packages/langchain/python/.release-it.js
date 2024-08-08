@@ -1,4 +1,4 @@
-const { whatBump } = require('../../../../release/util');
+const { whatBump } = require('../../../release/util');
 
 const version = '${version}';
 const packageName = 'langchain-python';
