@@ -22,7 +22,14 @@
     "examples": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "npx ts-node -r tsconfig-paths/register src/{args.filename}",
+        "command": "npx ts-node -r tsconfig-paths/register src/{args.filename} \"{args.message}\" {args.resource}",
+        "cwd": "packages/examples/nodejs"
+      }
+    },
+    "chat": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx ts-node -r tsconfig-paths/register src/chat.ts",
         "cwd": "packages/examples/nodejs"
       }
     }

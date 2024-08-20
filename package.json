@@ -9,6 +9,7 @@
   "private": true,
   "dependencies": {
     "@grpc/grpc-js": "^1.10.8",
+    "@inquirer/prompts": "^5.3.8",
     "@swc/helpers": "0.5.11",
     "axios": "1.7.2",
     "cache-manager": "^5.6.1",
