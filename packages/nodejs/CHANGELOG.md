@@ -1,3 +1,9 @@
+## [0.6.1](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/nodejs-v0.6.0...nodejs-v0.6.1) (2024-08-20)
+
+### Bug Fixes
+
+- **nodejs:** update export types ([3c410d0](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/3c410d002f752125371a5747453dc8d59e06a8cc))
+
 ## [0.6.0](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/nodejs-v0.5.0...nodejs-v0.6.0) (2024-08-01)
 
 ### Features
