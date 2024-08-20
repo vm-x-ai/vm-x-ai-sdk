@@ -8,7 +8,7 @@ import type {
   CompletionRequest as GrpcCompletionRequest,
 } from './proto-types/completion';
 import { CompletionServiceClient } from './proto-types/completion';
-import type { CompletionRequest } from './types';
+import type { CompletionRequestPayload } from './types';
 
 export type VMXClientOptions = {
   domain?: string;
@@ -57,7 +57,7 @@ export class VMXClient {
     multiAnswer = false as TMultiAnswer,
     answerCount,
   }: {
-    request: Omit<CompletionRequest, 'stream'>;
+    request: Omit<CompletionRequestPayload, 'stream'>;
     stream?: TStream;
     multiAnswer?: TMultiAnswer;
     answerCount?: number;
@@ -114,7 +114,7 @@ export class VMXClient {
   }
 
   private async fetchResourceProviderCount(
-    request: Omit<CompletionRequest, 'stream'>,
+    request: Omit<CompletionRequestPayload, 'stream'>,
     grpcMetadata: Metadata,
   ): Promise<number> {
     return await new Promise<number>((resolve, reject) =>

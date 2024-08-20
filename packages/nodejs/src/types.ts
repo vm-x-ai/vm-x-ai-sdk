@@ -6,15 +6,15 @@ import type {
   RequestTools,
 } from './proto-types/completion';
 
-export type CompletionRequest = Omit<BaseCompletionRequest, 'tools' | 'messages' | 'toolChoice'> & {
+export type CompletionRequestPayload = Omit<BaseCompletionRequest, 'tools' | 'messages' | 'toolChoice'> & {
   tools?: RequestTools[];
-  messages: RequestMessage[];
+  messages: CompletionMessage[];
   toolChoice?: 'auto' | 'none' | RequestToolChoiceItem;
 };
 
-export type RequestMessageRole = 'system' | 'user' | 'assistant' | 'tool';
+export type CompletionMessageRole = 'system' | 'user' | 'assistant' | 'tool';
 
-export type RequestMessage = Omit<BaseRequestMessage, 'toolCalls' | 'role'> & {
+export type CompletionMessage = Omit<BaseRequestMessage, 'toolCalls' | 'role'> & {
   toolCalls?: RequestMessageToolCall[];
-  role: RequestMessageRole;
+  role: CompletionMessageRole;
 };
