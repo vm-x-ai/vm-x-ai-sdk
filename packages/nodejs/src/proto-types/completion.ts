@@ -15,12 +15,14 @@ import {
 } from '@grpc/grpc-js';
 import Long from 'long';
 import _m0 from 'protobufjs/minimal.js';
-import { Struct } from './google/protobuf/struct';
+import { Struct } from './google/protobuf/struct.js';
 
 export const protobufPackage = 'llm.chat';
 
 /** getResourceProviderCount: Request Types */
 export interface GetResourceProviderCountRequest {
+  workspaceId?: string | undefined;
+  environmentId?: string | undefined;
   resource: string;
 }
 
@@ -31,6 +33,8 @@ export interface GetResourceProviderCountResponse {
 
 /** create: Request Types */
 export interface CompletionRequest {
+  workspaceId?: string | undefined;
+  environmentId?: string | undefined;
   primary?: boolean | undefined;
   secondaryModelIndex?: number | undefined;
   resource: string;
@@ -118,13 +122,19 @@ export interface CompletionResponseMetadata {
 }
 
 function createBaseGetResourceProviderCountRequest(): GetResourceProviderCountRequest {
-  return { resource: '' };
+  return { workspaceId: undefined, environmentId: undefined, resource: '' };
 }
 
 export const GetResourceProviderCountRequest = {
   encode(message: GetResourceProviderCountRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.workspaceId !== undefined) {
+      writer.uint32(10).string(message.workspaceId);
+    }
+    if (message.environmentId !== undefined) {
+      writer.uint32(18).string(message.environmentId);
+    }
     if (message.resource !== '') {
-      writer.uint32(10).string(message.resource);
+      writer.uint32(26).string(message.resource);
     }
     return writer;
   },
@@ -138,6 +148,20 @@ export const GetResourceProviderCountRequest = {
       switch (tag >>> 3) {
         case 1:
           if (tag !== 10) {
+            break;
+          }
+
+          message.workspaceId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.environmentId = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
             break;
           }
 
@@ -187,11 +211,21 @@ export const GetResourceProviderCountRequest = {
   },
 
   fromJSON(object: any): GetResourceProviderCountRequest {
-    return { resource: isSet(object.resource) ? globalThis.String(object.resource) : '' };
+    return {
+      workspaceId: isSet(object.workspaceId) ? globalThis.String(object.workspaceId) : undefined,
+      environmentId: isSet(object.environmentId) ? globalThis.String(object.environmentId) : undefined,
+      resource: isSet(object.resource) ? globalThis.String(object.resource) : '',
+    };
   },
 
   toJSON(message: GetResourceProviderCountRequest): unknown {
     const obj: any = {};
+    if (message.workspaceId !== undefined) {
+      obj.workspaceId = message.workspaceId;
+    }
+    if (message.environmentId !== undefined) {
+      obj.environmentId = message.environmentId;
+    }
     if (message.resource !== '') {
       obj.resource = message.resource;
     }
@@ -205,6 +239,8 @@ export const GetResourceProviderCountRequest = {
     object: I,
   ): GetResourceProviderCountRequest {
     const message = createBaseGetResourceProviderCountRequest();
+    message.workspaceId = object.workspaceId ?? undefined;
+    message.environmentId = object.environmentId ?? undefined;
     message.resource = object.resource ?? '';
     return message;
   },
@@ -307,6 +343,8 @@ export const GetResourceProviderCountResponse = {
 
 function createBaseCompletionRequest(): CompletionRequest {
   return {
+    workspaceId: undefined,
+    environmentId: undefined,
     primary: undefined,
     secondaryModelIndex: undefined,
     resource: '',
@@ -320,29 +358,35 @@ function createBaseCompletionRequest(): CompletionRequest {
 
 export const CompletionRequest = {
   encode(message: CompletionRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.workspaceId !== undefined) {
+      writer.uint32(10).string(message.workspaceId);
+    }
+    if (message.environmentId !== undefined) {
+      writer.uint32(18).string(message.environmentId);
+    }
     if (message.primary !== undefined) {
-      writer.uint32(8).bool(message.primary);
+      writer.uint32(24).bool(message.primary);
     }
     if (message.secondaryModelIndex !== undefined) {
-      writer.uint32(16).int32(message.secondaryModelIndex);
+      writer.uint32(32).int32(message.secondaryModelIndex);
     }
     if (message.resource !== '') {
-      writer.uint32(26).string(message.resource);
+      writer.uint32(42).string(message.resource);
     }
     if (message.stream !== false) {
-      writer.uint32(32).bool(message.stream);
+      writer.uint32(48).bool(message.stream);
     }
     for (const v of message.messages) {
-      RequestMessage.encode(v!, writer.uint32(42).fork()).ldelim();
+      RequestMessage.encode(v!, writer.uint32(58).fork()).ldelim();
     }
     for (const v of message.tools) {
-      RequestTools.encode(v!, writer.uint32(50).fork()).ldelim();
+      RequestTools.encode(v!, writer.uint32(66).fork()).ldelim();
     }
     if (message.toolChoice !== undefined) {
-      RequestToolChoice.encode(message.toolChoice, writer.uint32(58).fork()).ldelim();
+      RequestToolChoice.encode(message.toolChoice, writer.uint32(74).fork()).ldelim();
     }
     if (message.config !== undefined) {
-      Struct.encode(Struct.wrap(message.config), writer.uint32(66).fork()).ldelim();
+      Struct.encode(Struct.wrap(message.config), writer.uint32(82).fork()).ldelim();
     }
     return writer;
   },
@@ -355,56 +399,70 @@ export const CompletionRequest = {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1:
-          if (tag !== 8) {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.workspaceId = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.environmentId = reader.string();
+          continue;
+        case 3:
+          if (tag !== 24) {
             break;
           }
 
           message.primary = reader.bool();
-          continue;
-        case 2:
-          if (tag !== 16) {
-            break;
-          }
-
-          message.secondaryModelIndex = reader.int32();
-          continue;
-        case 3:
-          if (tag !== 26) {
-            break;
-          }
-
-          message.resource = reader.string();
           continue;
         case 4:
           if (tag !== 32) {
             break;
           }
 
-          message.stream = reader.bool();
+          message.secondaryModelIndex = reader.int32();
           continue;
         case 5:
           if (tag !== 42) {
             break;
           }
 
-          message.messages.push(RequestMessage.decode(reader, reader.uint32()));
+          message.resource = reader.string();
           continue;
         case 6:
-          if (tag !== 50) {
+          if (tag !== 48) {
             break;
           }
 
-          message.tools.push(RequestTools.decode(reader, reader.uint32()));
+          message.stream = reader.bool();
           continue;
         case 7:
           if (tag !== 58) {
             break;
           }
 
-          message.toolChoice = RequestToolChoice.decode(reader, reader.uint32());
+          message.messages.push(RequestMessage.decode(reader, reader.uint32()));
           continue;
         case 8:
           if (tag !== 66) {
+            break;
+          }
+
+          message.tools.push(RequestTools.decode(reader, reader.uint32()));
+          continue;
+        case 9:
+          if (tag !== 74) {
+            break;
+          }
+
+          message.toolChoice = RequestToolChoice.decode(reader, reader.uint32());
+          continue;
+        case 10:
+          if (tag !== 82) {
             break;
           }
 
@@ -453,6 +511,8 @@ export const CompletionRequest = {
 
   fromJSON(object: any): CompletionRequest {
     return {
+      workspaceId: isSet(object.workspaceId) ? globalThis.String(object.workspaceId) : undefined,
+      environmentId: isSet(object.environmentId) ? globalThis.String(object.environmentId) : undefined,
       primary: isSet(object.primary) ? globalThis.Boolean(object.primary) : undefined,
       secondaryModelIndex: isSet(object.secondaryModelIndex)
         ? globalThis.Number(object.secondaryModelIndex)
@@ -470,6 +530,12 @@ export const CompletionRequest = {
 
   toJSON(message: CompletionRequest): unknown {
     const obj: any = {};
+    if (message.workspaceId !== undefined) {
+      obj.workspaceId = message.workspaceId;
+    }
+    if (message.environmentId !== undefined) {
+      obj.environmentId = message.environmentId;
+    }
     if (message.primary !== undefined) {
       obj.primary = message.primary;
     }
@@ -502,6 +568,8 @@ export const CompletionRequest = {
   },
   fromPartial<I extends Exact<DeepPartial<CompletionRequest>, I>>(object: I): CompletionRequest {
     const message = createBaseCompletionRequest();
+    message.workspaceId = object.workspaceId ?? undefined;
+    message.environmentId = object.environmentId ?? undefined;
     message.primary = object.primary ?? undefined;
     message.secondaryModelIndex = object.secondaryModelIndex ?? undefined;
     message.resource = object.resource ?? '';

@@ -1,6 +1,6 @@
 import { Metadata, credentials } from '@grpc/grpc-js';
 import { v4 as uuidv4 } from 'uuid';
-import { VMXClientAPIKey, VMXClientOAuth, type VMXClientAuthProvider } from './auth';
+import { VMXClientAPIKey, type VMXClientAuthProvider } from './auth';
 import type {
   CompletionResponse,
   RequestToolChoice,
@@ -145,11 +145,6 @@ export class VMXClient {
       });
     } else if (this.options?.auth) {
       return this.options.auth;
-    } else if (process.env.VMX_OAUTH_CLIENT_ID && process.env.VMX_OAUTH_CLIENT_SECRET) {
-      return new VMXClientOAuth({
-        clientId: process.env.VMX_OAUTH_CLIENT_ID,
-        clientSecret: process.env.VMX_OAUTH_CLIENT_SECRET,
-      });
     } else {
       throw new Error(
         '`apiKey` or `auth` must be provided or `VMX_API_KEY` or `VMX_OAUTH_CLIENT_ID` and `VMX_OAUTH_CLIENT_SECRET` environment variables must be set',

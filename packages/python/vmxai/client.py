@@ -57,17 +57,11 @@ class VMXClient:
 
         self.domain = domain
         self.secure_channel = secure_channel
-        oauth_client_id = os.getenv("VMX_OAUTH_CLIENT_ID", None)
-        oauth_client_secret = os.getenv("VMX_OAUTH_CLIENT_SECRET", None)
 
         if api_key:
             self.auth = VMXClientAPIKey(api_key)
         elif auth:
             self.auth = auth
-        elif oauth_client_id and oauth_client_secret:
-            from vmxai.auth.oauth import VMXClientOAuth
-
-            self.auth = VMXClientOAuth(oauth_client_id, oauth_client_secret)
         else:
             raise AttributeError(
                 textwrap.wrap("""
@@ -155,6 +149,8 @@ class VMXClient:
             config.update(request.config)
 
         grpc_request = dict(
+            workspace_id=request.workspace_id,
+            environment_id=request.environment_id,
             resource=request.resource,
             config=config,
             stream=stream,
@@ -174,7 +170,11 @@ class VMXClient:
 
         if multi_answer and answer_count is None:
             provider_count_response: GetResourceProviderCountResponse = self.completion_client.getResourceProviderCount(
-                GetResourceProviderCountRequest(resource=request.resource), metadata=tuple(metadata)
+                GetResourceProviderCountRequest(
+                    workspace_id=request.workspace_id,
+                    environment_id=request.environment_id,
+                    resource=request.resource
+                ), metadata=tuple(metadata)
             )
 
             answer_count = provider_count_response.count
