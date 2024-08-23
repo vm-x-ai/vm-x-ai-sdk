@@ -7,10 +7,14 @@ from typing import ClassVar as _ClassVar, Iterable as _Iterable, Mapping as _Map
 DESCRIPTOR: _descriptor.FileDescriptor
 
 class GetResourceProviderCountRequest(_message.Message):
-    __slots__ = ("resource",)
+    __slots__ = ("workspace_id", "environment_id", "resource")
+    WORKSPACE_ID_FIELD_NUMBER: _ClassVar[int]
+    ENVIRONMENT_ID_FIELD_NUMBER: _ClassVar[int]
     RESOURCE_FIELD_NUMBER: _ClassVar[int]
+    workspace_id: str
+    environment_id: str
     resource: str
-    def __init__(self, resource: _Optional[str] = ...) -> None: ...
+    def __init__(self, workspace_id: _Optional[str] = ..., environment_id: _Optional[str] = ..., resource: _Optional[str] = ...) -> None: ...
 
 class GetResourceProviderCountResponse(_message.Message):
     __slots__ = ("count",)
@@ -19,7 +23,9 @@ class GetResourceProviderCountResponse(_message.Message):
     def __init__(self, count: _Optional[int] = ...) -> None: ...
 
 class CompletionRequest(_message.Message):
-    __slots__ = ("primary", "secondary_model_index", "resource", "stream", "messages", "tools", "tool_choice", "config")
+    __slots__ = ("workspace_id", "environment_id", "primary", "secondary_model_index", "resource", "stream", "messages", "tools", "tool_choice", "config")
+    WORKSPACE_ID_FIELD_NUMBER: _ClassVar[int]
+    ENVIRONMENT_ID_FIELD_NUMBER: _ClassVar[int]
     PRIMARY_FIELD_NUMBER: _ClassVar[int]
     SECONDARY_MODEL_INDEX_FIELD_NUMBER: _ClassVar[int]
     RESOURCE_FIELD_NUMBER: _ClassVar[int]
@@ -28,6 +34,8 @@ class CompletionRequest(_message.Message):
     TOOLS_FIELD_NUMBER: _ClassVar[int]
     TOOL_CHOICE_FIELD_NUMBER: _ClassVar[int]
     CONFIG_FIELD_NUMBER: _ClassVar[int]
+    workspace_id: str
+    environment_id: str
     primary: bool
     secondary_model_index: int
     resource: str
@@ -36,7 +44,7 @@ class CompletionRequest(_message.Message):
     tools: _containers.RepeatedCompositeFieldContainer[RequestTools]
     tool_choice: RequestToolChoice
     config: _struct_pb2.Struct
-    def __init__(self, primary: bool = ..., secondary_model_index: _Optional[int] = ..., resource: _Optional[str] = ..., stream: bool = ..., messages: _Optional[_Iterable[_Union[RequestMessage, _Mapping]]] = ..., tools: _Optional[_Iterable[_Union[RequestTools, _Mapping]]] = ..., tool_choice: _Optional[_Union[RequestToolChoice, _Mapping]] = ..., config: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ...) -> None: ...
+    def __init__(self, workspace_id: _Optional[str] = ..., environment_id: _Optional[str] = ..., primary: bool = ..., secondary_model_index: _Optional[int] = ..., resource: _Optional[str] = ..., stream: bool = ..., messages: _Optional[_Iterable[_Union[RequestMessage, _Mapping]]] = ..., tools: _Optional[_Iterable[_Union[RequestTools, _Mapping]]] = ..., tool_choice: _Optional[_Union[RequestToolChoice, _Mapping]] = ..., config: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ...) -> None: ...
 
 class RequestMessage(_message.Message):
     __slots__ = ("name", "role", "content", "tool_calls", "tool_call_id")

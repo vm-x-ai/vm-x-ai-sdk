@@ -31,13 +31,7 @@ from vmxai import (
 
 client = VMXClient(
     domain="env-abc123.clnt.dev.vm-x.ai", # (Or VMX_DOMAIN env variable)
-    # Authentication options
-    # OAuth Client credentials (Or VMX_OAUTH_CLIENT_ID, VMX_OAUTH_CLIENT_SECRET env variables)
-    auth=VMXClientOAuth(
-        client_id="abc123",
-        client_secret="abc123",
-    ),
-    # Or API Key (Or VMX_API_KEY env variable)
+    # API Key (Or VMX_API_KEY env variable)
     api_key="abc123",
 )
 

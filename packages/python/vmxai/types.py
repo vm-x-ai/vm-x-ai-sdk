@@ -29,6 +29,8 @@ class RequestMessage:
 @dataclass
 class CompletionRequest:
     resource: str
+    workspace_id: Optional[str] = None
+    environment_id: Optional[str] = None
     tools: Optional[list[RequestTools]] = field(default_factory=list)
     tool_choice: Optional[Union[Literal["auto", "none"], RequestToolChoiceItem]] = "auto"
     config: Optional[dict] = field(default_factory=dict)

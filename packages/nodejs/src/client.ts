@@ -1,6 +1,6 @@
 import { Metadata, credentials } from '@grpc/grpc-js';
 import { v4 as uuidv4 } from 'uuid';
-import { VMXClientAPIKey, VMXClientOAuth, type VMXClientAuthProvider } from './auth';
+import { VMXClientAPIKey, type VMXClientAuthProvider } from './auth';
 import type {
   CompletionResponse,
   RequestToolChoice,
@@ -15,14 +15,20 @@ export type VMXClientOptions = {
   apiKey?: string;
   auth?: VMXClientAuthProvider;
   secureChannel?: boolean;
+  workspaceId?: string;
+  environmentId?: string;
 };
 
 export class VMXClient {
   private completionClient: CompletionServiceClient;
   public domain: string;
+  public workspaceId?: string;
+  public environmentId?: string;
 
   constructor(public readonly options?: VMXClientOptions) {
     const domain = this.options?.domain ?? process.env.VMX_DOMAIN;
+    this.workspaceId = this.options?.workspaceId ?? process.env.VMX_WORKSPACE_ID;
+    this.environmentId = this.options?.environmentId ?? process.env.VMX_ENVIRONMENT_ID;
 
     if (!domain) {
       throw new Error('`domain` must be provided or `VMX_DOMAIN` environment variable must be set');
@@ -71,6 +77,9 @@ export class VMXClient {
 
     await this.getAuthProvider().injectCredentials(this, grpcMetadata);
     const grpcRequest = {
+      ...(this.workspaceId && this.environmentId
+        ? { workspaceId: this.workspaceId, environmentId: this.environmentId }
+        : {}),
       ...request,
       tools: request.tools ?? [],
       toolChoice: this.parseToolChoice(request.toolChoice),
@@ -145,11 +154,6 @@ export class VMXClient {
       });
     } else if (this.options?.auth) {
       return this.options.auth;
-    } else if (process.env.VMX_OAUTH_CLIENT_ID && process.env.VMX_OAUTH_CLIENT_SECRET) {
-      return new VMXClientOAuth({
-        clientId: process.env.VMX_OAUTH_CLIENT_ID,
-        clientSecret: process.env.VMX_OAUTH_CLIENT_SECRET,
-      });
     } else {
       throw new Error(
         '`apiKey` or `auth` must be provided or `VMX_API_KEY` or `VMX_OAUTH_CLIENT_ID` and `VMX_OAUTH_CLIENT_SECRET` environment variables must be set',

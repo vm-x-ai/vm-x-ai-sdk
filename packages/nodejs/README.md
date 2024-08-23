@@ -25,13 +25,7 @@ import { VMXClient, VMXClientOAuth } from '@vm-x-ai/sdk';
 
 const client = new VMXClient({
   domain: 'env-abc123.clnt.dev.vm-x.ai', // (Or VMX_DOMAIN env variable)
-  // Authentication options
-  // OAuth (Client credentials or VMX_OAUTH_CLIENT_ID, VMX_OAUTH_CLIENT_SECRET env variables)
-  auth: new VMXClientOAuth({
-    clientId: 'abc123',
-    clientSecret: 'abc123',
-  }),
-  // or API Key (Or VMX_API_KEY env variable)
+  // API Key (Or VMX_API_KEY env variable)
   apiKey: 'abc123',
 });
 ```

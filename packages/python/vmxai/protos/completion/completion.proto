@@ -11,7 +11,9 @@ service CompletionService {
 
 // getResourceProviderCount: Request Types
 message GetResourceProviderCountRequest {
-  string resource = 1;
+  optional string workspace_id = 1;
+  optional string environment_id = 2;
+  string resource = 3;
 }
 
 // getResourceProviderCount: Response Types
@@ -21,14 +23,16 @@ message GetResourceProviderCountResponse {
 
 // create: Request Types
 message CompletionRequest {
-  optional bool primary = 1;
-  optional int32 secondary_model_index = 2;
-  string resource = 3;
-  bool stream = 4;
-  repeated RequestMessage messages = 5;
-  repeated RequestTools tools = 6;
-  optional RequestToolChoice tool_choice = 7;
-  optional google.protobuf.Struct config = 8;
+  optional string workspace_id = 1;
+  optional string environment_id = 2;
+  optional bool primary = 3;
+  optional int32 secondary_model_index = 4;
+  string resource = 5;
+  bool stream = 6;
+  repeated RequestMessage messages = 7;
+  repeated RequestTools tools = 8;
+  optional RequestToolChoice tool_choice = 9;
+  optional google.protobuf.Struct config = 10;
 }
 
 message RequestMessage {
