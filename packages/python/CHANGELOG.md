@@ -1,3 +1,12 @@
+
+
+## [0.8.0](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/python-v0.7.0...python-v0.8.0) (2024-08-23)
+
+
+### Features
+
+* add support for multi-tenant ([#14](https://github.com/vm-x-ai/vm-x-ai-sdk/issues/14)) ([a29c17b](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/a29c17be51c52cde628b936984499f0a9e2b68c7))
+
 ## [0.7.0](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/python-v0.6.0...python-v0.7.0) (2024-08-01)
 
 ### Features
