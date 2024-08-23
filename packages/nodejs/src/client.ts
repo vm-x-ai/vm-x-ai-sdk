@@ -15,14 +15,20 @@ export type VMXClientOptions = {
   apiKey?: string;
   auth?: VMXClientAuthProvider;
   secureChannel?: boolean;
+  workspaceId?: string;
+  environmentId?: string;
 };
 
 export class VMXClient {
   private completionClient: CompletionServiceClient;
   public domain: string;
+  public workspaceId?: string;
+  public environmentId?: string;
 
   constructor(public readonly options?: VMXClientOptions) {
     const domain = this.options?.domain ?? process.env.VMX_DOMAIN;
+    this.workspaceId = this.options?.workspaceId ?? process.env.VMX_WORKSPACE_ID;
+    this.environmentId = this.options?.environmentId ?? process.env.VMX_ENVIRONMENT_ID;
 
     if (!domain) {
       throw new Error('`domain` must be provided or `VMX_DOMAIN` environment variable must be set');
@@ -71,6 +77,9 @@ export class VMXClient {
 
     await this.getAuthProvider().injectCredentials(this, grpcMetadata);
     const grpcRequest = {
+      ...(this.workspaceId && this.environmentId
+        ? { workspaceId: this.workspaceId, environmentId: this.environmentId }
+        : {}),
       ...request,
       tools: request.tools ?? [],
       toolChoice: this.parseToolChoice(request.toolChoice),

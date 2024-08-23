@@ -43,6 +43,8 @@ class VMXClient:
         auth: VMXClientAuthProvider = None,
         api_key: str = os.getenv("VMX_API_KEY", None),
         secure_channel: bool = os.getenv("VMX_SECURE_CHANNEL", "true").lower() == "true",
+        workspace_id: Optional[str] = os.getenv("VMX_WORKSPACE_ID", None),
+        environment_id: Optional[str] = os.getenv("VMX_ENVIRONMENT_ID", None),
     ):
         if not domain:
             raise AttributeError(
@@ -56,6 +58,8 @@ class VMXClient:
             )
 
         self.domain = domain
+        self.workspace_id = workspace_id
+        self.environment_id = environment_id
         self.secure_channel = secure_channel
 
         if api_key:
@@ -149,8 +153,8 @@ class VMXClient:
             config.update(request.config)
 
         grpc_request = dict(
-            workspace_id=request.workspace_id,
-            environment_id=request.environment_id,
+            workspace_id=request.workspace_id or self.workspace_id,
+            environment_id=request.environment_id or self.environment_id,
             resource=request.resource,
             config=config,
             stream=stream,
@@ -171,8 +175,8 @@ class VMXClient:
         if multi_answer and answer_count is None:
             provider_count_response: GetResourceProviderCountResponse = self.completion_client.getResourceProviderCount(
                 GetResourceProviderCountRequest(
-                    workspace_id=request.workspace_id,
-                    environment_id=request.environment_id,
+                    workspace_id=request.workspace_id or self.workspace_id,
+                    environment_id=request.environment_id or self.environment_id,
                     resource=request.resource
                 ), metadata=tuple(metadata)
             )

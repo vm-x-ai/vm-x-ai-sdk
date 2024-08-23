@@ -277,6 +277,10 @@ class BaseChatVMX(BaseChatModel):
     vmx_api_key: Optional[SecretStr] = Field(default=None, alias="api_key")
     """Automatically inferred from env var `VMX_API_KEY` if not provided."""
     vmx_domain: Optional[str] = Field(default=None, alias="domain")
+    """Automatically inferred from env var `VMX_WORKSPACE_ID` if not provided."""
+    vmx_workspace_id: Optional[str] = Field(default=None, alias="workspace_id")
+    """Automatically inferred from env var `VMX_ENVIRONMENT_ID` if not provided."""
+    vmx_environment_id: Optional[str] = Field(default=None, alias="environment_id")
     """Automatically inferred from env var `VMX_DOMAIN` if not provided."""
     streaming: bool = False
     """Whether to stream the results or not."""
@@ -300,16 +304,24 @@ class BaseChatVMX(BaseChatModel):
     def validate_environment(cls, values: Dict) -> Dict:
         """Validate that api key and python package exists in environment."""
         values["vmx_api_key"] = convert_to_secret_str(get_from_dict_or_env(values, "api_key", "VMX_API_KEY"))
-
-        values["vmx_domain"] = convert_to_secret_str(get_from_dict_or_env(values, "domain", "VMX_DOMAIN"))
+        values["vmx_domain"] = get_from_dict_or_env(values, "domain", "VMX_DOMAIN")
+        values["vmx_workspace_id"] = get_from_dict_or_env(values, "workspace_id", "VMX_WORKSPACE_ID", "")
+        values["vmx_environment_id"] = get_from_dict_or_env(values, "environment_id", "VMX_ENVIRONMENT_ID", "")
 
         client_params = {
             "api_key": (values["vmx_api_key"].get_secret_value() if values["vmx_api_key"] else None),
-            "domain": (values["vmx_domain"].get_secret_value() if values["vmx_domain"] else None),
+            "domain": values["vmx_domain"],
+            "workspace_id": values["vmx_workspace_id"] if values["vmx_environment_id"] else None,
+            "environment_id": values["vmx_environment_id"] if values["vmx_environment_id"] else None,
         }
 
         if not values.get("client"):
-            values["client"] = VMXClient(api_key=client_params["api_key"], domain=client_params["domain"])
+            values["client"] = VMXClient(
+                api_key=client_params["api_key"],
+                domain=client_params["domain"],
+                workspace_id=client_params["workspace_id"],
+                environment_id=client_params["environment_id"],
+            )
         return values
 
     @property
@@ -363,9 +375,9 @@ class BaseChatVMX(BaseChatModel):
             stream_iter = self._stream(messages, stop=stop, run_manager=run_manager, **kwargs)
             return generate_from_stream(stream_iter)
         payload = self._get_request_payload(messages, stop=stop, **kwargs)
-        if 'parallel_tool_calls' in payload:
+        if "parallel_tool_calls" in payload:
             # TODO: Add back in after VM-X supports parallel tool calls
-            del payload['parallel_tool_calls']
+            del payload["parallel_tool_calls"]
 
         request = CompletionRequest(**payload)
         response = self.client.completion(request=request, stream=False)
@@ -952,6 +964,12 @@ class ChatVMX(BaseChatVMX):
 
         if self.vmx_domain:
             attributes["vmx_domain"] = self.vmx_domain
+
+        if self.vmx_workspace_id:
+            attributes["vmx_workspace_id"] = self.vmx_workspace_id
+
+        if self.vmx_environment_id:
+            attributes["vmx_environment_id"] = self.vmx_environment_id
 
         return attributes
 

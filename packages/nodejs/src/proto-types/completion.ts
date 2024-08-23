@@ -15,7 +15,7 @@ import {
 } from '@grpc/grpc-js';
 import Long from 'long';
 import _m0 from 'protobufjs/minimal.js';
-import { Struct } from './google/protobuf/struct.js';
+import { Struct } from './google/protobuf/struct';
 
 export const protobufPackage = 'llm.chat';
 
