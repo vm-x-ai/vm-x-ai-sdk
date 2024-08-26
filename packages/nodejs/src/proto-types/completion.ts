@@ -99,6 +99,7 @@ export interface CompletionResponse {
   usage?: CompletionUsage | undefined;
   responseTimestamp?: number | undefined;
   metadata: CompletionResponseMetadata | undefined;
+  metrics?: CompletionResponseMetrics | undefined;
 }
 
 export interface CompletionUsage {
@@ -119,6 +120,11 @@ export interface CompletionResponseMetadata {
   errorMessage?: string | undefined;
   errorCode?: number | undefined;
   errorReason?: string | undefined;
+}
+
+export interface CompletionResponseMetrics {
+  timeToFirstToken?: number | undefined;
+  tokensPerSecond: number;
 }
 
 function createBaseGetResourceProviderCountRequest(): GetResourceProviderCountRequest {
@@ -1539,6 +1545,7 @@ function createBaseCompletionResponse(): CompletionResponse {
     usage: undefined,
     responseTimestamp: undefined,
     metadata: undefined,
+    metrics: undefined,
   };
 }
 
@@ -1564,6 +1571,9 @@ export const CompletionResponse = {
     }
     if (message.metadata !== undefined) {
       CompletionResponseMetadata.encode(message.metadata, writer.uint32(58).fork()).ldelim();
+    }
+    if (message.metrics !== undefined) {
+      CompletionResponseMetrics.encode(message.metrics, writer.uint32(66).fork()).ldelim();
     }
     return writer;
   },
@@ -1624,6 +1634,13 @@ export const CompletionResponse = {
 
           message.metadata = CompletionResponseMetadata.decode(reader, reader.uint32());
           continue;
+        case 8:
+          if (tag !== 66) {
+            break;
+          }
+
+          message.metrics = CompletionResponseMetrics.decode(reader, reader.uint32());
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -1678,6 +1695,7 @@ export const CompletionResponse = {
       usage: isSet(object.usage) ? CompletionUsage.fromJSON(object.usage) : undefined,
       responseTimestamp: isSet(object.responseTimestamp) ? globalThis.Number(object.responseTimestamp) : undefined,
       metadata: isSet(object.metadata) ? CompletionResponseMetadata.fromJSON(object.metadata) : undefined,
+      metrics: isSet(object.metrics) ? CompletionResponseMetrics.fromJSON(object.metrics) : undefined,
     };
   },
 
@@ -1704,6 +1722,9 @@ export const CompletionResponse = {
     if (message.metadata !== undefined) {
       obj.metadata = CompletionResponseMetadata.toJSON(message.metadata);
     }
+    if (message.metrics !== undefined) {
+      obj.metrics = CompletionResponseMetrics.toJSON(message.metrics);
+    }
     return obj;
   },
 
@@ -1722,6 +1743,10 @@ export const CompletionResponse = {
     message.metadata =
       object.metadata !== undefined && object.metadata !== null
         ? CompletionResponseMetadata.fromPartial(object.metadata)
+        : undefined;
+    message.metrics =
+      object.metrics !== undefined && object.metrics !== null
+        ? CompletionResponseMetrics.fromPartial(object.metrics)
         : undefined;
     return message;
   },
@@ -2101,6 +2126,114 @@ export const CompletionResponseMetadata = {
     message.errorMessage = object.errorMessage ?? undefined;
     message.errorCode = object.errorCode ?? undefined;
     message.errorReason = object.errorReason ?? undefined;
+    return message;
+  },
+};
+
+function createBaseCompletionResponseMetrics(): CompletionResponseMetrics {
+  return { timeToFirstToken: undefined, tokensPerSecond: 0 };
+}
+
+export const CompletionResponseMetrics = {
+  encode(message: CompletionResponseMetrics, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.timeToFirstToken !== undefined) {
+      writer.uint32(13).float(message.timeToFirstToken);
+    }
+    if (message.tokensPerSecond !== 0) {
+      writer.uint32(21).float(message.tokensPerSecond);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): CompletionResponseMetrics {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseCompletionResponseMetrics();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 13) {
+            break;
+          }
+
+          message.timeToFirstToken = reader.float();
+          continue;
+        case 2:
+          if (tag !== 21) {
+            break;
+          }
+
+          message.tokensPerSecond = reader.float();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  // encodeTransform encodes a source of message objects.
+  // Transform<CompletionResponseMetrics, Uint8Array>
+  async *encodeTransform(
+    source:
+      | AsyncIterable<CompletionResponseMetrics | CompletionResponseMetrics[]>
+      | Iterable<CompletionResponseMetrics | CompletionResponseMetrics[]>,
+  ): AsyncIterable<Uint8Array> {
+    for await (const pkt of source) {
+      if (globalThis.Array.isArray(pkt)) {
+        for (const p of pkt as any) {
+          yield* [CompletionResponseMetrics.encode(p).finish()];
+        }
+      } else {
+        yield* [CompletionResponseMetrics.encode(pkt as any).finish()];
+      }
+    }
+  },
+
+  // decodeTransform decodes a source of encoded messages.
+  // Transform<Uint8Array, CompletionResponseMetrics>
+  async *decodeTransform(
+    source: AsyncIterable<Uint8Array | Uint8Array[]> | Iterable<Uint8Array | Uint8Array[]>,
+  ): AsyncIterable<CompletionResponseMetrics> {
+    for await (const pkt of source) {
+      if (globalThis.Array.isArray(pkt)) {
+        for (const p of pkt as any) {
+          yield* [CompletionResponseMetrics.decode(p)];
+        }
+      } else {
+        yield* [CompletionResponseMetrics.decode(pkt as any)];
+      }
+    }
+  },
+
+  fromJSON(object: any): CompletionResponseMetrics {
+    return {
+      timeToFirstToken: isSet(object.timeToFirstToken) ? globalThis.Number(object.timeToFirstToken) : undefined,
+      tokensPerSecond: isSet(object.tokensPerSecond) ? globalThis.Number(object.tokensPerSecond) : 0,
+    };
+  },
+
+  toJSON(message: CompletionResponseMetrics): unknown {
+    const obj: any = {};
+    if (message.timeToFirstToken !== undefined) {
+      obj.timeToFirstToken = message.timeToFirstToken;
+    }
+    if (message.tokensPerSecond !== 0) {
+      obj.tokensPerSecond = message.tokensPerSecond;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<CompletionResponseMetrics>, I>>(base?: I): CompletionResponseMetrics {
+    return CompletionResponseMetrics.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<CompletionResponseMetrics>, I>>(object: I): CompletionResponseMetrics {
+    const message = createBaseCompletionResponseMetrics();
+    message.timeToFirstToken = object.timeToFirstToken ?? undefined;
+    message.tokensPerSecond = object.tokensPerSecond ?? 0;
     return message;
   },
 };

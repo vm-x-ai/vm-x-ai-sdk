@@ -91,6 +91,7 @@ message CompletionResponse {
   optional CompletionUsage usage = 5;
   optional int64 response_timestamp = 6;
   CompletionResponseMetadata metadata = 7;
+  optional CompletionResponseMetrics metrics = 8;
 }
 
 message CompletionUsage {
@@ -113,3 +114,7 @@ message CompletionResponseMetadata {
   optional string error_reason = 11;
 }
 
+message CompletionResponseMetrics {
+  optional float time_to_first_token = 1;
+  float tokens_per_second = 2;
+}
