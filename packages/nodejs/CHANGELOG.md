@@ -1,3 +1,9 @@
+## [0.8.0](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/nodejs-v0.7.0...nodejs-v0.8.0) (2024-08-26)
+
+### Features
+
+- add metrics to completion response ([#15](https://github.com/vm-x-ai/vm-x-ai-sdk/issues/15)) ([bdd22f6](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/bdd22f6b448860d5503011e821d929afe30fe8c9))
+
 ## [0.7.0](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/nodejs-v0.6.1...nodejs-v0.7.0) (2024-08-23)
 
 ### Features
