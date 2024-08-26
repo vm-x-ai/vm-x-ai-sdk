@@ -121,7 +121,7 @@ class RequestToolChoiceFunction(_message.Message):
     def __init__(self, name: _Optional[str] = ...) -> None: ...
 
 class CompletionResponse(_message.Message):
-    __slots__ = ("id", "message", "role", "tool_calls", "usage", "response_timestamp", "metadata")
+    __slots__ = ("id", "message", "role", "tool_calls", "usage", "response_timestamp", "metadata", "metrics")
     ID_FIELD_NUMBER: _ClassVar[int]
     MESSAGE_FIELD_NUMBER: _ClassVar[int]
     ROLE_FIELD_NUMBER: _ClassVar[int]
@@ -129,6 +129,7 @@ class CompletionResponse(_message.Message):
     USAGE_FIELD_NUMBER: _ClassVar[int]
     RESPONSE_TIMESTAMP_FIELD_NUMBER: _ClassVar[int]
     METADATA_FIELD_NUMBER: _ClassVar[int]
+    METRICS_FIELD_NUMBER: _ClassVar[int]
     id: str
     message: str
     role: str
@@ -136,7 +137,8 @@ class CompletionResponse(_message.Message):
     usage: CompletionUsage
     response_timestamp: int
     metadata: CompletionResponseMetadata
-    def __init__(self, id: _Optional[str] = ..., message: _Optional[str] = ..., role: _Optional[str] = ..., tool_calls: _Optional[_Iterable[_Union[RequestMessageToolCall, _Mapping]]] = ..., usage: _Optional[_Union[CompletionUsage, _Mapping]] = ..., response_timestamp: _Optional[int] = ..., metadata: _Optional[_Union[CompletionResponseMetadata, _Mapping]] = ...) -> None: ...
+    metrics: CompletionResponseMetrics
+    def __init__(self, id: _Optional[str] = ..., message: _Optional[str] = ..., role: _Optional[str] = ..., tool_calls: _Optional[_Iterable[_Union[RequestMessageToolCall, _Mapping]]] = ..., usage: _Optional[_Union[CompletionUsage, _Mapping]] = ..., response_timestamp: _Optional[int] = ..., metadata: _Optional[_Union[CompletionResponseMetadata, _Mapping]] = ..., metrics: _Optional[_Union[CompletionResponseMetrics, _Mapping]] = ...) -> None: ...
 
 class CompletionUsage(_message.Message):
     __slots__ = ("prompt", "completion", "total")
@@ -173,3 +175,11 @@ class CompletionResponseMetadata(_message.Message):
     error_code: int
     error_reason: str
     def __init__(self, primary: bool = ..., secondary_model_index: _Optional[int] = ..., provider: _Optional[str] = ..., model: _Optional[str] = ..., done: bool = ..., success: bool = ..., fallback: bool = ..., fallback_attempts: _Optional[int] = ..., error_message: _Optional[str] = ..., error_code: _Optional[int] = ..., error_reason: _Optional[str] = ...) -> None: ...
+
+class CompletionResponseMetrics(_message.Message):
+    __slots__ = ("time_to_first_token", "tokens_per_second")
+    TIME_TO_FIRST_TOKEN_FIELD_NUMBER: _ClassVar[int]
+    TOKENS_PER_SECOND_FIELD_NUMBER: _ClassVar[int]
+    time_to_first_token: float
+    tokens_per_second: float
+    def __init__(self, time_to_first_token: _Optional[float] = ..., tokens_per_second: _Optional[float] = ...) -> None: ...
