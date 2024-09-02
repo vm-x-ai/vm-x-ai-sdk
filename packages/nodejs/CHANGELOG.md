@@ -1,3 +1,9 @@
+## [0.9.0](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/nodejs-v0.8.0...nodejs-v0.9.0) (2024-09-02)
+
+### Features
+
+- add finish reason and include raw response properties ([#16](https://github.com/vm-x-ai/vm-x-ai-sdk/issues/16)) ([6d53020](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/6d53020d8e2a83f3dfb55a9836100d56fb05885d))
+
 ## [0.8.0](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/nodejs-v0.7.0...nodejs-v0.8.0) (2024-08-26)
 
 ### Features
