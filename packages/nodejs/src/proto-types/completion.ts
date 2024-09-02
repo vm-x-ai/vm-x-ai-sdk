@@ -43,6 +43,7 @@ export interface CompletionRequest {
   tools: RequestTools[];
   toolChoice?: RequestToolChoice | undefined;
   config?: { [key: string]: any } | undefined;
+  includeRawResponse?: boolean | undefined;
 }
 
 export interface RequestMessage {
@@ -100,6 +101,8 @@ export interface CompletionResponse {
   responseTimestamp?: number | undefined;
   metadata: CompletionResponseMetadata | undefined;
   metrics?: CompletionResponseMetrics | undefined;
+  rawResponse?: { [key: string]: any } | undefined;
+  finishReason: string;
 }
 
 export interface CompletionUsage {
@@ -359,6 +362,7 @@ function createBaseCompletionRequest(): CompletionRequest {
     tools: [],
     toolChoice: undefined,
     config: undefined,
+    includeRawResponse: undefined,
   };
 }
 
@@ -393,6 +397,9 @@ export const CompletionRequest = {
     }
     if (message.config !== undefined) {
       Struct.encode(Struct.wrap(message.config), writer.uint32(82).fork()).ldelim();
+    }
+    if (message.includeRawResponse !== undefined) {
+      writer.uint32(88).bool(message.includeRawResponse);
     }
     return writer;
   },
@@ -474,6 +481,13 @@ export const CompletionRequest = {
 
           message.config = Struct.unwrap(Struct.decode(reader, reader.uint32()));
           continue;
+        case 11:
+          if (tag !== 88) {
+            break;
+          }
+
+          message.includeRawResponse = reader.bool();
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -531,6 +545,7 @@ export const CompletionRequest = {
       tools: globalThis.Array.isArray(object?.tools) ? object.tools.map((e: any) => RequestTools.fromJSON(e)) : [],
       toolChoice: isSet(object.toolChoice) ? RequestToolChoice.fromJSON(object.toolChoice) : undefined,
       config: isObject(object.config) ? object.config : undefined,
+      includeRawResponse: isSet(object.includeRawResponse) ? globalThis.Boolean(object.includeRawResponse) : undefined,
     };
   },
 
@@ -566,6 +581,9 @@ export const CompletionRequest = {
     if (message.config !== undefined) {
       obj.config = message.config;
     }
+    if (message.includeRawResponse !== undefined) {
+      obj.includeRawResponse = message.includeRawResponse;
+    }
     return obj;
   },
 
@@ -587,6 +605,7 @@ export const CompletionRequest = {
         ? RequestToolChoice.fromPartial(object.toolChoice)
         : undefined;
     message.config = object.config ?? undefined;
+    message.includeRawResponse = object.includeRawResponse ?? undefined;
     return message;
   },
 };
@@ -1546,6 +1565,8 @@ function createBaseCompletionResponse(): CompletionResponse {
     responseTimestamp: undefined,
     metadata: undefined,
     metrics: undefined,
+    rawResponse: undefined,
+    finishReason: '',
   };
 }
 
@@ -1574,6 +1595,12 @@ export const CompletionResponse = {
     }
     if (message.metrics !== undefined) {
       CompletionResponseMetrics.encode(message.metrics, writer.uint32(66).fork()).ldelim();
+    }
+    if (message.rawResponse !== undefined) {
+      Struct.encode(Struct.wrap(message.rawResponse), writer.uint32(74).fork()).ldelim();
+    }
+    if (message.finishReason !== '') {
+      writer.uint32(82).string(message.finishReason);
     }
     return writer;
   },
@@ -1641,6 +1668,20 @@ export const CompletionResponse = {
 
           message.metrics = CompletionResponseMetrics.decode(reader, reader.uint32());
           continue;
+        case 9:
+          if (tag !== 74) {
+            break;
+          }
+
+          message.rawResponse = Struct.unwrap(Struct.decode(reader, reader.uint32()));
+          continue;
+        case 10:
+          if (tag !== 82) {
+            break;
+          }
+
+          message.finishReason = reader.string();
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -1696,6 +1737,8 @@ export const CompletionResponse = {
       responseTimestamp: isSet(object.responseTimestamp) ? globalThis.Number(object.responseTimestamp) : undefined,
       metadata: isSet(object.metadata) ? CompletionResponseMetadata.fromJSON(object.metadata) : undefined,
       metrics: isSet(object.metrics) ? CompletionResponseMetrics.fromJSON(object.metrics) : undefined,
+      rawResponse: isObject(object.rawResponse) ? object.rawResponse : undefined,
+      finishReason: isSet(object.finishReason) ? globalThis.String(object.finishReason) : '',
     };
   },
 
@@ -1725,6 +1768,12 @@ export const CompletionResponse = {
     if (message.metrics !== undefined) {
       obj.metrics = CompletionResponseMetrics.toJSON(message.metrics);
     }
+    if (message.rawResponse !== undefined) {
+      obj.rawResponse = message.rawResponse;
+    }
+    if (message.finishReason !== '') {
+      obj.finishReason = message.finishReason;
+    }
     return obj;
   },
 
@@ -1748,6 +1797,8 @@ export const CompletionResponse = {
       object.metrics !== undefined && object.metrics !== null
         ? CompletionResponseMetrics.fromPartial(object.metrics)
         : undefined;
+    message.rawResponse = object.rawResponse ?? undefined;
+    message.finishReason = object.finishReason ?? '';
     return message;
   },
 };
