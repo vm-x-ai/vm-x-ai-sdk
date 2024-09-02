@@ -1,3 +1,9 @@
+## [0.10.0](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/python-v0.9.0...python-v0.10.0) (2024-09-02)
+
+### Features
+
+- add finish reason and include raw response properties ([#16](https://github.com/vm-x-ai/vm-x-ai-sdk/issues/16)) ([6d53020](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/6d53020d8e2a83f3dfb55a9836100d56fb05885d))
+
 ## [0.9.0](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/python-v0.8.0...python-v0.9.0) (2024-08-26)
 
 ### Features
