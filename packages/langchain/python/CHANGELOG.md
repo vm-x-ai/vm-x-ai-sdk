@@ -1,3 +1,20 @@
+## 0.3.0 (2024-09-18)
+
+
+### 🚀 Features
+
+- rename langchain python module to langchain_vmxai ([c4be11f](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/c4be11f))
+
+
+### 🧱 Updated Dependencies
+
+- Updated vm-x-ai-sdk-python to 0.11.0
+
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## [0.2.0](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/langchain-python-v0.1.0...langchain-python-v0.2.0) (2024-08-23)
 
 ### Features

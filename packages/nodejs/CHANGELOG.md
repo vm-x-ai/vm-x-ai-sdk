@@ -1,3 +1,13 @@
+## 0.10.0 (2024-09-18)
+
+### 🚀 Features
+
+- remove auth option ([5c23246](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/5c23246))
+
+### ❤️ Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## [0.9.0](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/nodejs-v0.8.0...nodejs-v0.9.0) (2024-09-02)
 
 ### Features

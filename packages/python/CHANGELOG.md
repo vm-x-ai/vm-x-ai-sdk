@@ -1,3 +1,13 @@
+## 0.11.0 (2024-09-18)
+
+### 🚀 Features
+
+- remove auth option ([16fcd15](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/16fcd15))
+
+### ❤️ Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## [0.10.0](https://github.com/vm-x-ai/vm-x-ai-sdk/compare/python-v0.9.0...python-v0.10.0) (2024-09-02)
 
 ### Features
