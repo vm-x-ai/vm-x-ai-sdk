@@ -64,7 +64,7 @@ jobs:
           PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
       - name: Release
         run: |
-          pnpm nx release
+          pnpm nx release --yes
           git push --follow-tags
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
