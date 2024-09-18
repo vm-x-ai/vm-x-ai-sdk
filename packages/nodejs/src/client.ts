@@ -13,7 +13,6 @@ import type { CompletionRequestPayload } from './types';
 export type VMXClientOptions = {
   domain?: string;
   apiKey?: string;
-  auth?: VMXClientAuthProvider;
   secureChannel?: boolean;
   workspaceId?: string;
   environmentId?: string;
@@ -152,11 +151,9 @@ export class VMXClient {
       return new VMXClientAPIKey({
         apiKey: process.env.VMX_API_KEY,
       });
-    } else if (this.options?.auth) {
-      return this.options.auth;
     } else {
       throw new Error(
-        '`apiKey` or `auth` must be provided or `VMX_API_KEY` or `VMX_OAUTH_CLIENT_ID` and `VMX_OAUTH_CLIENT_SECRET` environment variables must be set',
+        '`apiKey` must be provided or `VMX_API_KEY` or `VMX_OAUTH_CLIENT_ID` and `VMX_OAUTH_CLIENT_SECRET` environment variables must be set',
       );
     }
   }
