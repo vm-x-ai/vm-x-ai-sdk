@@ -68,15 +68,6 @@
       },
       "dependsOn": ["^release"]
     },
-    "publish": {
-      "executor": "nx:run-commands",
-      "outputs": [],
-      "options": {
-        "command": "poetry publish -vvv",
-        "cwd": "packages/python"
-      },
-      "dependsOn": ["build"]
-    },
     "proto-gen": {
       "executor": "nx:run-commands",
       "options": {
