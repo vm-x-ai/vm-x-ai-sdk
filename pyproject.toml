@@ -17,7 +17,7 @@ package-mode = false
     path = "packages/python"
     develop = true
 
-    [tool.poetry.dependencies.vm-x-ai-langchain]
+    [tool.poetry.dependencies.langchain-vm-x-ai]
     path = "packages/langchain/python"
     develop = true
 
