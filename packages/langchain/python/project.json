@@ -3,6 +3,7 @@
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "packages/langchain/python/vmxai_langchain",
+  "tags": ["sdk", "python", "langchain"],
   "targets": {
     "lock": {
       "executor": "@nxlv/python:run-commands",
@@ -70,11 +71,15 @@
       },
       "dependsOn": ["^release"]
     },
-    "publish": {
+    "nx-release-publish": {
       "executor": "@nxlv/python:publish",
       "outputs": [],
       "options": {}
     }
   },
-  "tags": ["sdk", "python", "langchain"]
+  "release": {
+    "version": {
+      "generator": "@nxlv/python:release-version"
+    }
+  }
 }

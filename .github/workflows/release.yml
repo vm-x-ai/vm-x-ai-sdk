@@ -1,9 +1,9 @@
 name: Release
 
 on:
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
   workflow_dispatch:
     branches:
       - main
@@ -63,9 +63,10 @@ jobs:
         env:
           PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
       - name: Release
-        run: pnpm nx affected -t release --parallel=false
+        run: |
+          pnpm nx release
+          git push --follow-tags
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
           PYPI_TOKEN: ${{ secrets.PYPI_TOKEN }}
           GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
-          HUSKY: '0'

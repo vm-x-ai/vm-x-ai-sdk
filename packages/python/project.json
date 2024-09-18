@@ -3,6 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "packages/python/vmxai",
+  "tags": ["sdk", "python"],
   "targets": {
     "lock": {
       "executor": "@nxlv/python:run-commands",
@@ -82,7 +83,16 @@
         "command": "python -m grpc_tools.protoc -I. -I/usr/local/include --python_out=. --pyi_out=. --grpc_python_out=. ./vmxai/protos/completion/completion.proto",
         "cwd": "packages/python"
       }
+    },
+    "nx-release-publish": {
+      "executor": "@nxlv/python:publish",
+      "outputs": [],
+      "options": {}
     }
   },
-  "tags": ["sdk", "python"]
+  "release": {
+    "version": {
+      "generator": "@nxlv/python:release-version"
+    }
+  }
 }

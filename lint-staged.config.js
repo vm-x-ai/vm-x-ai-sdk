@@ -1,7 +1,7 @@
 module.exports = {
-  '{packages,tools,secrets}/**/*.{ts,js,jsx,tsx,json,yaml,md,html,css,scss,py}': [
+  '*': ['pnpm nx format:write'],
+  '{packages,docs,tools,secrets}/**/*.{ts,js,jsx,tsx,json,yaml,md,html,css,scss,py}': [
     () => 'pnpm nx affected --target lint --fix',
-    'pnpm nx format:write --uncommitted',
+    "git add ':(glob)**/package.json'",
   ],
-  '*.{js,ts,md,json}': ['pnpm nx format:write --uncommitted'],
 };

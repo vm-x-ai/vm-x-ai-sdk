@@ -57,5 +57,30 @@
         "awsBucket": "vm-x-ai-nx-remote-cache-shared"
       }
     }
+  },
+  "release": {
+    "version": {
+      "conventionalCommits": true,
+      "generatorOptions": {
+        "updateDependents": "auto"
+      }
+    },
+    "git": {
+      "commitMessage": "chore(release): publish [no ci]"
+    },
+    "changelog": {
+      "projectChangelogs": {
+        "renderOptions": {
+          "authors": true,
+          "mapAuthorsToGitHubUsernames": true,
+          "commitReferences": true,
+          "versionTitleDate": true
+        },
+        "createRelease": "github"
+      }
+    },
+    "projectsRelationship": "independent",
+    "releaseTagPattern": "{projectName}-v{version}",
+    "projects": ["packages/**/*", "!examples-*"]
   }
 }
