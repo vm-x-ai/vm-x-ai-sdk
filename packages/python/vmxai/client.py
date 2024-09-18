@@ -10,7 +10,6 @@ from google.protobuf.struct_pb2 import Struct
 from grpc import aio
 
 from vmxai.auth.api_key import VMXClientAPIKey
-from vmxai.auth.provider import VMXClientAuthProvider
 from vmxai.protos.completion.completion_pb2 import (
     CompletionRequest as GrpcCompletionRequest,
 )
@@ -40,7 +39,6 @@ class VMXClient:
     def __init__(
         self,
         domain: str = os.getenv("VMX_DOMAIN", None),
-        auth: VMXClientAuthProvider = None,
         api_key: str = os.getenv("VMX_API_KEY", None),
         secure_channel: bool = os.getenv("VMX_SECURE_CHANNEL", "true").lower() == "true",
         workspace_id: Optional[str] = os.getenv("VMX_WORKSPACE_ID", None),
@@ -64,12 +62,10 @@ class VMXClient:
 
         if api_key:
             self.auth = VMXClientAPIKey(api_key)
-        elif auth:
-            self.auth = auth
         else:
             raise AttributeError(
                 textwrap.wrap("""
-                Either 'auth' or 'api_key' must be provided.
+                'api_key' must be provided.
 
                 Or
 
