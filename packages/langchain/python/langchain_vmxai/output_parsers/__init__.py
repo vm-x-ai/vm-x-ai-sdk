@@ -1,4 +1,4 @@
-from vmxai_langchain.output_parsers.tools import (
+from langchain_vmxai.output_parsers.tools import (
     JsonOutputKeyToolsParser,
     JsonOutputToolsParser,
     PydanticToolsParser,

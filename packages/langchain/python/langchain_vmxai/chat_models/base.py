@@ -77,13 +77,13 @@ from vmxai import (
     VMXClient,
 )
 
-from vmxai_langchain.output_parsers.tools import (
+from langchain_vmxai.output_parsers.tools import (
     JsonOutputKeyToolsParser,
     PydanticToolsParser,
     make_invalid_tool_call,
     parse_tool_call,
 )
-from vmxai_langchain.utils.function_calling import convert_to_vmx_tool
+from langchain_vmxai.utils.function_calling import convert_to_vmx_tool
 
 logger = logging.getLogger(__name__)
 
@@ -521,7 +521,7 @@ class BaseChatVMX(BaseChatModel):
                 If ``schema`` is a Pydantic class then the model output will be a
                 Pydantic instance of that class, and the model-generated fields will be
                 validated by the Pydantic class. Otherwise the model output will be a
-                dict and will not be validated. See :meth:`vmxai_langchain.utils.function_calling.convert_to_vmx_tool`
+                dict and will not be validated. See :meth:`langchain_vmxai.utils.function_calling.convert_to_vmx_tool`
                 for more on how to properly specify types and descriptions of
                 schema fields when specifying a Pydantic or TypedDict class.
 
@@ -571,7 +571,7 @@ class BaseChatVMX(BaseChatModel):
 
                 from typing import Optional
 
-                from vmxai_langchain import ChatVMX
+                from langchain_vmxai import ChatVMX
                 from langchain_core.pydantic_v1 import BaseModel, Field
 
 
@@ -601,7 +601,7 @@ class BaseChatVMX(BaseChatModel):
         Example: schema=Pydantic class, method="function_calling", include_raw=True:
             .. code-block:: python
 
-                from vmxai_langchain import ChatVMX
+                from langchain_vmxai import ChatVMX
                 from langchain_core.pydantic_v1 import BaseModel
 
 
@@ -633,7 +633,7 @@ class BaseChatVMX(BaseChatModel):
                 # from typing_extensions, not from typing.
                 from typing_extensions import Annotated, TypedDict
 
-                from vmxai_langchain import ChatVMX
+                from langchain_vmxai import ChatVMX
 
 
                 class AnswerWithJustification(TypedDict):
@@ -659,7 +659,7 @@ class BaseChatVMX(BaseChatModel):
         Example: schema=VMX function schema, method="function_calling", include_raw=False:
             .. code-block:: python
 
-                from vmxai_langchain import ChatVMX
+                from langchain_vmxai import ChatVMX
 
                 oai_schema = {
                     'name': 'AnswerWithJustification',
@@ -725,11 +725,11 @@ class ChatVMX(BaseChatVMX):
     """VMX chat model integration.
 
     Setup:
-        Install ``vm-x-ai-langchain`` and set environment variable ``VMX_API_KEY``.
+        Install ``langchain-vm-x-ai`` and set environment variable ``VMX_API_KEY``.
 
         .. code-block:: bash
 
-            pip install -U vm-x-ai-langchain
+            pip install -U langchain-vm-x-ai
             export VMX_API_KEY="your-api-key"
 
     Key init args — completion params:
@@ -747,7 +747,7 @@ class ChatVMX(BaseChatVMX):
     Instantiate:
         .. code-block:: python
 
-            from vmxai_langchain import ChatVMX
+            from langchain_vmxai import ChatVMX
 
             llm = ChatVMX(
                 resource="default",

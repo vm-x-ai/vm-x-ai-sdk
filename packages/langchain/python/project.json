@@ -2,7 +2,7 @@
   "name": "langchain-vm-x-ai-python",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "sourceRoot": "packages/langchain/python/vmxai_langchain",
+  "sourceRoot": "packages/langchain/python/langchain_vmxai",
   "tags": ["sdk", "python", "langchain"],
   "targets": {
     "lock": {
@@ -48,7 +48,7 @@
       "executor": "@nxlv/python:ruff-check",
       "outputs": [],
       "options": {
-        "lintFilePatterns": ["vmxai_langchain", "tests"]
+        "lintFilePatterns": ["langchain_vmxai", "tests"]
       }
     },
     "test": {

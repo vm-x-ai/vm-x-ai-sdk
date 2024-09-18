@@ -1,4 +1,4 @@
-from vmxai_langchain import ChatVMX
+from langchain_vmxai import ChatVMX
 
 llm = ChatVMX(
     resource="default",

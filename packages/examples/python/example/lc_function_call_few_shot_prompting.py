@@ -1,7 +1,7 @@
 from langchain_core.messages import AIMessage, HumanMessage, ToolMessage
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough
-from vmxai_langchain import ChatVMX
+from langchain_vmxai import ChatVMX
 
 llm = ChatVMX(
     resource="default",

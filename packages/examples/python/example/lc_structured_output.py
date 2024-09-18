@@ -1,5 +1,5 @@
 from langchain_core.pydantic_v1 import BaseModel, Field
-from vmxai_langchain import ChatVMX
+from langchain_vmxai import ChatVMX
 
 
 class Joke(BaseModel):

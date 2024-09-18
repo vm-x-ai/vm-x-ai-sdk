@@ -1,6 +1,6 @@
 from langchain_core.pydantic_v1 import BaseModel, Field
-from vmxai_langchain import ChatVMX
-from vmxai_langchain.output_parsers.tools import PydanticToolsParser
+from langchain_vmxai import ChatVMX
+from langchain_vmxai.output_parsers.tools import PydanticToolsParser
 
 
 # Note that the docstrings here are crucial, as they will be passed along

@@ -1,6 +1,6 @@
 from langchain_core.messages import HumanMessage, ToolMessage
 from langchain_core.tools import tool
-from vmxai_langchain import ChatVMX
+from langchain_vmxai import ChatVMX
 
 
 @tool

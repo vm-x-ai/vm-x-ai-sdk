@@ -29,7 +29,7 @@ group = { }
     path = "../../python"
     develop = true
 
-    [tool.poetry.dependencies.vm-x-ai-langchain]
+    [tool.poetry.dependencies.langchain-vm-x-ai]
     path = "../../langchain/python"
     develop = true
 

@@ -7,11 +7,11 @@ VM-X AI SDK client for Python Langchain
 ## Installation
 
 ```bash
-pip install vm-x-ai-langchain
+pip install langchain-vm-x-ai
 ```
 
 ```bash
-poetry add vm-x-ai-langchain
+poetry add langchain-vm-x-ai
 ```
 
 ## Usage
@@ -19,7 +19,7 @@ poetry add vm-x-ai-langchain
 ### Non-Streaming
 
 ```python
-from vmxai_langchain import ChatVMX
+from langchain_vmxai import ChatVMX
 
 llm = ChatVMX(
     resource="default",
@@ -38,7 +38,7 @@ result = llm.invoke(messages)
 ### Streaming
 
 ```python
-from vmxai_langchain import ChatVMX
+from langchain_vmxai import ChatVMX
 
 llm = ChatVMX(
     resource="default",
@@ -63,7 +63,7 @@ for chunk in llm.stream(messages):
 ```python
 from langchain_core.messages import HumanMessage, ToolMessage
 from langchain_core.tools import tool
-from vmxai_langchain import ChatVMX
+from langchain_vmxai import ChatVMX
 
 
 @tool
@@ -112,8 +112,8 @@ print(llm_with_tools.invoke(messages))
 
 ```python
 from langchain_core.pydantic_v1 import BaseModel, Field
-from vmxai_langchain import ChatVMX
-from vmxai_langchain.output_parsers.tools import PydanticToolsParser
+from langchain_vmxai import ChatVMX
+from langchain_vmxai.output_parsers.tools import PydanticToolsParser
 
 
 # Note that the docstrings here are crucial, as they will be passed along
@@ -150,8 +150,8 @@ print(llm_with_tools.invoke(query))
 
 ```python
 from langchain_core.pydantic_v1 import BaseModel, Field
-from vmxai_langchain import ChatVMX
-from vmxai_langchain.output_parsers.tools import PydanticToolsParser
+from langchain_vmxai import ChatVMX
+from langchain_vmxai.output_parsers.tools import PydanticToolsParser
 
 
 # Note that the docstrings here are crucial, as they will be passed along
@@ -188,7 +188,7 @@ for chunk in llm_with_tools.stream(query):
 
 ```python
 from langchain_core.pydantic_v1 import BaseModel, Field
-from vmxai_langchain import ChatVMX
+from langchain_vmxai import ChatVMX
 
 
 class Joke(BaseModel):
