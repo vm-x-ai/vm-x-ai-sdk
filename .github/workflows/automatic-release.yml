@@ -1,0 +1,15 @@
+name: Automatic Release
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    branches:
+      - main
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    uses: vm-x-ai/github-actions/.github/workflow-automatic-release.yml@main
