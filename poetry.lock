@@ -472,7 +472,7 @@ typing-extensions = ">=4.7"
 
 [[package]]
 name = "langchain-vm-x-ai"
-version = "0.3.0"
+version = "1.0.0"
 description = "VM-X AI Langchain Python SDK"
 optional = false
 python-versions = ">=3.8.1,<4"
@@ -1118,7 +1118,7 @@ zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
 name = "vm-x-ai-sdk"
-version = "0.11.0"
+version = "1.0.0"
 description = "VM-X AI Python SDK"
 optional = false
 python-versions = ">=3.8,<4"
@@ -1137,7 +1137,7 @@ url = "packages/python"
 
 [[package]]
 name = "vm-x-ai-sdk-example"
-version = "0.0.3"
+version = "0.0.6"
 description = "VM-X AI Python SDK Example"
 optional = false
 python-versions = ">=3.8.1,<4"

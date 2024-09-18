@@ -1,3 +1,7 @@
+# 1.0.0 (2024-09-18)
+
+This was a version bump only for vm-x-ai-sdk-python to align it with other projects, there were no code changes.
+
 ## 0.11.0 (2024-09-18)
 
 ### 🚀 Features

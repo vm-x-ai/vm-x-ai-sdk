@@ -1,3 +1,10 @@
+# 1.0.0 (2024-09-18)
+
+
+### 🧱 Updated Dependencies
+
+- Updated vm-x-ai-sdk-python to 1.0.0
+
 ## 0.3.0 (2024-09-18)
 
 

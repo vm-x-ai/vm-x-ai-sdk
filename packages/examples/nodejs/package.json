@@ -1,8 +1,8 @@
 {
   "name": "@vm-x-ai/sdk/examples/nodejs",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "dependencies": {
-    "@vm-x-ai/sdk": "0.10.0",
+    "@vm-x-ai/sdk": "1.0.0",
     "tslib": "^2.3.0",
     "@inquirer/prompts": "^5.3.8"
   },

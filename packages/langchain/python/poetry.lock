@@ -623,7 +623,7 @@ zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
 name = "vm-x-ai-sdk"
-version = "0.11.0"
+version = "1.0.0"
 description = "VM-X AI Python SDK"
 optional = false
 python-versions = ">=3.8,<4"
