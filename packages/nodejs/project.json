@@ -1,5 +1,5 @@
 {
-  "name": "nodejs",
+  "name": "vm-x-ai-sdk-nodejs",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/nodejs/src",
   "projectType": "library",

@@ -1,5 +1,5 @@
 {
-  "name": "langchain-python",
+  "name": "langchain-vm-x-ai-python",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "packages/langchain/python/vmxai_langchain",

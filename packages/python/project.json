@@ -1,5 +1,5 @@
 {
-  "name": "python",
+  "name": "vm-x-ai-sdk-python",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "sourceRoot": "packages/python/vmxai",
