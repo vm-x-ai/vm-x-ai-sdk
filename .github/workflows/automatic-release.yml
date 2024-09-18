@@ -12,4 +12,4 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
-    uses: vm-x-ai/github-actions/.github/workflow-automatic-release.yml@main
+    uses: vm-x-ai/github-public-actions/.github/workflow-automatic-release.yml@main
