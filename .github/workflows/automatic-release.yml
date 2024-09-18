@@ -13,3 +13,6 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     uses: vm-x-ai/github-public-actions/.github/workflows/workflow-automatic-release.yml@main
+    secrets: inherit
+    with:
+      use-python: true
