@@ -1,7 +1,7 @@
 import { status } from '@grpc/grpc-js';
 import { HttpStatus } from '@nestjs/common';
 
-export const HTTP_STATUS_TO_GRPC = {
+export const HTTP_STATUS_TO_GRPC: Record<number, status | undefined> = {
   [HttpStatus.BAD_REQUEST]: status.INVALID_ARGUMENT,
   [HttpStatus.UNAUTHORIZED]: status.UNAUTHENTICATED,
   [HttpStatus.FORBIDDEN]: status.PERMISSION_DENIED,
