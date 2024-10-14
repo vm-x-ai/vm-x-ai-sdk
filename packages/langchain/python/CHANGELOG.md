@@ -1,3 +1,20 @@
+## 1.1.0 (2024-10-14)
+
+
+### 🚀 Features
+
+- add completion provider sdk ([6bf6c17](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/6bf6c17))
+
+
+### 🧱 Updated Dependencies
+
+- Updated sdk-python to 1.1.0
+
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 1.0.1 (2024-10-14)
 
 
