@@ -11,7 +11,7 @@ addopts = "--cov --cov-report html:'../../../coverage/packages/sdk/python/html' 
 
 [tool.poetry]
 name = "vm-x-ai-sdk"
-version = "1.0.0"
+version = "1.0.1"
 description = "VM-X AI Python SDK"
 authors = [ "VM-X Engineering <eng@vm-x.ai>" ]
 maintainers = [ "VM-X Engineering <eng@vm-x.ai>" ]
@@ -35,9 +35,9 @@ group = { }
   grpcio = "^1.62.2"
   protobuf = "^4.21.6"
 
-  [tool.poetry.dependencies.vm-x-ai-completion-client]
-  path = "../../completion/client/python"
-  develop = true
+    [tool.poetry.dependencies.vm-x-ai-completion-client]
+    path = "../../completion/client/python"
+    develop = true
 
 [tool.ruff]
 exclude = [

@@ -269,7 +269,7 @@ typing-extensions = ">=4.7"
 
 [[package]]
 name = "langchain-vm-x-ai"
-version = "1.0.0"
+version = "1.0.1"
 description = "VM-X AI Langchain Python SDK"
 optional = false
 python-versions = ">=3.8.1,<4"
@@ -282,7 +282,7 @@ vm-x-ai-sdk = {path = "../../sdk/python", develop = true}
 
 [package.source]
 type = "directory"
-url = "../../python"
+url = "../python"
 
 [[package]]
 name = "langsmith"
@@ -657,9 +657,9 @@ socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
 zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
-name = "vm-x-ai-sdk"
-version = "1.0.0"
-description = "VM-X AI Python SDK"
+name = "vm-x-ai-completion-client"
+version = "1.1.0"
+description = "VM-X AI Completion Client"
 optional = false
 python-versions = ">=3.8,<4"
 files = []
@@ -673,9 +673,29 @@ requests = "^2.31.0"
 
 [package.source]
 type = "directory"
-url = "../../../sdk/python"
+url = "../../completion/client/python"
+
+[[package]]
+name = "vm-x-ai-sdk"
+version = "1.0.1"
+description = "VM-X AI Python SDK"
+optional = false
+python-versions = ">=3.8,<4"
+files = []
+develop = true
+
+[package.dependencies]
+cachetools = "^5.3.3"
+grpcio = "^1.62.2"
+protobuf = "^4.21.6"
+requests = "^2.31.0"
+vm-x-ai-completion-client = {path = "../../completion/client/python", develop = true}
+
+[package.source]
+type = "directory"
+url = "../../sdk/python"
 
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8.1,<4"
-content-hash = "97f9e28d66117e3af4748aa2864b653e1f000578ad42c82dcbfda3ceec72074c"
+content-hash = "e85ddf7a7113e9edb4f7fae2d9ffcb2f69c2d418ae3e56b4d0a4eb9d32e26e2d"

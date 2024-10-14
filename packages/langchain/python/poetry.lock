@@ -622,8 +622,27 @@ socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
 zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
+name = "vm-x-ai-completion-client"
+version = "1.1.0"
+description = "VM-X AI Completion Client"
+optional = false
+python-versions = ">=3.8,<4"
+files = []
+develop = true
+
+[package.dependencies]
+cachetools = "^5.3.3"
+grpcio = "^1.62.2"
+protobuf = "^4.21.6"
+requests = "^2.31.0"
+
+[package.source]
+type = "directory"
+url = "../../completion/client/python"
+
+[[package]]
 name = "vm-x-ai-sdk"
-version = "1.0.0"
+version = "1.0.1"
 description = "VM-X AI Python SDK"
 optional = false
 python-versions = ">=3.8,<4"
@@ -635,6 +654,7 @@ cachetools = "^5.3.3"
 grpcio = "^1.62.2"
 protobuf = "^4.21.6"
 requests = "^2.31.0"
+vm-x-ai-completion-client = {path = "../../completion/client/python", develop = true}
 
 [package.source]
 type = "directory"

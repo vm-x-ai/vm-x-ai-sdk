@@ -1,3 +1,10 @@
+## 1.0.1 (2024-10-14)
+
+
+### 🧱 Updated Dependencies
+
+- Updated completion-client-js to 1.1.0
+
 # 1.0.0 (2024-09-18)
 
 This was a version bump only for vm-x-ai-sdk-nodejs to align it with other projects, there were no code changes.
