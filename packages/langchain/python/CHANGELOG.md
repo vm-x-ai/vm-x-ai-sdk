@@ -1,3 +1,10 @@
+## 1.1.1 (2024-10-14)
+
+
+### 🧱 Updated Dependencies
+
+- Updated sdk-python to 1.1.1
+
 ## 1.1.0 (2024-10-14)
 
 
