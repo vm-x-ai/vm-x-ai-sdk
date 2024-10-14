@@ -14,15 +14,23 @@ package-mode = false
   python = ">=3.8.1,<4"
 
     [tool.poetry.dependencies.vm-x-ai-sdk]
-    path = "packages/python"
+    path = "packages/sdk/python"
+    develop = true
+
+    [tool.poetry.dependencies.vm-x-ai-sdk-example]
+    path = "packages/sdk/python-example"
     develop = true
 
     [tool.poetry.dependencies.langchain-vm-x-ai]
     path = "packages/langchain/python"
     develop = true
 
-    [tool.poetry.dependencies.vm-x-ai-sdk-example]
-    path = "packages/examples/python"
+    [tool.poetry.dependencies.langchain-vm-x-ai-example]
+    path = "packages/langchain/python-example"
+    develop = true
+
+    [tool.poetry.dependencies.vm-x-ai-completion-client]
+    path = "packages/completion/client/python"
     develop = true
 
 [tool.poetry.group.dev.dependencies]

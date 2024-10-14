@@ -1,0 +1,27 @@
+{
+  "name": "completion-grpc-proto",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "sourceRoot": "packages/completion/grpc-proto",
+  "tags": ["completion", "grpc", "proto"],
+  "targets": {
+    "gen-js": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": ["buf generate"],
+        "cwd": "packages/completion/grpc-proto"
+      }
+    },
+    "gen-python": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "cp ../../grpc-proto/completion.proto ./vmxai_completion_client/protos/completion/completion.proto",
+          "python -m grpc_tools.protoc -I. -I../../grpc-proto -I/usr/local/include --python_out=. --pyi_out=. --grpc_python_out=. ./vmxai_completion_client/protos/completion/completion.proto"
+        ],
+        "parallel": false,
+        "cwd": "packages/completion/client/python"
+      }
+    }
+  }
+}

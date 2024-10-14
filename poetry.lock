@@ -481,11 +481,29 @@ develop = true
 
 [package.dependencies]
 langchain-core = "^0.2.29"
-vm-x-ai-sdk = {path = "../../python", develop = true}
+vm-x-ai-sdk = {path = "../../sdk/python", develop = true}
 
 [package.source]
 type = "directory"
 url = "packages/langchain/python"
+
+[[package]]
+name = "langchain-vm-x-ai-example"
+version = "0.0.0"
+description = "VM-X AI Python SDK Example"
+optional = false
+python-versions = ">=3.8.1,<4"
+files = []
+develop = true
+
+[package.dependencies]
+blessings = "^1.7"
+langchain-vm-x-ai = {path = "../python", develop = true}
+vm-x-ai-sdk = {path = "../../sdk/python", develop = true}
+
+[package.source]
+type = "directory"
+url = "packages/langchain/python-example"
 
 [[package]]
 name = "langsmith"
@@ -1117,9 +1135,9 @@ socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
 zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
-name = "vm-x-ai-sdk"
+name = "vm-x-ai-completion-client"
 version = "1.0.0"
-description = "VM-X AI Python SDK"
+description = "VM-X AI Completion Client"
 optional = false
 python-versions = ">=3.8,<4"
 files = []
@@ -1133,7 +1151,27 @@ requests = "^2.31.0"
 
 [package.source]
 type = "directory"
-url = "packages/python"
+url = "packages/completion/client/python"
+
+[[package]]
+name = "vm-x-ai-sdk"
+version = "1.0.0"
+description = "VM-X AI Python SDK"
+optional = false
+python-versions = ">=3.8,<4"
+files = []
+develop = true
+
+[package.dependencies]
+cachetools = "^5.3.3"
+grpcio = "^1.62.2"
+protobuf = "^4.21.6"
+requests = "^2.31.0"
+vm-x-ai-completion-client = {path = "../../completion/client/python", develop = true}
+
+[package.source]
+type = "directory"
+url = "packages/sdk/python"
 
 [[package]]
 name = "vm-x-ai-sdk-example"
@@ -1146,14 +1184,13 @@ develop = true
 
 [package.dependencies]
 blessings = "^1.7"
-langchain-vm-x-ai = {path = "../../langchain/python", develop = true}
-vm-x-ai-sdk = {path = "../../python", develop = true}
+vm-x-ai-sdk = {path = "../python", develop = true}
 
 [package.source]
 type = "directory"
-url = "packages/examples/python"
+url = "packages/sdk/python-example"
 
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.8.1,<4"
-content-hash = "2eb663e258d200e01b60152055963235faeddbb8697b4aeba6472967c02ceb12"
+content-hash = "51413eae35472d77a9e1d09d5902c7dcbbc4b1e94f8effb58c0d6429cabc9a82"

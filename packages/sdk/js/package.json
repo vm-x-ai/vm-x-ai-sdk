@@ -1,0 +1,31 @@
+{
+  "name": "@vm-x-ai/sdk",
+  "version": "1.0.0",
+  "description": "VM-X AI SDK Node.js Client",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:vm-x-ai/vm-x-ai-sdk.git",
+    "directory": "packages/sdk/nodejs"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "bugs": {
+    "url": "https://github.com/vm-x-ai/vm-x-ai-sdk/issues",
+    "email": "eng@vm-x.ai"
+  },
+  "author": {
+    "name": "VM-X Engineering",
+    "email": "eng@vm-x.ai"
+  },
+  "dependencies": {
+    "@grpc/grpc-js": "^1.10.8",
+    "uuid": "^10.0.0",
+    "@vm-x-ai/completion-client": "1.0.0"
+  },
+  "main": "./src/index.js",
+  "typings": "./src/index.d.ts",
+  "devDependencies": {}
+}

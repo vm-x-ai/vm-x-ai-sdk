@@ -1,15 +1,15 @@
 {
-  "name": "langchain-python",
+  "name": "sdk-python",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
-  "sourceRoot": "packages/langchain/python/langchain_vmxai",
-  "tags": ["sdk", "python", "langchain"],
+  "sourceRoot": "packages/sdk/python/vmxai",
+  "tags": ["sdk", "python"],
   "targets": {
     "lock": {
       "executor": "@nxlv/python:run-commands",
       "options": {
         "command": "poetry lock --no-update",
-        "cwd": "packages/langchain/python"
+        "cwd": "packages/sdk/python"
       }
     },
     "add": {
@@ -28,7 +28,7 @@
       "executor": "@nxlv/python:build",
       "outputs": ["{projectRoot}/dist"],
       "options": {
-        "outputPath": "packages/langchain/python/dist",
+        "outputPath": "packages/sdk/python/dist",
         "publish": true,
         "lockedVersions": false,
         "bundleLocalDependencies": false
@@ -48,18 +48,18 @@
       "executor": "@nxlv/python:ruff-check",
       "outputs": [],
       "options": {
-        "lintFilePatterns": ["langchain_vmxai", "tests"]
+        "lintFilePatterns": ["vmxai", "tests"]
       }
     },
     "test": {
       "executor": "@nxlv/python:run-commands",
       "outputs": [
-        "{workspaceRoot}/reports/packages/langchain/python/unittests",
-        "{workspaceRoot}/coverage/packages/langchain/python"
+        "{workspaceRoot}/reports/packages/sdk/python/unittests",
+        "{workspaceRoot}/coverage/packages/sdk/python"
       ],
       "options": {
         "command": "poetry run pytest tests/",
-        "cwd": "packages/langchain/python"
+        "cwd": "packages/sdk/python"
       }
     },
     "release": {
@@ -67,7 +67,7 @@
       "outputs": [],
       "options": {
         "command": "npx release-it --ci",
-        "cwd": "packages/langchain/python"
+        "cwd": "packages/sdk/python"
       },
       "dependsOn": ["^release"]
     },

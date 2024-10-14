@@ -81,6 +81,6 @@
     },
     "projectsRelationship": "independent",
     "releaseTagPattern": "{projectName}-v{version}",
-    "projects": ["packages/**/*", "!examples-*"]
+    "projects": ["packages/**/*", "!*-example"]
   }
 }

@@ -1,39 +1,32 @@
 [tool.coverage.run]
 branch = true
-source = [ "langchain_vmxai" ]
+source = [ "example" ]
 
 [tool.coverage.report]
 exclude_lines = [ "if TYPE_CHECKING:" ]
 show_missing = true
 
-[tool.pytest.ini_options]
-addopts = "--cov --cov-report html:'../../../coverage/packages/langchain/python/html' --cov-report xml:'../../../coverage/packages/langchain/python/coverage.xml' --html='../../../reports/packages/langchain/python/unittests/html/index.html' --junitxml='../../../reports/langchain/packages/python/unittests/junit.xml'"
-
 [tool.poetry]
-name = "langchain-vm-x-ai"
-version = "1.0.0"
-description = "VM-X AI Langchain Python SDK"
+name = "vm-x-ai-sdk-example"
+version = "0.0.6"
+description = "VM-X AI Python SDK Example"
 authors = [ "VM-X Engineering <eng@vm-x.ai>" ]
 maintainers = [ "VM-X Engineering <eng@vm-x.ai>" ]
 license = "MIT"
-readme = "README.md"
 repository = "https://github.com/vm-x-ai/vm-x-ai-sdk"
-keywords = [ "VM-X", "AI", "SDK", "Python", "LangChain" ]
-classifiers = [
-  "Intended Audience :: Developers",
-  "Programming Language :: Python :: 3"
-]
+keywords = [ "VM-X", "AI", "SDK", "Python", "Example" ]
+classifiers = [ ]
 group = { }
 
   [[tool.poetry.packages]]
-  include = "langchain_vmxai"
+  include = "example"
 
   [tool.poetry.dependencies]
   python = ">=3.8.1,<4"
-  langchain-core = "^0.2.29"
+  blessings = "^1.7"
 
     [tool.poetry.dependencies.vm-x-ai-sdk]
-    path = "../../sdk/python"
+    path = "../python"
     develop = true
 
 [tool.ruff]
@@ -50,7 +43,7 @@ indent-width = 4
 
   [tool.ruff.lint]
   select = [ "E", "F", "UP", "B", "SIM", "I" ]
-  ignore = [ "UP006", "UP007", "B028", "SIM105" ]
+  ignore = [ ]
   fixable = [ "ALL" ]
   unfixable = [ ]
 

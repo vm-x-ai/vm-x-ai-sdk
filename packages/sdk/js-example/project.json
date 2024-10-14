@@ -1,0 +1,37 @@
+{
+  "name": "sdk-js-example",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/sdk/js-example/src",
+  "projectType": "library",
+  "tags": ["examples", "js"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/sdk/js-example",
+        "main": "packages/sdk/js-example/src/index.ts",
+        "tsConfig": "packages/sdk/js-example/tsconfig.json",
+        "assets": []
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "examples": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx ts-node -r tsconfig-paths/register src/{args.filename} \"{args.message}\" {args.resource}",
+        "cwd": "packages/sdk/js-example"
+      }
+    },
+    "chat": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx ts-node -r tsconfig-paths/register src/chat.ts",
+        "cwd": "packages/sdk/js-example"
+      }
+    }
+  }
+}

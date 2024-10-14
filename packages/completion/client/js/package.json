@@ -1,0 +1,31 @@
+{
+  "name": "@vm-x-ai/completion-client",
+  "version": "1.0.0",
+  "description": "VM-X AI Completion Client",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:vm-x-ai/vm-x-ai-sdk.git",
+    "directory": "packages/completion/client/js"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
+  "bugs": {
+    "url": "https://github.com/vm-x-ai/vm-x-ai-sdk/issues",
+    "email": "eng@vm-x.ai"
+  },
+  "author": {
+    "name": "VM-X Engineering",
+    "email": "eng@vm-x.ai"
+  },
+  "dependencies": {
+    "@grpc/grpc-js": "^1.10.8",
+    "protobufjs": "^7.3.0",
+    "long": "^5.2.3"
+  },
+  "main": "./src/index.js",
+  "typings": "./src/index.d.ts",
+  "devDependencies": {}
+}
