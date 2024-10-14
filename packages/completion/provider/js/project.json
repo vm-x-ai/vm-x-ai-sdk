@@ -1,0 +1,64 @@
+{
+  "name": "completion-provider-js",
+  "$schema": "../../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/completion/provider/js/src",
+  "projectType": "library",
+  "tags": ["completion", "provider", "js"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/vite:test",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {}
+    },
+    "release": {
+      "executor": "nx:run-commands",
+      "outputs": [],
+      "options": {
+        "command": "npx release-it --ci",
+        "cwd": "packages/completion/provider/js"
+      },
+      "dependsOn": ["^release"]
+    },
+    "build": {
+      "executor": "@nx/rollup:rollup",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "main": "packages/completion/provider/js/src/index.ts",
+        "outputPath": "dist/packages/completion/provider/js",
+        "tsConfig": "packages/completion/provider/js/tsconfig.lib.json",
+        "compiler": "swc",
+        "project": "packages/completion/provider/js/package.json",
+        "format": ["esm", "cjs"],
+        "external": "all",
+        "rollupConfig": "packages/completion/provider/js/rollup.config.js",
+        "generateExportsField": true,
+        "assets": [
+          {
+            "glob": "packages/completion/provider/js/README.md",
+            "input": ".",
+            "output": "."
+          },
+          {
+            "glob": "packages/completion/provider/js/CHANGELOG.md",
+            "input": ".",
+            "output": "."
+          }
+        ]
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "vendorChunk": false
+        }
+      }
+    }
+  }
+}
