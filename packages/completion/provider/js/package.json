@@ -21,7 +21,7 @@
     "email": "eng@vm-x.ai"
   },
   "dependencies": {
-    "@vm-x-ai/completion-client": "1.0.0",
+    "@vm-x-ai/completion-client": "1.2.0",
     "rxjs": "^7.8.1"
   },
   "main": "./src/index.js",
