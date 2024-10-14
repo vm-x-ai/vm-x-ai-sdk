@@ -34,6 +34,7 @@ message CompletionRequest {
   optional RequestToolChoice tool_choice = 9;
   optional google.protobuf.Struct config = 10;
   optional bool include_raw_response = 11;
+  optional google.protobuf.Struct resource_config_overrides = 12;
 }
 
 message RequestMessage {
@@ -94,7 +95,7 @@ message CompletionResponse {
   CompletionResponseMetadata metadata = 7;
   optional CompletionResponseMetrics metrics = 8;
   optional google.protobuf.Struct raw_response = 9;
-  string finish_reason = 10;
+  optional string finish_reason = 10;
 }
 
 message CompletionUsage {

@@ -44,6 +44,7 @@ export interface CompletionRequest {
   toolChoice?: RequestToolChoice | undefined;
   config?: { [key: string]: any } | undefined;
   includeRawResponse?: boolean | undefined;
+  resourceConfigOverrides?: { [key: string]: any } | undefined;
 }
 
 export interface RequestMessage {
@@ -102,7 +103,7 @@ export interface CompletionResponse {
   metadata: CompletionResponseMetadata | undefined;
   metrics?: CompletionResponseMetrics | undefined;
   rawResponse?: { [key: string]: any } | undefined;
-  finishReason: string;
+  finishReason?: string | undefined;
 }
 
 export interface CompletionUsage {
@@ -363,6 +364,7 @@ function createBaseCompletionRequest(): CompletionRequest {
     toolChoice: undefined,
     config: undefined,
     includeRawResponse: undefined,
+    resourceConfigOverrides: undefined,
   };
 }
 
@@ -400,6 +402,9 @@ export const CompletionRequest = {
     }
     if (message.includeRawResponse !== undefined) {
       writer.uint32(88).bool(message.includeRawResponse);
+    }
+    if (message.resourceConfigOverrides !== undefined) {
+      Struct.encode(Struct.wrap(message.resourceConfigOverrides), writer.uint32(98).fork()).ldelim();
     }
     return writer;
   },
@@ -488,6 +493,13 @@ export const CompletionRequest = {
 
           message.includeRawResponse = reader.bool();
           continue;
+        case 12:
+          if (tag !== 98) {
+            break;
+          }
+
+          message.resourceConfigOverrides = Struct.unwrap(Struct.decode(reader, reader.uint32()));
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -546,6 +558,7 @@ export const CompletionRequest = {
       toolChoice: isSet(object.toolChoice) ? RequestToolChoice.fromJSON(object.toolChoice) : undefined,
       config: isObject(object.config) ? object.config : undefined,
       includeRawResponse: isSet(object.includeRawResponse) ? globalThis.Boolean(object.includeRawResponse) : undefined,
+      resourceConfigOverrides: isObject(object.resourceConfigOverrides) ? object.resourceConfigOverrides : undefined,
     };
   },
 
@@ -584,6 +597,9 @@ export const CompletionRequest = {
     if (message.includeRawResponse !== undefined) {
       obj.includeRawResponse = message.includeRawResponse;
     }
+    if (message.resourceConfigOverrides !== undefined) {
+      obj.resourceConfigOverrides = message.resourceConfigOverrides;
+    }
     return obj;
   },
 
@@ -606,6 +622,7 @@ export const CompletionRequest = {
         : undefined;
     message.config = object.config ?? undefined;
     message.includeRawResponse = object.includeRawResponse ?? undefined;
+    message.resourceConfigOverrides = object.resourceConfigOverrides ?? undefined;
     return message;
   },
 };
@@ -1566,7 +1583,7 @@ function createBaseCompletionResponse(): CompletionResponse {
     metadata: undefined,
     metrics: undefined,
     rawResponse: undefined,
-    finishReason: '',
+    finishReason: undefined,
   };
 }
 
@@ -1599,7 +1616,7 @@ export const CompletionResponse = {
     if (message.rawResponse !== undefined) {
       Struct.encode(Struct.wrap(message.rawResponse), writer.uint32(74).fork()).ldelim();
     }
-    if (message.finishReason !== '') {
+    if (message.finishReason !== undefined) {
       writer.uint32(82).string(message.finishReason);
     }
     return writer;
@@ -1738,7 +1755,7 @@ export const CompletionResponse = {
       metadata: isSet(object.metadata) ? CompletionResponseMetadata.fromJSON(object.metadata) : undefined,
       metrics: isSet(object.metrics) ? CompletionResponseMetrics.fromJSON(object.metrics) : undefined,
       rawResponse: isObject(object.rawResponse) ? object.rawResponse : undefined,
-      finishReason: isSet(object.finishReason) ? globalThis.String(object.finishReason) : '',
+      finishReason: isSet(object.finishReason) ? globalThis.String(object.finishReason) : undefined,
     };
   },
 
@@ -1771,7 +1788,7 @@ export const CompletionResponse = {
     if (message.rawResponse !== undefined) {
       obj.rawResponse = message.rawResponse;
     }
-    if (message.finishReason !== '') {
+    if (message.finishReason !== undefined) {
       obj.finishReason = message.finishReason;
     }
     return obj;
@@ -1798,7 +1815,7 @@ export const CompletionResponse = {
         ? CompletionResponseMetrics.fromPartial(object.metrics)
         : undefined;
     message.rawResponse = object.rawResponse ?? undefined;
-    message.finishReason = object.finishReason ?? '';
+    message.finishReason = object.finishReason ?? undefined;
     return message;
   },
 };
