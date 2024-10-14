@@ -62,7 +62,8 @@
     "version": {
       "conventionalCommits": true,
       "generatorOptions": {
-        "updateDependents": "auto"
+        "updateDependents": "auto",
+        "fallbackCurrentVersionResolver": "disk"
       }
     },
     "git": {
@@ -77,10 +78,11 @@
           "versionTitleDate": true
         },
         "createRelease": "github"
-      }
+      },
+      "automaticFromRef": true
     },
     "projectsRelationship": "independent",
     "releaseTagPattern": "{projectName}-v{version}",
-    "projects": ["packages/**/*", "!*-example"]
+    "projects": ["packages/**/*", "!packages/**/*/*-example", "!completion-grpc-proto"]
   }
 }
