@@ -1,3 +1,15 @@
+## 0.2.1 (2024-10-14)
+
+
+### 🩹 Fixes
+
+- update http status to grpc mapping type definition ([1868b40](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/1868b40))
+
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.2.0 (2024-10-14)
 
 
