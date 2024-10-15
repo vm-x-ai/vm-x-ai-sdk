@@ -1,3 +1,20 @@
+## 1.1.2 (2024-10-15)
+
+
+### 🩹 Fixes
+
+- change nx release publish dist folder ([f3a4cdc](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/f3a4cdc))
+
+
+### 🧱 Updated Dependencies
+
+- Updated completion-client-js to 1.3.1
+
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 1.1.1 (2024-10-14)
 
 
