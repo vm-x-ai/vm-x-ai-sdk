@@ -1,3 +1,15 @@
+## 0.4.5 (2024-10-17)
+
+
+### 🩹 Fixes
+
+- change upload content-type ([cab1cd2](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/cab1cd2))
+
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.4.4 (2024-10-17)
 
 
