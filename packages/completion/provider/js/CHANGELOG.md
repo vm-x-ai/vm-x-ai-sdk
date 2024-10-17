@@ -1,3 +1,15 @@
+## 0.3.0 (2024-10-17)
+
+
+### 🚀 Features
+
+- add ai provider publish cli command ([5af741b](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/5af741b))
+
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.2.2 (2024-10-15)
 
 
