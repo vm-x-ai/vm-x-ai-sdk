@@ -180,7 +180,7 @@ export class PublishCommand extends BaseCommand<PublishCommandArgs> {
       await axios.put(
         upload.url as string,
         {
-          data: fsPromises.readFile(distPath),
+          data: await fsPromises.readFile(distPath),
         },
         {
           headers: {
