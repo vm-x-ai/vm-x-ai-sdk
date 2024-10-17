@@ -111,7 +111,7 @@ export class PublishCommand extends BaseCommand<PublishCommandArgs> {
   ) {
     this.logger.debug(`Uploading source code archive from ${chalk.bold(distSource)}`);
     await axios.put(presignedManifest.config.source.url, {
-      data: fsPromises.readFile(distPath),
+      data: await fsPromises.readFile(distPath),
     });
     this.logger.debug(`Source code archive uploaded successfully`);
   }
