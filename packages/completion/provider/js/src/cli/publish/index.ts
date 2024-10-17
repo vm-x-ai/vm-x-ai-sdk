@@ -179,7 +179,7 @@ export class PublishCommand extends BaseCommand<PublishCommandArgs> {
         cliProgress.Presets.shades_classic,
       );
       bar.start(1, 0);
-      await axios.put(upload.url as string, await fsPromises.readFile(distPath), {
+      await axios.put(upload.url as string, await fsPromises.readFile(upload.localPath), {
         headers: {
           'Content-Type': mime.lookup(upload.localPath) || 'application/octet-stream',
         },
