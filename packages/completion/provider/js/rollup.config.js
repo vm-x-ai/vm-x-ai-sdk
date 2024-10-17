@@ -1,4 +1,7 @@
 module.exports = (config) => {
-  // config.output.preserveModules = true;
+  config.input = {
+    index: `${__dirname}/src/index.ts`,
+    'bin/index': `${__dirname}/src/cli/index.ts`,
+  };
   return config;
 };
