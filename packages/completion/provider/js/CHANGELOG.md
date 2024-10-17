@@ -1,3 +1,15 @@
+## 0.4.0 (2024-10-17)
+
+
+### 🚀 Features
+
+- add dry-run option and fix manifest schema ([154186c](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/154186c))
+
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.3.1 (2024-10-17)
 
 
