@@ -131,8 +131,8 @@ devDependencies:
     specifier: 19.7.3
     version: 19.7.3(@swc-node/register@1.10.9)(@swc/core@1.5.25)
   '@nxlv/python':
-    specifier: ^19.1.0
-    version: 19.1.0(@swc-node/register@1.10.9)(@swc/core@1.5.25)
+    specifier: ^19.2.0
+    version: 19.2.0(@swc-node/register@1.10.9)(@swc/core@1.5.25)
   '@swc-node/register':
     specifier: ^1.10.9
     version: 1.10.9(@swc/core@1.5.25)(@swc/types@0.1.7)(typescript@5.5.4)
@@ -4743,8 +4743,8 @@ packages:
       - debug
     dev: true
 
-  /@nxlv/python@19.1.0(@swc-node/register@1.10.9)(@swc/core@1.5.25):
-    resolution: {integrity: sha512-bEWNFAj39VJSVjwMyRVtfEZo32xqJ1tgTOcIblNZ9ct0PoIcDM/qWXeLGqKKyBjQBKNRI19ABufntb4Tzhzmrg==}
+  /@nxlv/python@19.2.0(@swc-node/register@1.10.9)(@swc/core@1.5.25):
+    resolution: {integrity: sha512-DLeXS3CfTsEwD0iFundZu2Z/IcFjMZ4uOdd5TaSAMy2ArkcE81RGFWfPSc/WuuwXao3QbyUvJg8Ytmp+mQZNcA==}
     dependencies:
       '@iarna/toml': 2.2.5
       '@nx/devkit': 19.7.3(nx@19.7.3)
@@ -4757,7 +4757,7 @@ packages:
       nx: 19.7.3(@swc-node/register@1.10.9)(@swc/core@1.5.25)
       ora: 5.3.0
       semver: 7.6.2
-      tslib: 2.6.3
+      tslib: 2.7.0
       uuid: 9.0.1
     transitivePeerDependencies:
       - '@swc-node/register'
