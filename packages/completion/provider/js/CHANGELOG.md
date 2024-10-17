@@ -1,3 +1,15 @@
+## 0.4.1 (2024-10-17)
+
+
+### 🩹 Fixes
+
+- remove --pat requirement when --dry-run is provided ([c0fbbe3](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/c0fbbe3))
+
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.4.0 (2024-10-17)
 
 
