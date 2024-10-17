@@ -1,3 +1,15 @@
+## 0.4.2 (2024-10-17)
+
+
+### 🩹 Fixes
+
+- axios content type octet-stream to upload files ([347d59e](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/347d59e))
+
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.4.1 (2024-10-17)
 
 
