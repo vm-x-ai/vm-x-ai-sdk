@@ -27,20 +27,10 @@ export const manifestSchema = z.object({
                 z.object({
                   type: z.enum(['typography']),
                   content: z.string(),
-                  variant: z.enum([
-                    'body1',
-                    'body2',
-                    'caption',
-                    'h1',
-                    'h2',
-                    'h3',
-                    'h4',
-                    'h5',
-                    'h6',
-                    'subtitle1',
-                    'subtitle2',
-                  ]),
-                  sx: z.object({}),
+                  variant: z
+                    .enum(['body1', 'body2', 'caption', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'subtitle1', 'subtitle2'])
+                    .optional(),
+                  sx: z.object({}).optional(),
                 }),
                 z.object({
                   type: z.enum(['editor']),

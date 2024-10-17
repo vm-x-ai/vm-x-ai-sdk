@@ -19,6 +19,7 @@ export type PublishCommandArgs = {
   manifest: string;
   pat: string;
   apiBaseUrl: string;
+  dryRun: boolean;
 };
 
 export class PublishCommand extends BaseCommand<PublishCommandArgs> {
@@ -73,15 +74,18 @@ export class PublishCommand extends BaseCommand<PublishCommandArgs> {
     await this.checkManifestVersion(manifest);
 
     const distPath = await this.buildHandler(manifest);
-    const presignedManifest = await this.getPresignedManifest(manifest);
 
-    await this.uploadAssets(manifest, presignedManifest, distPath);
+    if (!argv.dryRun) {
+      const presignedManifest = await this.getPresignedManifest(manifest);
 
-    const distSource = await this.archiveSourceCode();
+      await this.uploadAssets(manifest, presignedManifest, distPath);
 
-    await this.uploadSourceCode(distSource, presignedManifest, distPath);
+      const distSource = await this.archiveSourceCode();
 
-    await this.completePublishing(presignedManifest);
+      await this.uploadSourceCode(distSource, presignedManifest, distPath);
+
+      await this.completePublishing(presignedManifest);
+    }
 
     this.logger.info(chalk.bold`Completion provider published successfully`);
   }

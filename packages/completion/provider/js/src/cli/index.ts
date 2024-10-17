@@ -43,6 +43,11 @@ yargs(hideBin(process.argv))
           demandOption: true,
           default: 'https://api.vm-x.ai',
         })
+        .option('dryRun', {
+          type: 'boolean',
+          description: 'Run in dry-run mode',
+          default: false,
+        })
         .env('VMX');
     },
     async (argv) => {
