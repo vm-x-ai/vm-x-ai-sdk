@@ -19,6 +19,7 @@ if (fs.existsSync('.env')) {
 }
 
 yargs(hideBin(process.argv))
+  .scriptName('vm-x-completion-ai-provider')
   .command(
     'publish',
     'Publish the completion provider',
