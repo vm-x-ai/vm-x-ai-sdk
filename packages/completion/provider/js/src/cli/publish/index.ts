@@ -183,6 +183,9 @@ export class PublishCommand extends BaseCommand<PublishCommandArgs> {
           data: fsPromises.readFile(distPath),
         },
         {
+          headers: {
+            'Content-Type': 'application/octet-stream',
+          },
           onUploadProgress(progressEvent) {
             if (!progressEvent.total) return;
             bar.update(progressEvent.loaded / progressEvent.total);
