@@ -35,12 +35,10 @@ yargs(hideBin(process.argv))
         .option('pat', {
           type: 'string',
           description: 'VM-X Personal Access Token (By default, it will be read from the environment variable VMX_PAT)',
-          demandOption: true,
         })
         .option('apiBaseUrl', {
           type: 'string',
           description: 'VM-X API Base URL',
-          demandOption: true,
           default: 'https://api.vm-x.ai',
         })
         .option('dryRun', {

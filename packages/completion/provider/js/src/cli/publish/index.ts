@@ -17,8 +17,8 @@ import { manifestSchema } from './manifest';
 
 export type PublishCommandArgs = {
   manifest: string;
-  pat: string;
-  apiBaseUrl: string;
+  pat?: string;
+  apiBaseUrl?: string;
   dryRun: boolean;
 };
 
@@ -31,6 +31,11 @@ export class PublishCommand extends BaseCommand<PublishCommandArgs> {
 
   async run(argv: PublishCommandArgs) {
     this.logger.debug(`Command arguments: ${JSON.stringify(argv, null, 2)}`);
+    if (!argv.dryRun && !argv.pat) {
+      this.logger.error(chalk.red`Personal Access Token is required to publish the completion provider`);
+      process.exit(1);
+    }
+
     this.axiosInstance = axios.create({
       baseURL: argv.apiBaseUrl,
       headers: {
@@ -71,7 +76,10 @@ export class PublishCommand extends BaseCommand<PublishCommandArgs> {
     rawManifest.version = packageJson.version;
 
     const manifest = this.validateManifest(rawManifest);
-    await this.checkManifestVersion(manifest);
+
+    if (!argv.dryRun) {
+      await this.checkManifestVersion(manifest);
+    }
 
     const distPath = await this.buildHandler(manifest);
 
