@@ -1,3 +1,15 @@
+## 0.4.4 (2024-10-17)
+
+
+### 🩹 Fixes
+
+- change source upload to await the readFile promise ([5a43545](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/5a43545))
+
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.4.3 (2024-10-17)
 
 
