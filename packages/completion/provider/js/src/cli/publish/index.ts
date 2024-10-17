@@ -9,6 +9,7 @@ import chalk from 'chalk';
 import cliProgress from 'cli-progress';
 import esbuild, { type BuildOptions } from 'esbuild';
 import { load as loadYaml } from 'js-yaml';
+import mime from 'mime-types';
 import type { Logger } from 'pino';
 import { v4 as uuid } from 'uuid';
 import { BaseCommand } from '../types';
@@ -90,7 +91,7 @@ export class PublishCommand extends BaseCommand<PublishCommandArgs> {
 
       const distSource = await this.archiveSourceCode();
 
-      await this.uploadSourceCode(distSource, presignedManifest, distPath);
+      await this.uploadSourceCode(distSource, presignedManifest);
 
       await this.completePublishing(presignedManifest);
     }
@@ -107,11 +108,12 @@ export class PublishCommand extends BaseCommand<PublishCommandArgs> {
         };
       };
     },
-    distPath: string,
   ) {
     this.logger.debug(`Uploading source code archive from ${chalk.bold(distSource)}`);
-    await axios.put(presignedManifest.config.source.url, {
-      data: await fsPromises.readFile(distPath),
+    await axios.put(presignedManifest.config.source.url, await fsPromises.readFile(distSource), {
+      headers: {
+        'Content-Type': mime.lookup(distSource) || 'application/octet-stream',
+      },
     });
     this.logger.debug(`Source code archive uploaded successfully`);
   }
@@ -177,21 +179,15 @@ export class PublishCommand extends BaseCommand<PublishCommandArgs> {
         cliProgress.Presets.shades_classic,
       );
       bar.start(1, 0);
-      await axios.put(
-        upload.url as string,
-        {
-          data: await fsPromises.readFile(distPath),
+      await axios.put(upload.url as string, await fsPromises.readFile(distPath), {
+        headers: {
+          'Content-Type': mime.lookup(upload.localPath) || 'application/octet-stream',
         },
-        {
-          headers: {
-            'Content-Type': 'application/octet-stream',
-          },
-          onUploadProgress(progressEvent) {
-            if (!progressEvent.total) return;
-            bar.update(progressEvent.loaded / progressEvent.total);
-          },
+        onUploadProgress(progressEvent) {
+          if (!progressEvent.total) return;
+          bar.update(progressEvent.loaded / progressEvent.total);
         },
-      );
+      });
 
       uploadedMap[upload.localPath] = true;
 
