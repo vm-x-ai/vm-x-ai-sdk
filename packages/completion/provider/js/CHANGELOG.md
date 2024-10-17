@@ -1,3 +1,15 @@
+## 0.3.1 (2024-10-17)
+
+
+### 🩹 Fixes
+
+- add yargs custom script name ([33ea4e9](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/33ea4e9))
+
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.3.0 (2024-10-17)
 
 
