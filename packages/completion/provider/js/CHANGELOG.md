@@ -1,3 +1,15 @@
+## 0.4.6 (2024-10-17)
+
+
+### 🩹 Fixes
+
+- reading correct asset file ([338f129](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/338f129))
+
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.4.5 (2024-10-17)
 
 
