@@ -1,3 +1,15 @@
+## 0.5.0 (2024-10-22)
+
+
+### 🚀 Features
+
+- **completion-provider:** add watch publish ([9f04f1a](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/9f04f1a))
+
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.4.6 (2024-10-17)
 
 
