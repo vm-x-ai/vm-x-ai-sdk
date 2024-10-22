@@ -46,12 +46,27 @@ yargs(hideBin(process.argv))
           description: 'Run in dry-run mode',
           default: false,
         })
+        .option('watch', {
+          type: 'boolean',
+          description: 'Watch for changes and publish automatically',
+          default: false,
+        })
+        .option('workspaceId', {
+          type: 'string',
+          description: 'VM-X Workspace ID (By default, it will be read from the environment variable VMX_WORKSPACE_ID)',
+        })
+        .option('environmentId', {
+          type: 'string',
+          description:
+            'VM-X Environment ID (By default, it will be read from the environment variable VMX_ENVIRONMENT_ID)',
+        })
         .env('VMX');
     },
     async (argv) => {
       await new PublishCommand(logger).run(argv);
     },
   )
+
   .option('verbose', {
     alias: 'v',
     type: 'boolean',

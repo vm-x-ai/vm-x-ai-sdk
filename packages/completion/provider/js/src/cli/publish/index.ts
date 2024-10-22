@@ -2,6 +2,7 @@ import fs from 'fs';
 import fsPromises from 'fs/promises';
 import os from 'os';
 import path from 'path';
+import { input } from '@inquirer/prompts';
 import archiver from 'archiver';
 import type { AxiosInstance } from 'axios';
 import axios from 'axios';
@@ -12,20 +13,24 @@ import { load as loadYaml } from 'js-yaml';
 import mime from 'mime-types';
 import type { Logger } from 'pino';
 import { v4 as uuid } from 'uuid';
+import { DEFAULT_EXTERNALS } from '../consts';
+import type { Manifest } from '../manifest';
+import { manifestSchema } from '../manifest';
 import { BaseCommand } from '../types';
-import type { Manifest } from './manifest';
-import { manifestSchema } from './manifest';
 
 export type PublishCommandArgs = {
   manifest: string;
   pat?: string;
   apiBaseUrl?: string;
   dryRun: boolean;
+  watch: boolean;
+  workspaceId?: string;
+  environmentId?: string;
 };
 
-export class PublishCommand extends BaseCommand<PublishCommandArgs> {
-  private axiosInstance: AxiosInstance;
+const DEFAULT_API_BASE_URL = 'https://api.vm-x.ai';
 
+export class PublishCommand extends BaseCommand<PublishCommandArgs> {
   constructor(logger: Logger) {
     super(logger);
   }
@@ -36,13 +41,6 @@ export class PublishCommand extends BaseCommand<PublishCommandArgs> {
       this.logger.error(chalk.red`Personal Access Token is required to publish the completion provider`);
       process.exit(1);
     }
-
-    this.axiosInstance = axios.create({
-      baseURL: argv.apiBaseUrl,
-      headers: {
-        Authorization: `Bearer ${argv.pat}`,
-      },
-    });
 
     this.logger.info(chalk.bold`Publishing the completion provider`);
 
@@ -77,26 +75,211 @@ export class PublishCommand extends BaseCommand<PublishCommandArgs> {
     rawManifest.version = packageJson.version;
 
     const manifest = this.validateManifest(rawManifest);
+    const publisher = new Publisher(this.logger, argv.apiBaseUrl ?? DEFAULT_API_BASE_URL, argv.pat as string);
 
-    if (!argv.dryRun) {
-      await this.checkManifestVersion(manifest);
-    }
+    const distPath = await this.buildHandler(manifest, publisher, argv);
 
-    const distPath = await this.buildHandler(manifest);
-
-    if (!argv.dryRun) {
-      const presignedManifest = await this.getPresignedManifest(manifest);
-
-      await this.uploadAssets(manifest, presignedManifest, distPath);
-
-      const distSource = await this.archiveSourceCode();
-
-      await this.uploadSourceCode(distSource, presignedManifest);
-
-      await this.completePublishing(presignedManifest);
+    if (!argv.dryRun && !argv.watch) {
+      await publisher.publish(manifest, distPath, false);
     }
 
     this.logger.info(chalk.bold`Completion provider published successfully`);
+  }
+
+  private validateManifest(rawManifest: unknown): Manifest {
+    let manifest: Manifest;
+    try {
+      manifest = manifestSchema.parse(rawManifest);
+    } catch (error) {
+      this.logger.error(chalk.red`Error parsing manifest file: ${(error as Error).message}`);
+      this.logger.debug(`Error details: ${JSON.stringify(error, null, 2)}`);
+      process.exit(1);
+    }
+
+    this.logger.info(`Manifest file parsed successfully`);
+
+    if (!fs.existsSync(manifest.config.logo.src)) {
+      this.logger.error(chalk.red`Logo file ${chalk.bold(manifest.config.logo.src)} does not exist`);
+      process.exit(1);
+    }
+
+    if (!fs.existsSync(manifest.config.handler.src)) {
+      this.logger.error(chalk.red`Handler file ${chalk.bold(manifest.config.handler.src)} does not exist`);
+      process.exit(1);
+    }
+
+    if (!fs.existsSync(manifest.config.handler.tsConfigPath)) {
+      this.logger.error(
+        chalk.red`Handler tsconfig file ${chalk.bold(manifest.config.handler.tsConfigPath)} does not exist`,
+      );
+      process.exit(1);
+    }
+
+    for (const model of manifest.config.models) {
+      if (model.logo && !fs.existsSync(model.logo.src)) {
+        this.logger.error(chalk.red`Model logo file ${chalk.bold(model.logo.src)} does not exist`);
+        process.exit(1);
+      }
+    }
+    return manifest;
+  }
+
+  private async watchLogs(manifest: Manifest, argv: PublishCommandArgs): Promise<void> {
+    const workspaceId =
+      argv.workspaceId ??
+      (await input({
+        message: 'Workspace ID: ',
+      }));
+    const environmentId =
+      argv.environmentId ??
+      (await input({
+        message: 'Environment ID: ',
+      }));
+
+    let startTime = Date.now();
+    while (true) {
+      try {
+        const response = await axios.get(
+          `${argv.apiBaseUrl ?? DEFAULT_API_BASE_URL}/workspace/ai-provider/${manifest.id}/${manifest.version}/logs/${workspaceId}/${environmentId}`,
+          {
+            params: {
+              startTime,
+            },
+            headers: {
+              Authorization: `Bearer ${argv.pat}`,
+            },
+          },
+        );
+
+        for (const log of response.data.logs) {
+          this.logger.info(chalk.yellow.bold`[${new Date(log.timestamp).toISOString()}] ${log.message}`);
+        }
+        startTime =
+          response.data.logs.length > 0 ? response.data.logs[response.data.logs.length - 1].timestamp + 100 : startTime;
+      } catch (error) {
+        if (error instanceof axios.AxiosError) {
+          this.logger.error(chalk.red`Error fetching logs: ${error.response?.data.message}`);
+        } else {
+          this.logger.error(chalk.red`Error fetching logs: ${(error as Error).message}`);
+        }
+      } finally {
+        await new Promise((resolve) => setTimeout(resolve, 5000)); // wait 5 seconds
+      }
+    }
+  }
+
+  private async buildHandler(manifest: Manifest, publisher: Publisher, argv: PublishCommandArgs): Promise<string> {
+    this.logger.info(`Bulding with ${chalk.bold('esbuild')}...`);
+
+    const esbuildConfigPath = path.join(process.cwd(), './esbuild.config.js');
+
+    if (!fs.existsSync(esbuildConfigPath)) {
+      this.logger.error(chalk.red`esbuild config file ${chalk.bold(esbuildConfigPath)} does not exist`);
+      process.exit(1);
+    }
+
+    this.logger.debug(`Loading esbuild config file ${esbuildConfigPath}`);
+    const userDefinedEsbuildConfig = (await import(esbuildConfigPath)).default as BuildOptions;
+
+    this.logger.debug(`User-defined esbuild config: ${JSON.stringify(userDefinedEsbuildConfig, null, 2)}`);
+
+    const distPath = path.join(process.cwd(), 'dist', 'index.js');
+
+    let watchLogsPromise: Promise<void> | undefined = undefined;
+
+    const esbuildConfig = {
+      ...userDefinedEsbuildConfig,
+      external: [...new Set([...(userDefinedEsbuildConfig.external ?? []), ...DEFAULT_EXTERNALS])],
+      sourcemap: userDefinedEsbuildConfig?.sourcemap ?? false,
+      metafile: userDefinedEsbuildConfig?.metafile ?? false,
+      bundle: true,
+      entryNames: '[dir]/[name]',
+      tsconfig: path.join(process.cwd(), manifest.config.handler.tsConfigPath),
+      outExtension: {
+        '.js': '.js',
+      },
+      entryPoints: [path.join(process.cwd(), manifest.config.handler.src)],
+      outfile: distPath,
+      plugins: [
+        ...(argv.watch
+          ? [
+              {
+                name: 'watch-plugin',
+                setup: (build: esbuild.PluginBuild) => {
+                  build.onEnd(async () => {
+                    this.logger.info(`Republishing completion provider...`);
+                    await publisher.publish(manifest, distPath, true);
+                    this.logger.info(`Completion provider republished successfully`);
+
+                    if (!watchLogsPromise) {
+                      watchLogsPromise = this.watchLogs(manifest, argv);
+                    }
+                  });
+                },
+              },
+            ]
+          : []),
+        ...(userDefinedEsbuildConfig.plugins ?? []),
+      ],
+    };
+
+    this.logger.debug(`Final esbuild config: ${JSON.stringify(esbuildConfig, null, 2)}`);
+
+    if (argv.watch) {
+      this.logger.info(`Watching changes with ${chalk.bold('esbuild')}...`);
+      const context = await esbuild.context(esbuildConfig);
+      process.on('SIGINT', () => {
+        this.logger.debug(`Stopping esbuild watch`);
+        context.dispose();
+        process.exit(0);
+      });
+
+      await context.watch({});
+      return distPath;
+    }
+
+    try {
+      const startBuild = Date.now();
+      await esbuild.build(esbuildConfig);
+      this.logger.info(`Build completed in ${chalk.bold(`${Date.now() - startBuild}ms`)}`);
+    } catch (error) {
+      this.logger.error(chalk.red`Error building with esbuild: ${(error as Error).message}`);
+      process.exit(1);
+    }
+
+    return distPath;
+  }
+}
+
+export class Publisher {
+  private axiosInstance: AxiosInstance;
+
+  constructor(
+    private logger: Logger,
+    apiBaseUrl: string,
+    pat: string,
+  ) {
+    this.axiosInstance = axios.create({
+      baseURL: apiBaseUrl,
+      headers: {
+        Authorization: `Bearer ${pat}`,
+      },
+    });
+  }
+
+  public async publish(manifest: Manifest, handlerJsPath: string, debug: boolean) {
+    await this.checkManifestVersion(manifest);
+
+    const presignedManifest = await this.getPresignedManifest(manifest);
+
+    await this.uploadAssets(manifest, presignedManifest, handlerJsPath, debug);
+
+    if (!debug) {
+      const distSource = await this.archiveSourceCode();
+      await this.uploadSourceCode(distSource, presignedManifest);
+    }
+
+    await this.completePublishing(presignedManifest, debug);
   }
 
   private async uploadSourceCode(
@@ -144,6 +327,7 @@ export class PublishCommand extends BaseCommand<PublishCommandArgs> {
       };
     },
     distPath: string,
+    debug: boolean,
   ) {
     const uploads = [
       {
@@ -172,33 +356,41 @@ export class PublishCommand extends BaseCommand<PublishCommandArgs> {
         continue;
       }
 
-      const bar = new cliProgress.SingleBar(
-        {
-          format: `Uploading ${chalk.bold(upload.label)} file ${chalk.bold(upload.localPath)} [{bar}] {percentage}%`,
-        },
-        cliProgress.Presets.shades_classic,
-      );
-      bar.start(1, 0);
+      let bar: cliProgress.SingleBar | undefined = undefined;
+      if (!debug) {
+        bar = new cliProgress.SingleBar(
+          {
+            format: `Uploading ${chalk.bold(upload.label)} file ${chalk.bold(upload.localPath)} [{bar}] {percentage}%`,
+          },
+          cliProgress.Presets.shades_classic,
+        );
+        bar.start(1, 0);
+      }
       await axios.put(upload.url as string, await fsPromises.readFile(upload.localPath), {
         headers: {
           'Content-Type': mime.lookup(upload.localPath) || 'application/octet-stream',
         },
         onUploadProgress(progressEvent) {
           if (!progressEvent.total) return;
-          bar.update(progressEvent.loaded / progressEvent.total);
+          bar?.update(progressEvent.loaded / progressEvent.total);
         },
       });
 
       uploadedMap[upload.localPath] = true;
 
-      bar.stop();
+      bar?.stop();
     }
   }
 
   private async checkManifestVersion(manifest: Manifest): Promise<void> {
     try {
-      const response = await this.axiosInstance.get<Manifest>(`/workspace/ai-provider/${manifest.id}`);
-      if (response.data.version === manifest.version) {
+      const response = await this.axiosInstance.get<Manifest & { status: string }>(
+        `/workspace/ai-provider/${manifest.id}`,
+      );
+      if (
+        response.data.version === manifest.version &&
+        !['pending-publish', 'debugging'].includes(response.data.status)
+      ) {
         this.logger.warn(
           chalk.yellow`The version ${chalk.bold(
             manifest.version,
@@ -221,12 +413,13 @@ export class PublishCommand extends BaseCommand<PublishCommandArgs> {
     }
   }
 
-  private async completePublishing(presignedManifest: Manifest) {
+  private async completePublishing(presignedManifest: Manifest, debug: boolean) {
     try {
       this.logger.debug(`Calling VM-X API endpoint /workspace/ai-provider/publish/complete`);
       const response = await this.axiosInstance.post('/workspace/ai-provider/publish/complete', {
         id: presignedManifest.id,
         version: presignedManifest.version,
+        debug,
       });
       this.logger.debug(`VM-X API response: ${response.status}`);
     } catch (error) {
@@ -315,99 +508,5 @@ export class PublishCommand extends BaseCommand<PublishCommandArgs> {
 
       process.exit(1);
     }
-  }
-
-  private validateManifest(rawManifest: unknown): Manifest {
-    let manifest: Manifest;
-    try {
-      manifest = manifestSchema.parse(rawManifest);
-    } catch (error) {
-      this.logger.error(chalk.red`Error parsing manifest file: ${(error as Error).message}`);
-      this.logger.debug(`Error details: ${JSON.stringify(error, null, 2)}`);
-      process.exit(1);
-    }
-
-    this.logger.info(`Manifest file parsed successfully`);
-
-    if (!fs.existsSync(manifest.config.logo.src)) {
-      this.logger.error(chalk.red`Logo file ${chalk.bold(manifest.config.logo.src)} does not exist`);
-      process.exit(1);
-    }
-
-    if (!fs.existsSync(manifest.config.handler.src)) {
-      this.logger.error(chalk.red`Handler file ${chalk.bold(manifest.config.handler.src)} does not exist`);
-      process.exit(1);
-    }
-
-    if (!fs.existsSync(manifest.config.handler.tsConfigPath)) {
-      this.logger.error(
-        chalk.red`Handler tsconfig file ${chalk.bold(manifest.config.handler.tsConfigPath)} does not exist`,
-      );
-      process.exit(1);
-    }
-
-    for (const model of manifest.config.models) {
-      if (model.logo && !fs.existsSync(model.logo.src)) {
-        this.logger.error(chalk.red`Model logo file ${chalk.bold(model.logo.src)} does not exist`);
-        process.exit(1);
-      }
-    }
-    return manifest;
-  }
-
-  private async buildHandler(manifest: Manifest): Promise<string> {
-    this.logger.info(`Bulding with ${chalk.bold('esbuild')}...`);
-
-    const esbuildConfigPath = path.join(process.cwd(), './esbuild.config.js');
-
-    if (!fs.existsSync(esbuildConfigPath)) {
-      this.logger.error(chalk.red`esbuild config file ${chalk.bold(esbuildConfigPath)} does not exist`);
-      process.exit(1);
-    }
-
-    this.logger.debug(`Loading esbuild config file ${esbuildConfigPath}`);
-    const userDefinedEsbuildConfig = (await import(esbuildConfigPath)).default as BuildOptions;
-
-    this.logger.debug(`User-defined esbuild config: ${JSON.stringify(userDefinedEsbuildConfig, null, 2)}`);
-
-    const distPath = path.join(process.cwd(), 'dist', 'index.js');
-
-    const esbuildConfig = {
-      ...userDefinedEsbuildConfig,
-      external: [
-        ...new Set([
-          ...(userDefinedEsbuildConfig.external ?? []),
-          'esbuild',
-          '@nestjs/*',
-          '@vm-x-ai/completion-provider',
-          '@grpc/grpc-js',
-          'nestjs-otel',
-          'rxjs',
-        ]),
-      ],
-      sourcemap: userDefinedEsbuildConfig?.sourcemap ?? false,
-      metafile: userDefinedEsbuildConfig?.metafile ?? false,
-      bundle: true,
-      entryNames: '[dir]/[name]',
-      tsconfig: path.join(process.cwd(), manifest.config.handler.tsConfigPath),
-      outExtension: {
-        '.js': '.js',
-      },
-      entryPoints: [path.join(process.cwd(), manifest.config.handler.src)],
-      outfile: distPath,
-    };
-
-    this.logger.debug(`Final esbuild config: ${JSON.stringify(esbuildConfig, null, 2)}`);
-
-    try {
-      const startBuild = Date.now();
-      await esbuild.build(esbuildConfig);
-      this.logger.info(`Build completed in ${chalk.bold(`${Date.now() - startBuild}ms`)}`);
-    } catch (error) {
-      this.logger.error(chalk.red`Error building with esbuild: ${(error as Error).message}`);
-      process.exit(1);
-    }
-
-    return distPath;
   }
 }

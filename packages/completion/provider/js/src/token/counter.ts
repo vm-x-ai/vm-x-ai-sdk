@@ -10,7 +10,6 @@ export class TokenCounter<TMessage extends TokenMessage = TokenMessage> {
       try {
         this.modelEncodingCache[model] = encodingForModel(model as Parameters<typeof encodingForModel>[0]);
       } catch (e) {
-        console.error('Model not found. Using cl100k_base encoding.');
         this.modelEncodingCache[model] = getEncoding('cl100k_base');
       }
     }
