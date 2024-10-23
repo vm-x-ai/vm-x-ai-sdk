@@ -1,3 +1,17 @@
+## 1.1.2 (2024-10-23)
+
+### 🩹 Fixes
+
+- add depends on build to default nx-release-publish ([f229b15](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/f229b15))
+
+### 🧱 Updated Dependencies
+
+- Updated sdk-python to 1.1.2
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 1.1.1 (2024-10-14)
 
 
