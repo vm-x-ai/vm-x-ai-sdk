@@ -22,5 +22,6 @@ describe('ai-provider generator', () => {
     const config = readProjectConfiguration(tree, 'dummy');
     expect(config).toMatchSnapshot();
     expect(tree.listChanges().map((change) => change.path)).toMatchSnapshot();
+    expect(tree.read('package.json', 'utf-8')).toMatchSnapshot();
   });
 });

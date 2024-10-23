@@ -9,6 +9,7 @@ import {
   updateJson,
 } from '@nx/devkit';
 import { libraryGenerator } from '@nx/js';
+import { getPackageVersion } from '@vm-x-ai/completion-provider';
 import type { AiProviderGeneratorSchema } from './schema';
 
 export async function aiProviderGenerator(tree: Tree, options: AiProviderGeneratorSchema) {
@@ -42,10 +43,11 @@ export async function aiProviderGenerator(tree: Tree, options: AiProviderGenerat
       'nestjs-otel': '6.1.1',
       rxjs: '^7.8.1',
       uuid: '^9.0.1',
-      '@vm-x-ai/completion-provider': '^0.5.0',
+      '@vm-x-ai/completion-provider': `^${getPackageVersion()}`,
     },
     {
       'esbuild-plugin-tsc': '^0.4.0',
+      '@types/uuid': '^10.0.0',
     },
     undefined,
     true,
