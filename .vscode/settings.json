@@ -1,0 +1,9 @@
+{
+  "eslint.validate": ["json"],
+  "eslint.useFlatConfig": true,
+  "eslint.workingDirectories": [{ "mode": "auto" }],
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.fixAll.markdownlint": "never"
+  }
+}
