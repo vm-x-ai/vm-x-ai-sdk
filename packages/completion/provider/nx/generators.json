@@ -1,0 +1,9 @@
+{
+  "generators": {
+    "ai-provider": {
+      "factory": "./src/generators/ai-provider/generator",
+      "schema": "./src/generators/ai-provider/schema.json",
+      "description": "Create new AI Provider"
+    }
+  }
+}

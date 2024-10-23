@@ -1,0 +1,75 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ai-provider generator > should run successfully 1`] = `
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "dummy",
+  "projectType": "library",
+  "root": "packages/dummy",
+  "sourceRoot": "packages/dummy/src",
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vm-x-completion-ai-provider publish --dry-run",
+        "cwd": "{projectRoot}",
+      },
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+    },
+    "publish": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vm-x-completion-ai-provider publish",
+        "cwd": "{projectRoot}",
+      },
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "options": {
+        "jestConfig": "packages/dummy/jest.config.ts",
+      },
+      "outputs": [
+        "{workspaceRoot}/coverage/{projectRoot}",
+      ],
+    },
+    "watch": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "vm-x-completion-ai-provider publish --watch",
+        "cwd": "{projectRoot}",
+      },
+    },
+  },
+}
+`;
+
+exports[`ai-provider generator > should run successfully 2`] = `
+[
+  ".prettierrc",
+  "package.json",
+  "nx.json",
+  "tsconfig.base.json",
+  ".prettierignore",
+  "packages/dummy/tsconfig.lib.json",
+  "packages/dummy/tsconfig.json",
+  "packages/dummy/src/index.ts",
+  "packages/dummy/README.md",
+  "packages/dummy/package.json",
+  "packages/dummy/project.json",
+  "eslint.config.js",
+  "packages/dummy/eslint.config.js",
+  "jest.preset.js",
+  "jest.config.ts",
+  "packages/dummy/jest.config.ts",
+  "packages/dummy/tsconfig.spec.json",
+  "packages/dummy/.env.local",
+  "packages/dummy/assets/logos/vmx.png",
+  "packages/dummy/esbuild.config.js",
+  "packages/dummy/manifest.yaml",
+  "packages/dummy/src/provider.spec.ts",
+  "packages/dummy/src/provider.ts",
+]
+`;
