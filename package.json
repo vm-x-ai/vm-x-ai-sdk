@@ -58,6 +58,7 @@
     "@nx/web": "20.0.3",
     "@nx/workspace": "20.0.3",
     "@nxlv/python": "^19.2.1",
+    "@rollup/plugin-esm-shim": "^0.1.7",
     "@swc-node/register": "^1.10.9",
     "@swc/cli": "0.3.12",
     "@swc/core": "1.5.25",
