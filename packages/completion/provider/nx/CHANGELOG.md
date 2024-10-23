@@ -1,3 +1,18 @@
+## 0.2.0 (2024-10-23)
+
+### 🚀 Features
+
+- resolve completion provider package version dynamically ([95c4f9a](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/95c4f9a))
+- add init command ([1d304c7](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/1d304c7))
+
+### 🧱 Updated Dependencies
+
+- Updated completion-provider-js to 0.6.0
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.1.0 (2024-10-23)
 
 ### 🚀 Features

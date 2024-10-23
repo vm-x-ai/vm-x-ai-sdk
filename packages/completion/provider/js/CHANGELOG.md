@@ -1,3 +1,13 @@
+## 0.6.0 (2024-10-23)
+
+### 🚀 Features
+
+- add init command ([1d304c7](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/1d304c7))
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.5.0 (2024-10-22)
 
 
