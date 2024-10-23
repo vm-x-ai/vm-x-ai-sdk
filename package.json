@@ -8,10 +8,12 @@
   },
   "private": true,
   "dependencies": {
+    "@nx/devkit": "20.0.3",
     "@grpc/grpc-js": "^1.10.8",
     "@inquirer/prompts": "^5.3.8",
     "@nestjs/common": "^10.3.9",
     "@nestjs/microservices": "^10.3.9",
+    "@nx/plugin": "^20.0.3",
     "@swc/helpers": "0.5.11",
     "archiver": "^7.0.1",
     "axios": "1.7.2",
@@ -43,15 +45,17 @@
     "@commitlint/prompt-cli": "^19.5.0",
     "@eslint/eslintrc": "^2.1.1",
     "@nx-aws-plugin/nx-aws-cache": "^3.2.1",
-    "@nx/devkit": "19.7.3",
-    "@nx/esbuild": "19.7.3",
-    "@nx/eslint": "19.7.3",
-    "@nx/eslint-plugin": "19.7.3",
-    "@nx/js": "19.7.3",
-    "@nx/node": "19.7.3",
-    "@nx/rollup": "19.7.3",
-    "@nx/vite": "19.7.3",
-    "@nx/workspace": "19.7.3",
+    "@nx/devkit": "20.0.3",
+    "@nx/esbuild": "20.0.3",
+    "@nx/eslint": "20.0.3",
+    "@nx/eslint-plugin": "20.0.3",
+    "@nx/jest": "20.0.3",
+    "@nx/js": "20.0.3",
+    "@nx/node": "20.0.3",
+    "@nx/rollup": "20.0.3",
+    "@nx/vite": "20.0.3",
+    "@nx/web": "20.0.3",
+    "@nx/workspace": "20.0.3",
     "@nxlv/python": "^19.2.1",
     "@swc-node/register": "^1.10.9",
     "@swc/cli": "0.3.12",
@@ -86,7 +90,7 @@
     "glob": "^10.4.1",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.5",
-    "nx": "19.7.3",
+    "nx": "20.0.3",
     "prettier": "^3.3.1",
     "source-map-support": "^0.5.21",
     "swc-loader": "0.2.6",
@@ -105,5 +109,8 @@
   },
   "engines": {
     "node": "20.*"
+  },
+  "nx": {
+    "includedScripts": []
   }
 }

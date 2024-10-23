@@ -58,3 +58,5 @@ cdk.out
 .cache
 
 .coverage
+
+**/vite.config.{js,ts,mjs,mts,cjs,cts}.timestamp*
