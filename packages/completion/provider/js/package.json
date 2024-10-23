@@ -1,6 +1,6 @@
 {
   "name": "@vm-x-ai/completion-provider",
-  "version": "0.6.2",
+  "version": "0.6.3",
   "description": "VM-X AI Completion Provider SDK",
   "license": "MIT",
   "bin": {

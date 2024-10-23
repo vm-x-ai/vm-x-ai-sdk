@@ -1,3 +1,13 @@
+## 0.6.3 (2024-10-23)
+
+### 🩹 Fixes
+
+- read package json from the correct path ([1bbf94b](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/1bbf94b))
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.6.2 (2024-10-23)
 
 ### 🩹 Fixes
