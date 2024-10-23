@@ -23,9 +23,10 @@
     "baseUrl": ".",
     "typeRoots": ["node_modules/@types", "./types", "./node_modules"],
     "paths": {
-      "@vm-x-ai/completion-client": ["packages/completion/client/js/src/index"],
+      "@vm-x-ai/completion-client": ["packages/completion/client/js/src/index.ts"],
+      "@vm-x-ai/completion-provider": ["packages/completion/provider/js/src/index.ts"],
       "@vm-x-ai/completion-provider-nx": ["packages/completion/provider/nx/src/index.ts"],
-      "@vm-x-ai/sdk": ["packages/sdk/js/src/index"]
+      "@vm-x-ai/sdk": ["packages/sdk/js/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
