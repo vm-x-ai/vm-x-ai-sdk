@@ -1,5 +1,6 @@
-import packageJson from '../package.json';
+import fs from 'fs';
+import path from 'path';
 
 export function getPackageVersion(): string {
-  return packageJson.version;
+  return JSON.parse(fs.readFileSync(path.resolve(__dirname, '../package.json'), 'utf-8')).version;
 }

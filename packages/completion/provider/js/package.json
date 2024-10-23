@@ -45,7 +45,8 @@
     "mime-types": "^2.1.35",
     "@inquirer/prompts": "^5.3.8",
     "enquirer": "^2.4.1",
-    "ejs": "^3.1.10"
+    "ejs": "^3.1.10",
+    "@rollup/plugin-esm-shim": "^0.1.7"
   },
   "main": "./src/index.js",
   "typings": "./src/index.d.ts",
