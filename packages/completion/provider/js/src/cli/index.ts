@@ -2,10 +2,13 @@
 
 import fs from 'fs';
 import dotenv from 'dotenv';
+import { prompt } from 'enquirer';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 import { logger, setGlobalLevel } from '../logger';
 import { yargsDecorator } from './decorator';
+import type { InitCommandArgs } from './init';
+import { InitCommand } from './init';
 import { PublishCommand } from './publish';
 
 if (fs.existsSync('.env')) {
@@ -66,7 +69,72 @@ yargs(hideBin(process.argv))
       await new PublishCommand(logger).run(argv);
     },
   )
+  .command<InitCommandArgs>(
+    'init',
+    'Initialize the completion provider project',
+    (yargs) =>
+      yargs
+        .option('name', {
+          alias: 'n',
+          type: 'string',
+          description: 'AI Provider name',
+        })
+        .option('type', {
+          alias: 't',
+          type: 'string',
+          description: 'AI Provider type',
+          choices: ['official', 'community'],
+          default: 'community',
+        })
+        .option('visibility', {
+          alias: 'v',
+          type: 'string',
+          description: 'AI Provider Visibility',
+          choices: ['public', 'private'],
+          default: 'private',
+        })
+        .option('interactive', {
+          type: 'boolean',
+          description: 'Run in interactive mode',
+          default: process.env.CI !== 'true',
+        }),
+    async (argv) => {
+      if (argv.interactive) {
+        const response = await prompt<{
+          name: string;
+          type: string;
+          visibility: string;
+        }>([
+          {
+            type: 'input',
+            name: 'name',
+            message: 'AI Provider name:',
+            initial: argv.name,
+          },
+          {
+            type: 'select',
+            name: 'type',
+            message: 'AI Provider type:',
+            choices: ['official', 'community'],
+            initial: 1,
+          },
+          {
+            type: 'select',
+            name: 'visibility',
+            message: 'AI Provider visibility:',
+            choices: ['public', 'private'],
+            initial: 1,
+          },
+        ]);
 
+        argv.name = response.name;
+        argv.type = response.type;
+        argv.visibility = response.visibility;
+      }
+
+      await new InitCommand(logger).run(argv);
+    },
+  )
   .option('verbose', {
     alias: 'v',
     type: 'boolean',

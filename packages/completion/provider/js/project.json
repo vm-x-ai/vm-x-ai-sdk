@@ -38,6 +38,11 @@
             "glob": "packages/completion/provider/js/CHANGELOG.md",
             "input": ".",
             "output": "."
+          },
+          {
+            "input": "packages/completion/provider/js/src/cli/init/files",
+            "glob": "**/*",
+            "output": "./src/cli/init/files"
           }
         ]
       },

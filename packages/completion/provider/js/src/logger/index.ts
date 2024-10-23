@@ -20,6 +20,7 @@ const debugFileStream = pretty({
 const stream = pretty({
   colorize: false,
   ignore: 'pid,hostname,time,level',
+  sync: true,
 });
 
 export const logger = pino(

@@ -4,3 +4,4 @@ export * from '@vm-x-ai/completion-client';
 export * from './token';
 export * from './grpc';
 export * from './errors';
+export * from './version';
