@@ -54,7 +54,8 @@
     "nx-release-publish": {
       "executor": "@nxlv/python:publish",
       "outputs": [],
-      "options": {}
+      "options": {},
+      "dependsOn": []
     }
   },
   "release": {

@@ -2,6 +2,9 @@
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
   "plugins": ["@nxlv/python"],
   "targetDefaults": {
+    "nx-release-publish": {
+      "dependsOn": ["build"]
+    },
     "build": {
       "dependsOn": ["^build"],
       "inputs": ["production", "^production", "{projectRoot}/nest-cli.json", "{workspaceRoot}/esbuild.config.js"],
