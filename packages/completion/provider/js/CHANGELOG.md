@@ -1,3 +1,13 @@
+## 0.6.2 (2024-10-23)
+
+### 🩹 Fixes
+
+- read package json with fs ([85aea2a](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/85aea2a))
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.6.1 (2024-10-23)
 
 This was a version bump only for completion-provider-js to align it with other projects, there were no code changes.
