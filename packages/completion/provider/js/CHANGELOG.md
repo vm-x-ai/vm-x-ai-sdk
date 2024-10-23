@@ -1,3 +1,13 @@
+## 0.6.4 (2024-10-23)
+
+### 🩹 Fixes
+
+- check package json path ([5b215ed](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/5b215ed))
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.6.3 (2024-10-23)
 
 ### 🩹 Fixes
