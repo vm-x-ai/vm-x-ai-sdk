@@ -51,15 +51,6 @@
         "lintFilePatterns": ["vmxai_completion_client"]
       }
     },
-    "release": {
-      "executor": "nx:run-commands",
-      "outputs": [],
-      "options": {
-        "command": "npx release-it --ci",
-        "cwd": "packages/completion/client/python"
-      },
-      "dependsOn": ["^release"]
-    },
     "nx-release-publish": {
       "executor": "@nxlv/python:publish",
       "outputs": [],

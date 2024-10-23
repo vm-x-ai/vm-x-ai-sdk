@@ -62,15 +62,6 @@
         "cwd": "packages/langchain/python"
       }
     },
-    "release": {
-      "executor": "nx:run-commands",
-      "outputs": [],
-      "options": {
-        "command": "npx release-it --ci",
-        "cwd": "packages/langchain/python"
-      },
-      "dependsOn": ["^release"]
-    },
     "nx-release-publish": {
       "executor": "@nxlv/python:publish",
       "outputs": [],
