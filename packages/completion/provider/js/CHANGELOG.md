@@ -1,3 +1,13 @@
+## 0.6.5 (2024-10-24)
+
+### 🩹 Fixes
+
+- copy the assets to the correct dist folder ([86e38df](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/86e38df))
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.6.4 (2024-10-23)
 
 ### 🩹 Fixes
