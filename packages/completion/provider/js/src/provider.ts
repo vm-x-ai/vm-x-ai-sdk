@@ -1,6 +1,8 @@
+import type { Logger } from '@nestjs/common';
 import type { CompletionRequest, CompletionResponse, CompletionResponseMetadata } from '@vm-x-ai/completion-client';
 import type { Subject } from 'rxjs';
-import type { AIConnection, CompletionMetadata, ResourceModelConfig } from './types';
+import { TokenCounter } from './token';
+import type { AIConnection, AIProviderConfig, CompletionMetadata, ResourceModelConfig } from './types';
 
 export interface ICompletionProvider {
   getMaxReplyTokens(request: CompletionRequest, modelConfig: ResourceModelConfig): number;
@@ -15,6 +17,24 @@ export interface ICompletionProvider {
 }
 
 export abstract class BaseCompletionProvider<TClient> {
+  protected constructor(
+    protected readonly logger: Logger,
+    protected readonly provider: AIProviderConfig,
+  ) {
+    this.initializeTokenCounterModels(provider);
+  }
+
+  protected initializeTokenCounterModels(provider: AIProviderConfig) {
+    const startAt = Date.now();
+    this.logger.log('Initializing token counter models');
+
+    provider.config.models.forEach((model) => {
+      TokenCounter.getEncodingForModelCached(model.value);
+    });
+
+    this.logger.log(`Token counter models initialized in ${Date.now() - startAt}ms`);
+  }
+
   protected abstract createClient(connection: AIConnection): Promise<TClient>;
 
   protected getMetadata(
