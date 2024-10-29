@@ -1,3 +1,17 @@
+## 0.3.0 (2024-10-29)
+
+### 🚀 Features
+
+- add token counter model initialization ([6185ff4](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/6185ff4))
+
+### 🧱 Updated Dependencies
+
+- Updated completion-provider-js to 0.8.0
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.2.5 (2024-10-29)
 
 ### 🧱 Updated Dependencies

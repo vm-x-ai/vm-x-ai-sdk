@@ -1,3 +1,13 @@
+## 0.8.0 (2024-10-29)
+
+### 🚀 Features
+
+- add token counter model initialization ([6185ff4](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/6185ff4))
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.7.0 (2024-10-29)
 
 ### 🚀 Features
