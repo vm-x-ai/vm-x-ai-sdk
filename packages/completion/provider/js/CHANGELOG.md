@@ -1,3 +1,13 @@
+## 0.8.4 (2024-10-29)
+
+### 🩹 Fixes
+
+- remove esm suffix from files ([09acbbd](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/09acbbd))
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.8.3 (2024-10-29)
 
 ### 🩹 Fixes
