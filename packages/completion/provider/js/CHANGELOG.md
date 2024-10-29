@@ -1,3 +1,13 @@
+## 0.8.3 (2024-10-29)
+
+### 🩹 Fixes
+
+- export enums to the main entrypoint ([bd1920d](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/bd1920d))
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.8.2 (2024-10-29)
 
 ### 🩹 Fixes
