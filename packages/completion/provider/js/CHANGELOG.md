@@ -1,3 +1,13 @@
+## 0.8.1 (2024-10-29)
+
+### 🩹 Fixes
+
+- preserve src folder ([33697d8](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/33697d8))
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.8.0 (2024-10-29)
 
 ### 🚀 Features
