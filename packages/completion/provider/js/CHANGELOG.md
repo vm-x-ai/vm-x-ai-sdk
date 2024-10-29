@@ -1,3 +1,13 @@
+## 0.7.0 (2024-10-29)
+
+### 🚀 Features
+
+- export ai provider config types ([49729ff](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/49729ff))
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.6.5 (2024-10-24)
 
 ### 🩹 Fixes
