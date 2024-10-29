@@ -1,3 +1,5 @@
+import type { JSONSchema7 } from 'json-schema';
+
 export type ResourceModelConfig = {
   provider: string;
   model: string;
@@ -20,4 +22,87 @@ export interface AIConnection<TConfig = Record<string, unknown>> {
   provider: string;
   allowedModels?: string[];
   config?: TConfig;
+}
+
+export enum AIProviderType {
+  OFFICIAL = 'official',
+  COMMUNITY = 'community',
+}
+
+export enum AIProviderVisibility {
+  PUBLIC = 'public',
+  PRIVATE = 'private',
+}
+
+export enum AIProviderStatus {
+  PENDING_PUBLISH = 'pending-publish',
+  PUBLISHED = 'published',
+  PENDING_APPROVAL = 'pending-approval',
+  REJECTED = 'rejected',
+  DEBUGGING = 'debugging',
+}
+
+export type AIProviderLogo = {
+  url: string;
+};
+
+export type AIProviderHandler = {
+  url: string;
+  module: string;
+};
+
+export type AIProviderSource = {
+  url: string;
+};
+
+export type AIProviderConnectionAccordionComponent = {
+  type: 'accordion';
+  title: string;
+  elements: (AIProviderConnectionTypographyComponent | AIProviderConnectionEditorComponent)[];
+};
+
+export type AIProviderConnectionTypographyComponent = {
+  type: 'typography';
+  content: string;
+  variant: 'body1' | 'body2' | 'caption' | 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'subtitle1' | 'subtitle2';
+  sx?: Record<string, unknown>;
+};
+
+export type AIProviderConnectionEditorComponent = {
+  type: 'editor';
+  content: string;
+  language: string;
+  height: string;
+  readOnly?: boolean;
+  readOnlyMessage?: string;
+};
+
+export type AIProviderConnection = {
+  form: JSONSchema7;
+  uiComponents?: AIProviderConnectionAccordionComponent[];
+};
+
+export type AIProviderModel = {
+  value: string;
+  label: string;
+  logo?: AIProviderLogo;
+};
+
+export type AIProviderProperties = {
+  logo: AIProviderLogo;
+  source: AIProviderSource;
+  handler: AIProviderHandler;
+  connection: AIProviderConnection;
+  models: AIProviderModel[];
+};
+
+export interface AIProviderConfig {
+  id: string;
+  name: string;
+  description?: string;
+  version: string;
+  type: AIProviderType;
+  config: AIProviderProperties;
+  visibility: AIProviderVisibility;
+  status: AIProviderStatus;
 }
