@@ -1,4 +1,5 @@
 import type { JSONSchema7 } from 'json-schema';
+import type { AIProviderStatus, AIProviderType, AIProviderVisibility } from './enums';
 
 export type ResourceModelConfig = {
   provider: string;
@@ -22,24 +23,6 @@ export interface AIConnection<TConfig = Record<string, unknown>> {
   provider: string;
   allowedModels?: string[];
   config?: TConfig;
-}
-
-export enum AIProviderType {
-  OFFICIAL = 'official',
-  COMMUNITY = 'community',
-}
-
-export enum AIProviderVisibility {
-  PUBLIC = 'public',
-  PRIVATE = 'private',
-}
-
-export enum AIProviderStatus {
-  PENDING_PUBLISH = 'pending-publish',
-  PUBLISHED = 'published',
-  PENDING_APPROVAL = 'pending-approval',
-  REJECTED = 'rejected',
-  DEBUGGING = 'debugging',
 }
 
 export type AIProviderLogo = {

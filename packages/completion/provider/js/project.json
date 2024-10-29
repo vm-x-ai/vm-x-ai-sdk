@@ -22,6 +22,7 @@
         "main": "packages/completion/provider/js/src/index.ts",
         "outputPath": "dist/packages/completion/provider/js",
         "tsConfig": "packages/completion/provider/js/tsconfig.lib.json",
+        "additionalEntryPoints": ["packages/completion/provider/js/src/enums.ts"],
         "compiler": "swc",
         "project": "packages/completion/provider/js/package.json",
         "format": ["esm", "cjs"],

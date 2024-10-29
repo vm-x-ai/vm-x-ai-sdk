@@ -5,6 +5,7 @@ module.exports = (config) => {
   const packageRoot = path.relative(process.cwd(), __dirname);
   config.input = {
     index: `${packageRoot}/src/index.ts`,
+    enums: `${packageRoot}/src/enums.ts`,
     'bin/index': `${packageRoot}/src/cli/index.ts`,
   };
 
