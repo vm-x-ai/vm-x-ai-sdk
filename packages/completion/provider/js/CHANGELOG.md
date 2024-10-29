@@ -1,3 +1,13 @@
+## 0.8.2 (2024-10-29)
+
+### 🩹 Fixes
+
+- add enums entrypoint ([e329eca](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/e329eca))
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.8.1 (2024-10-29)
 
 ### 🩹 Fixes
