@@ -42,7 +42,7 @@
           {
             "input": "packages/completion/provider/js/src/cli/init/files",
             "glob": "**/*",
-            "output": "./cli/init/files"
+            "output": "./src/cli/init/files"
           }
         ]
       },
