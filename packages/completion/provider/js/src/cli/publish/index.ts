@@ -31,6 +31,8 @@ export type PublishCommandArgs = {
 const DEFAULT_API_BASE_URL = 'https://api.vm-x.ai';
 
 export class PublishCommand extends BaseCommand<PublishCommandArgs> {
+  private manifest: Manifest;
+
   constructor(logger: Logger) {
     super(logger);
   }
@@ -43,14 +45,25 @@ export class PublishCommand extends BaseCommand<PublishCommandArgs> {
     }
 
     this.logger.info(chalk.bold`Publishing the completion provider`);
+    this.manifest = this.loadManifest(argv);
+    const publisher = new Publisher(this.logger, argv.apiBaseUrl ?? DEFAULT_API_BASE_URL, argv.pat as string);
 
+    const distPath = await this.buildHandler(publisher, argv);
+
+    if (!argv.dryRun && !argv.watch) {
+      await publisher.publish(this.manifest, distPath, false);
+    }
+
+    this.logger.info(chalk.bold`Completion provider published successfully`);
+  }
+
+  private loadManifest(argv: PublishCommandArgs, reload = false) {
     if (!fs.existsSync(argv.manifest)) {
       this.logger.error(chalk.red`Manifest file ${chalk.bold(argv.manifest)} does not exist`);
       process.exit(1);
     }
 
-    this.logger.info(`Using manifest file ${chalk.bold(argv.manifest)}`);
-
+    !reload && this.logger.info(`Using manifest file ${chalk.bold(argv.manifest)}`);
     this.logger.debug(`Loading manifest file ${argv.manifest}`);
     const manifestContent = fs.readFileSync(argv.manifest, 'utf8');
     this.logger.debug(`Manifest file content: ${manifestContent}`);
@@ -74,19 +87,10 @@ export class PublishCommand extends BaseCommand<PublishCommandArgs> {
     this.logger.debug(`Setting manifest version to ${packageJson.version}`);
     rawManifest.version = packageJson.version;
 
-    const manifest = this.validateManifest(rawManifest);
-    const publisher = new Publisher(this.logger, argv.apiBaseUrl ?? DEFAULT_API_BASE_URL, argv.pat as string);
-
-    const distPath = await this.buildHandler(manifest, publisher, argv);
-
-    if (!argv.dryRun && !argv.watch) {
-      await publisher.publish(manifest, distPath, false);
-    }
-
-    this.logger.info(chalk.bold`Completion provider published successfully`);
+    return this.validateManifest(rawManifest, reload);
   }
 
-  private validateManifest(rawManifest: unknown): Manifest {
+  private validateManifest(rawManifest: unknown, reload = false): Manifest {
     let manifest: Manifest;
     try {
       manifest = manifestSchema.parse(rawManifest);
@@ -96,7 +100,7 @@ export class PublishCommand extends BaseCommand<PublishCommandArgs> {
       process.exit(1);
     }
 
-    this.logger.info(`Manifest file parsed successfully`);
+    !reload && this.logger.info(`Manifest file parsed successfully`);
 
     if (!fs.existsSync(manifest.config.logo.src)) {
       this.logger.error(chalk.red`Logo file ${chalk.bold(manifest.config.logo.src)} does not exist`);
@@ -124,7 +128,7 @@ export class PublishCommand extends BaseCommand<PublishCommandArgs> {
     return manifest;
   }
 
-  private async watchLogs(manifest: Manifest, argv: PublishCommandArgs): Promise<void> {
+  private async watchLogs(argv: PublishCommandArgs): Promise<void> {
     const workspaceId =
       argv.workspaceId ??
       (await input({
@@ -140,7 +144,7 @@ export class PublishCommand extends BaseCommand<PublishCommandArgs> {
     while (true) {
       try {
         const response = await axios.get(
-          `${argv.apiBaseUrl ?? DEFAULT_API_BASE_URL}/workspace/ai-provider/${manifest.id}/${manifest.version}/logs/${workspaceId}/${environmentId}`,
+          `${argv.apiBaseUrl ?? DEFAULT_API_BASE_URL}/workspace/ai-provider/${this.manifest.id}/${this.manifest.version}/logs/${workspaceId}/${environmentId}`,
           {
             params: {
               startTime,
@@ -168,7 +172,7 @@ export class PublishCommand extends BaseCommand<PublishCommandArgs> {
     }
   }
 
-  private async buildHandler(manifest: Manifest, publisher: Publisher, argv: PublishCommandArgs): Promise<string> {
+  private async buildHandler(publisher: Publisher, argv: PublishCommandArgs): Promise<string> {
     this.logger.info(`Bulding with ${chalk.bold('esbuild')}...`);
 
     const esbuildConfigPath = path.join(process.cwd(), './esbuild.config.js');
@@ -194,11 +198,11 @@ export class PublishCommand extends BaseCommand<PublishCommandArgs> {
       metafile: userDefinedEsbuildConfig?.metafile ?? false,
       bundle: true,
       entryNames: '[dir]/[name]',
-      tsconfig: path.join(process.cwd(), manifest.config.handler.tsConfigPath),
+      tsconfig: path.join(process.cwd(), this.manifest.config.handler.tsConfigPath),
       outExtension: {
         '.js': '.js',
       },
-      entryPoints: [path.join(process.cwd(), manifest.config.handler.src)],
+      entryPoints: [path.join(process.cwd(), this.manifest.config.handler.src)],
       outfile: distPath,
       plugins: [
         ...(argv.watch
@@ -208,11 +212,11 @@ export class PublishCommand extends BaseCommand<PublishCommandArgs> {
                 setup: (build: esbuild.PluginBuild) => {
                   build.onEnd(async () => {
                     this.logger.info(`Republishing completion provider...`);
-                    await publisher.publish(manifest, distPath, true);
+                    await publisher.publish(this.manifest, distPath, true);
                     this.logger.info(`Completion provider republished successfully`);
 
                     if (!watchLogsPromise) {
-                      watchLogsPromise = this.watchLogs(manifest, argv);
+                      watchLogsPromise = this.watchLogs(argv);
                     }
                   });
                 },
@@ -222,6 +226,16 @@ export class PublishCommand extends BaseCommand<PublishCommandArgs> {
         ...(userDefinedEsbuildConfig.plugins ?? []),
       ],
     };
+
+    if (argv.watch) {
+      fs.watchFile(argv.manifest, async () => {
+        this.logger.info(`Manifest file ${chalk.bold(argv.manifest)} has been changed`);
+        this.manifest = this.loadManifest(argv, true);
+        this.logger.info(`Republishing completion provider...`);
+        await publisher.publish(this.manifest, distPath, true);
+        this.logger.info(`Completion provider republished successfully`);
+      });
+    }
 
     this.logger.debug(`Final esbuild config: ${JSON.stringify(esbuildConfig, null, 2)}`);
 
