@@ -1,3 +1,13 @@
+## 0.9.0 (2024-10-30)
+
+### 🚀 Features
+
+- add manifest yaml file watch to re-publish ([b48973b](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/b48973b))
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.8.4 (2024-10-29)
 
 ### 🩹 Fixes
