@@ -1,3 +1,17 @@
+## 1.2.0 (2024-10-31)
+
+### 🚀 Features
+
+- feat: add metadata to completion request object ([3757cbf](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/3757cbf))
+
+### 🧱 Updated Dependencies
+
+- Updated completion-client-python to 1.4.0
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 1.1.2 (2024-10-23)
 
 ### 🩹 Fixes

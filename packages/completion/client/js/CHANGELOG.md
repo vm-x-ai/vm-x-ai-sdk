@@ -1,3 +1,13 @@
+## 1.4.0 (2024-10-31)
+
+### 🚀 Features
+
+- feat: add metadata to completion request object ([3757cbf](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/3757cbf))
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 1.3.1 (2024-10-15)
 
 
