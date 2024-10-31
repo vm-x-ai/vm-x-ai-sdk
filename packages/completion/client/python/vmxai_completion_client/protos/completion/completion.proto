@@ -35,6 +35,7 @@ message CompletionRequest {
   optional google.protobuf.Struct config = 10;
   optional bool include_raw_response = 11;
   optional google.protobuf.Struct resource_config_overrides = 12;
+  optional google.protobuf.Struct metadata = 13;
 }
 
 message RequestMessage {

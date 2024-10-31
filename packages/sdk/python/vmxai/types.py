@@ -35,3 +35,5 @@ class CompletionRequest:
     tool_choice: Optional[Union[Literal["auto", "none"], RequestToolChoiceItem]] = "auto"
     config: Optional[dict] = field(default_factory=dict)
     messages: list[RequestMessage] = field(default_factory=list)
+    resource_config_overrides: Optional[dict] = field(default_factory=dict)
+    metadata: Optional[dict] = field(default_factory=dict)

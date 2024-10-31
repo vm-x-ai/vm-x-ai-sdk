@@ -23,7 +23,7 @@ class GetResourceProviderCountResponse(_message.Message):
     def __init__(self, count: _Optional[int] = ...) -> None: ...
 
 class CompletionRequest(_message.Message):
-    __slots__ = ("workspace_id", "environment_id", "primary", "secondary_model_index", "resource", "stream", "messages", "tools", "tool_choice", "config", "include_raw_response", "resource_config_overrides")
+    __slots__ = ("workspace_id", "environment_id", "primary", "secondary_model_index", "resource", "stream", "messages", "tools", "tool_choice", "config", "include_raw_response", "resource_config_overrides", "metadata")
     WORKSPACE_ID_FIELD_NUMBER: _ClassVar[int]
     ENVIRONMENT_ID_FIELD_NUMBER: _ClassVar[int]
     PRIMARY_FIELD_NUMBER: _ClassVar[int]
@@ -36,6 +36,7 @@ class CompletionRequest(_message.Message):
     CONFIG_FIELD_NUMBER: _ClassVar[int]
     INCLUDE_RAW_RESPONSE_FIELD_NUMBER: _ClassVar[int]
     RESOURCE_CONFIG_OVERRIDES_FIELD_NUMBER: _ClassVar[int]
+    METADATA_FIELD_NUMBER: _ClassVar[int]
     workspace_id: str
     environment_id: str
     primary: bool
@@ -48,7 +49,8 @@ class CompletionRequest(_message.Message):
     config: _struct_pb2.Struct
     include_raw_response: bool
     resource_config_overrides: _struct_pb2.Struct
-    def __init__(self, workspace_id: _Optional[str] = ..., environment_id: _Optional[str] = ..., primary: bool = ..., secondary_model_index: _Optional[int] = ..., resource: _Optional[str] = ..., stream: bool = ..., messages: _Optional[_Iterable[_Union[RequestMessage, _Mapping]]] = ..., tools: _Optional[_Iterable[_Union[RequestTools, _Mapping]]] = ..., tool_choice: _Optional[_Union[RequestToolChoice, _Mapping]] = ..., config: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ..., include_raw_response: bool = ..., resource_config_overrides: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ...) -> None: ...
+    metadata: _struct_pb2.Struct
+    def __init__(self, workspace_id: _Optional[str] = ..., environment_id: _Optional[str] = ..., primary: bool = ..., secondary_model_index: _Optional[int] = ..., resource: _Optional[str] = ..., stream: bool = ..., messages: _Optional[_Iterable[_Union[RequestMessage, _Mapping]]] = ..., tools: _Optional[_Iterable[_Union[RequestTools, _Mapping]]] = ..., tool_choice: _Optional[_Union[RequestToolChoice, _Mapping]] = ..., config: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ..., include_raw_response: bool = ..., resource_config_overrides: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ..., metadata: _Optional[_Union[_struct_pb2.Struct, _Mapping]] = ...) -> None: ...
 
 class RequestMessage(_message.Message):
     __slots__ = ("name", "role", "content", "tool_calls", "tool_call_id")

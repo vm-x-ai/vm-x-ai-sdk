@@ -45,6 +45,7 @@ export interface CompletionRequest {
   config?: { [key: string]: any } | undefined;
   includeRawResponse?: boolean | undefined;
   resourceConfigOverrides?: { [key: string]: any } | undefined;
+  metadata?: { [key: string]: any } | undefined;
 }
 
 export interface RequestMessage {
@@ -365,6 +366,7 @@ function createBaseCompletionRequest(): CompletionRequest {
     config: undefined,
     includeRawResponse: undefined,
     resourceConfigOverrides: undefined,
+    metadata: undefined,
   };
 }
 
@@ -405,6 +407,9 @@ export const CompletionRequest = {
     }
     if (message.resourceConfigOverrides !== undefined) {
       Struct.encode(Struct.wrap(message.resourceConfigOverrides), writer.uint32(98).fork()).ldelim();
+    }
+    if (message.metadata !== undefined) {
+      Struct.encode(Struct.wrap(message.metadata), writer.uint32(106).fork()).ldelim();
     }
     return writer;
   },
@@ -500,6 +505,13 @@ export const CompletionRequest = {
 
           message.resourceConfigOverrides = Struct.unwrap(Struct.decode(reader, reader.uint32()));
           continue;
+        case 13:
+          if (tag !== 106) {
+            break;
+          }
+
+          message.metadata = Struct.unwrap(Struct.decode(reader, reader.uint32()));
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -559,6 +571,7 @@ export const CompletionRequest = {
       config: isObject(object.config) ? object.config : undefined,
       includeRawResponse: isSet(object.includeRawResponse) ? globalThis.Boolean(object.includeRawResponse) : undefined,
       resourceConfigOverrides: isObject(object.resourceConfigOverrides) ? object.resourceConfigOverrides : undefined,
+      metadata: isObject(object.metadata) ? object.metadata : undefined,
     };
   },
 
@@ -600,6 +613,9 @@ export const CompletionRequest = {
     if (message.resourceConfigOverrides !== undefined) {
       obj.resourceConfigOverrides = message.resourceConfigOverrides;
     }
+    if (message.metadata !== undefined) {
+      obj.metadata = message.metadata;
+    }
     return obj;
   },
 
@@ -623,6 +639,7 @@ export const CompletionRequest = {
     message.config = object.config ?? undefined;
     message.includeRawResponse = object.includeRawResponse ?? undefined;
     message.resourceConfigOverrides = object.resourceConfigOverrides ?? undefined;
+    message.metadata = object.metadata ?? undefined;
     return message;
   },
 };

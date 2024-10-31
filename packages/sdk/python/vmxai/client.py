@@ -156,6 +156,8 @@ class VMXClient:
             stream=stream,
             tools=self._parse_tools(request.tools),
             tool_choice=self._parse_tool_choice(request.tool_choice),
+            metadata=request.metadata or None,
+            resource_config_overrides=request.resource_config_overrides or None,
             messages=[
                 GrpcRequestMessage(
                     name=message.name,
