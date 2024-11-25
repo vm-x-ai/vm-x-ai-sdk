@@ -1,3 +1,13 @@
+## 0.10.0 (2024-11-25)
+
+### 🚀 Features
+
+- refactor manifest loading to a separate utility function ([7032a67](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/7032a67))
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.9.1 (2024-10-31)
 
 ### 🧱 Updated Dependencies
