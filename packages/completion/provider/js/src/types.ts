@@ -69,6 +69,11 @@ export type AIProviderModel = {
   value: string;
   label: string;
   logo?: AIProviderLogo;
+  options?: AIProviderModelOptions;
+};
+
+export type AIProviderModelOptions = {
+  maxTokens?: number;
 };
 
 export type AIProviderProperties = {

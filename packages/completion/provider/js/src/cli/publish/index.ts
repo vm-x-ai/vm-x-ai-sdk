@@ -9,10 +9,10 @@ import axios from 'axios';
 import chalk from 'chalk';
 import cliProgress from 'cli-progress';
 import esbuild, { type BuildOptions } from 'esbuild';
-import { load as loadYaml } from 'js-yaml';
 import mime from 'mime-types';
 import type { Logger } from 'pino';
 import { v4 as uuid } from 'uuid';
+import { readManifest } from '../../utils/manifest';
 import { DEFAULT_EXTERNALS } from '../consts';
 import type { Manifest } from '../manifest';
 import { manifestSchema } from '../manifest';
@@ -58,36 +58,11 @@ export class PublishCommand extends BaseCommand<PublishCommandArgs> {
   }
 
   private loadManifest(argv: PublishCommandArgs, reload = false) {
-    if (!fs.existsSync(argv.manifest)) {
-      this.logger.error(chalk.red`Manifest file ${chalk.bold(argv.manifest)} does not exist`);
-      process.exit(1);
-    }
-
     !reload && this.logger.info(`Using manifest file ${chalk.bold(argv.manifest)}`);
     this.logger.debug(`Loading manifest file ${argv.manifest}`);
-    const manifestContent = fs.readFileSync(argv.manifest, 'utf8');
-    this.logger.debug(`Manifest file content: ${manifestContent}`);
-    this.logger.debug(`Parsing manifest file content`);
-    let rawManifest: Record<string, unknown>;
-    try {
-      rawManifest = loadYaml(manifestContent) as Record<string, unknown>;
-    } catch (error) {
-      this.logger.error(chalk.red`Error parsing manifest file: ${(error as Error).message}`);
-      process.exit(1);
-    }
+    const manifest = readManifest(argv.manifest);
 
-    if (!fs.existsSync('./package.json')) {
-      this.logger.error(chalk.red`package.json file does not exist`);
-      process.exit(1);
-    }
-
-    this.logger.debug(`Loading package.json file`);
-    const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf8'));
-
-    this.logger.debug(`Setting manifest version to ${packageJson.version}`);
-    rawManifest.version = packageJson.version;
-
-    return this.validateManifest(rawManifest, reload);
+    return this.validateManifest(manifest, reload);
   }
 
   private validateManifest(rawManifest: unknown, reload = false): Manifest {
