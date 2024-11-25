@@ -1,3 +1,13 @@
+## 0.11.0 (2024-11-25)
+
+### 🚀 Features
+
+- enhance DummyLLMProvider initialization with manifest loading ([7725791](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/7725791))
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.10.0 (2024-11-25)
 
 ### 🚀 Features
