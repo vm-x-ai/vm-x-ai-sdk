@@ -1,11 +1,13 @@
+import path from 'path';
 import { Logger } from '@nestjs/common';
-import type { CompletionResponse } from '@vm-x-ai/completion-provider';
+import { CompletionResponse, readManifest } from '@vm-x-ai/completion-provider';
 import { Subject } from 'rxjs';
 import { DummyLLMProvider } from './provider';
 
 describe('Dummy e2e', () => {
   const logger = new Logger();
-  const provider = new DummyLLMProvider(logger);
+  const manifestPath = path.join(import.meta.dirname, '..', 'manifest.yaml')
+  const provider = new DummyLLMProvider(logger, readManifest(manifestPath));
   const connection = {
     connectionId: 'default',
     description: 'default',
