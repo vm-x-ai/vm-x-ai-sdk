@@ -1,3 +1,13 @@
+## 1.5.0 (2024-12-09)
+
+### 🚀 Features
+
+- add optional duration field to CompletionResponseMetrics ([8feda12](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/8feda12))
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 1.4.0 (2024-10-31)
 
 ### 🚀 Features

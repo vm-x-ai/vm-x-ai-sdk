@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "vm-x-ai-completion-client"
-version = "1.4.0"
+version = "1.5.0"
 description = "VM-X AI Completion Client"
 authors = [ "VM-X Engineering <eng@vm-x.ai>" ]
 maintainers = [ "VM-X Engineering <eng@vm-x.ai>" ]

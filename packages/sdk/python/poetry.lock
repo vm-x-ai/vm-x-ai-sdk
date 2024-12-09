@@ -258,7 +258,7 @@ zstd = ["zstandard (>=0.18.0)"]
 
 [[package]]
 name = "vm-x-ai-completion-client"
-version = "1.4.0"
+version = "1.5.0"
 description = "VM-X AI Completion Client"
 optional = false
 python-versions = ">=3.8,<4"

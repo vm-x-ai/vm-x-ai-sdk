@@ -1,3 +1,9 @@
+## 1.2.1 (2024-12-09)
+
+### 🧱 Updated Dependencies
+
+- Updated completion-client-python to 1.5.0
+
 ## 1.2.0 (2024-10-31)
 
 ### 🚀 Features
