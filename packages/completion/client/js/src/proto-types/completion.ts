@@ -131,6 +131,7 @@ export interface CompletionResponseMetrics {
   timeToFirstToken?: number | undefined;
   tokensPerSecond: number;
   duration?: number | undefined;
+  providerDuration?: number | undefined;
 }
 
 function createBaseGetResourceProviderCountRequest(): GetResourceProviderCountRequest {
@@ -2217,7 +2218,7 @@ export const CompletionResponseMetadata = {
 };
 
 function createBaseCompletionResponseMetrics(): CompletionResponseMetrics {
-  return { timeToFirstToken: undefined, tokensPerSecond: 0, duration: undefined };
+  return { timeToFirstToken: undefined, tokensPerSecond: 0, duration: undefined, providerDuration: undefined };
 }
 
 export const CompletionResponseMetrics = {
@@ -2230,6 +2231,9 @@ export const CompletionResponseMetrics = {
     }
     if (message.duration !== undefined) {
       writer.uint32(29).float(message.duration);
+    }
+    if (message.providerDuration !== undefined) {
+      writer.uint32(37).float(message.providerDuration);
     }
     return writer;
   },
@@ -2261,6 +2265,13 @@ export const CompletionResponseMetrics = {
           }
 
           message.duration = reader.float();
+          continue;
+        case 4:
+          if (tag !== 37) {
+            break;
+          }
+
+          message.providerDuration = reader.float();
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -2310,6 +2321,7 @@ export const CompletionResponseMetrics = {
       timeToFirstToken: isSet(object.timeToFirstToken) ? globalThis.Number(object.timeToFirstToken) : undefined,
       tokensPerSecond: isSet(object.tokensPerSecond) ? globalThis.Number(object.tokensPerSecond) : 0,
       duration: isSet(object.duration) ? globalThis.Number(object.duration) : undefined,
+      providerDuration: isSet(object.providerDuration) ? globalThis.Number(object.providerDuration) : undefined,
     };
   },
 
@@ -2324,6 +2336,9 @@ export const CompletionResponseMetrics = {
     if (message.duration !== undefined) {
       obj.duration = message.duration;
     }
+    if (message.providerDuration !== undefined) {
+      obj.providerDuration = message.providerDuration;
+    }
     return obj;
   },
 
@@ -2335,6 +2350,7 @@ export const CompletionResponseMetrics = {
     message.timeToFirstToken = object.timeToFirstToken ?? undefined;
     message.tokensPerSecond = object.tokensPerSecond ?? 0;
     message.duration = object.duration ?? undefined;
+    message.providerDuration = object.providerDuration ?? undefined;
     return message;
   },
 };
