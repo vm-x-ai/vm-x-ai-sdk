@@ -1,3 +1,9 @@
+## 1.1.5 (2024-12-09)
+
+### 🧱 Updated Dependencies
+
+- Updated completion-client-js to 1.6.0
+
 ## 1.1.4 (2024-12-09)
 
 ### 🧱 Updated Dependencies

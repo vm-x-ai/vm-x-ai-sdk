@@ -1,3 +1,13 @@
+## 1.6.0 (2024-12-09)
+
+### 🚀 Features
+
+- add optional provider_duration field to CompletionResponseMetrics ([243ff44](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/243ff44))
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 1.5.0 (2024-12-09)
 
 ### 🚀 Features

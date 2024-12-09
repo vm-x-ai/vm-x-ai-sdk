@@ -1,3 +1,9 @@
+## 0.4.2 (2024-12-09)
+
+### 🧱 Updated Dependencies
+
+- Updated completion-provider-js to 0.11.2
+
 ## 0.4.1 (2024-12-09)
 
 ### 🧱 Updated Dependencies

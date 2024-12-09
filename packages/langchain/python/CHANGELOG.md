@@ -1,3 +1,9 @@
+## 1.1.5 (2024-12-09)
+
+### 🧱 Updated Dependencies
+
+- Updated sdk-python to 1.2.2
+
 ## 1.1.4 (2024-12-09)
 
 ### 🧱 Updated Dependencies
