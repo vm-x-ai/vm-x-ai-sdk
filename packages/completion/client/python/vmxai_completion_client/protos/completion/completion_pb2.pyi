@@ -187,9 +187,11 @@ class CompletionResponseMetadata(_message.Message):
     def __init__(self, primary: bool = ..., secondary_model_index: _Optional[int] = ..., provider: _Optional[str] = ..., model: _Optional[str] = ..., done: bool = ..., success: bool = ..., fallback: bool = ..., fallback_attempts: _Optional[int] = ..., error_message: _Optional[str] = ..., error_code: _Optional[int] = ..., error_reason: _Optional[str] = ...) -> None: ...
 
 class CompletionResponseMetrics(_message.Message):
-    __slots__ = ("time_to_first_token", "tokens_per_second")
+    __slots__ = ("time_to_first_token", "tokens_per_second", "duration")
     TIME_TO_FIRST_TOKEN_FIELD_NUMBER: _ClassVar[int]
     TOKENS_PER_SECOND_FIELD_NUMBER: _ClassVar[int]
+    DURATION_FIELD_NUMBER: _ClassVar[int]
     time_to_first_token: float
     tokens_per_second: float
-    def __init__(self, time_to_first_token: _Optional[float] = ..., tokens_per_second: _Optional[float] = ...) -> None: ...
+    duration: float
+    def __init__(self, time_to_first_token: _Optional[float] = ..., tokens_per_second: _Optional[float] = ..., duration: _Optional[float] = ...) -> None: ...

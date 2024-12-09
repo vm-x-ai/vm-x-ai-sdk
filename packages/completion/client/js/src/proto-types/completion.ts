@@ -130,6 +130,7 @@ export interface CompletionResponseMetadata {
 export interface CompletionResponseMetrics {
   timeToFirstToken?: number | undefined;
   tokensPerSecond: number;
+  duration?: number | undefined;
 }
 
 function createBaseGetResourceProviderCountRequest(): GetResourceProviderCountRequest {
@@ -2216,7 +2217,7 @@ export const CompletionResponseMetadata = {
 };
 
 function createBaseCompletionResponseMetrics(): CompletionResponseMetrics {
-  return { timeToFirstToken: undefined, tokensPerSecond: 0 };
+  return { timeToFirstToken: undefined, tokensPerSecond: 0, duration: undefined };
 }
 
 export const CompletionResponseMetrics = {
@@ -2226,6 +2227,9 @@ export const CompletionResponseMetrics = {
     }
     if (message.tokensPerSecond !== 0) {
       writer.uint32(21).float(message.tokensPerSecond);
+    }
+    if (message.duration !== undefined) {
+      writer.uint32(29).float(message.duration);
     }
     return writer;
   },
@@ -2250,6 +2254,13 @@ export const CompletionResponseMetrics = {
           }
 
           message.tokensPerSecond = reader.float();
+          continue;
+        case 3:
+          if (tag !== 29) {
+            break;
+          }
+
+          message.duration = reader.float();
           continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
@@ -2298,6 +2309,7 @@ export const CompletionResponseMetrics = {
     return {
       timeToFirstToken: isSet(object.timeToFirstToken) ? globalThis.Number(object.timeToFirstToken) : undefined,
       tokensPerSecond: isSet(object.tokensPerSecond) ? globalThis.Number(object.tokensPerSecond) : 0,
+      duration: isSet(object.duration) ? globalThis.Number(object.duration) : undefined,
     };
   },
 
@@ -2309,6 +2321,9 @@ export const CompletionResponseMetrics = {
     if (message.tokensPerSecond !== 0) {
       obj.tokensPerSecond = message.tokensPerSecond;
     }
+    if (message.duration !== undefined) {
+      obj.duration = message.duration;
+    }
     return obj;
   },
 
@@ -2319,6 +2334,7 @@ export const CompletionResponseMetrics = {
     const message = createBaseCompletionResponseMetrics();
     message.timeToFirstToken = object.timeToFirstToken ?? undefined;
     message.tokensPerSecond = object.tokensPerSecond ?? 0;
+    message.duration = object.duration ?? undefined;
     return message;
   },
 };

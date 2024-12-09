@@ -122,4 +122,5 @@ message CompletionResponseMetadata {
 message CompletionResponseMetrics {
   optional float time_to_first_token = 1;
   float tokens_per_second = 2;
+  optional float duration = 3;
 }
