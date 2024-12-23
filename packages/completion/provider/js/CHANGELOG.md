@@ -1,3 +1,13 @@
+## 0.11.3 (2024-12-23)
+
+### 🩹 Fixes
+
+- update warning message to reference package.json instead of manifest file ([3b18613](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/3b18613))
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.11.2 (2024-12-09)
 
 ### 🧱 Updated Dependencies
