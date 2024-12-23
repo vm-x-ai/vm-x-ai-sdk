@@ -383,7 +383,7 @@ export class Publisher {
         this.logger.warn(
           chalk.yellow`The version ${chalk.bold(
             manifest.version,
-          )} is already published, please update the version in the manifest file and try again`,
+          )} is already published, please update the version in the${chalk.bold('package.json')} file and try again`,
         );
         process.exit(0);
       }
