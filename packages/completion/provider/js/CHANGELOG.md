@@ -1,3 +1,13 @@
+## 0.12.0 (2024-12-26)
+
+### 🚀 Features
+
+- add support for link-button component in manifest schema ([9414ef6](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/9414ef6))
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.11.3 (2024-12-23)
 
 ### 🩹 Fixes
