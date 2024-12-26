@@ -46,6 +46,9 @@ export class PublishCommand extends BaseCommand<PublishCommandArgs> {
 
     this.logger.info(chalk.bold`Publishing the completion provider`);
     this.manifest = this.loadManifest(argv);
+
+    this.logger.debug(`Manifest: ${JSON.stringify(this.manifest, null, 2)}`);
+
     const publisher = new Publisher(this.logger, argv.apiBaseUrl ?? DEFAULT_API_BASE_URL, argv.pat as string);
 
     const distPath = await this.buildHandler(publisher, argv);

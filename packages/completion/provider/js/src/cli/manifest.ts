@@ -31,7 +31,7 @@ export const manifestSchema = z.object({
                     variant: z
                       .enum(['body1', 'body2', 'caption', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'subtitle1', 'subtitle2'])
                       .optional(),
-                    sx: z.object({}).optional(),
+                    sx: z.custom().default({}),
                   }),
                   z.object({
                     type: z.enum(['editor']),
@@ -47,7 +47,7 @@ export const manifestSchema = z.object({
             z.object({
               type: z.literal('link-button'),
               content: z.string(),
-              sx: z.object({}).optional(),
+              sx: z.custom().default({}),
               url: z.string(),
               target: z.string().optional(),
             }),
