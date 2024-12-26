@@ -1,3 +1,13 @@
+## 0.12.3 (2024-12-26)
+
+### 🩹 Fixes
+
+- update manifest schema to set default for sx property ([34b9661](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/34b9661))
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.12.2 (2024-12-26)
 
 ### 🩹 Fixes
