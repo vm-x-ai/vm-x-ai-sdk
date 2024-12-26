@@ -44,6 +44,14 @@ export type AIProviderConnectionAccordionComponent = {
   elements: (AIProviderConnectionTypographyComponent | AIProviderConnectionEditorComponent)[];
 };
 
+export type AIProviderConnectionButtonComponent = {
+  type: 'link-button';
+  content: string;
+  sx?: Record<string, unknown>;
+  url: string;
+  target?: string;
+};
+
 export type AIProviderConnectionTypographyComponent = {
   type: 'typography';
   content: string;
@@ -62,7 +70,7 @@ export type AIProviderConnectionEditorComponent = {
 
 export type AIProviderConnection = {
   form: JSONSchema7;
-  uiComponents?: AIProviderConnectionAccordionComponent[];
+  uiComponents?: (AIProviderConnectionAccordionComponent | AIProviderConnectionAccordionComponent)[];
 };
 
 export type AIProviderModel = {

@@ -19,30 +19,39 @@ export const manifestSchema = z.object({
       }),
       uiComponents: z
         .array(
-          z.object({
-            type: z.enum(['accordion']),
-            title: z.string(),
-            elements: z.array(
-              z.union([
-                z.object({
-                  type: z.enum(['typography']),
-                  content: z.string(),
-                  variant: z
-                    .enum(['body1', 'body2', 'caption', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'subtitle1', 'subtitle2'])
-                    .optional(),
-                  sx: z.object({}).optional(),
-                }),
-                z.object({
-                  type: z.enum(['editor']),
-                  content: z.string(),
-                  language: z.string(),
-                  height: z.string(),
-                  readOnly: z.boolean().optional(),
-                  readOnlyMessage: z.string().optional(),
-                }),
-              ]),
-            ),
-          }),
+          z.union([
+            z.object({
+              type: z.enum(['accordion']),
+              title: z.string(),
+              elements: z.array(
+                z.union([
+                  z.object({
+                    type: z.enum(['typography']),
+                    content: z.string(),
+                    variant: z
+                      .enum(['body1', 'body2', 'caption', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'subtitle1', 'subtitle2'])
+                      .optional(),
+                    sx: z.object({}).optional(),
+                  }),
+                  z.object({
+                    type: z.enum(['editor']),
+                    content: z.string(),
+                    language: z.string(),
+                    height: z.string(),
+                    readOnly: z.boolean().optional(),
+                    readOnlyMessage: z.string().optional(),
+                  }),
+                ]),
+              ),
+            }),
+            z.object({
+              type: z.enum(['link-button']),
+              content: z.string(),
+              sx: z.object({}).optional(),
+              url: z.string(),
+              target: z.string().optional(),
+            }),
+          ]),
         )
         .optional(),
     }),
