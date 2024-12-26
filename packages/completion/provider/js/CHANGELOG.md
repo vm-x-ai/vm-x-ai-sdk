@@ -1,3 +1,13 @@
+## 0.12.1 (2024-12-26)
+
+### 🩹 Fixes
+
+- update AIProviderConnection type to include AIProviderConnectionButtonComponent ([919bbaf](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/919bbaf))
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.12.0 (2024-12-26)
 
 ### 🚀 Features
