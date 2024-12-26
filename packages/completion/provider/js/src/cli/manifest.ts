@@ -21,7 +21,7 @@ export const manifestSchema = z.object({
         .array(
           z.union([
             z.object({
-              type: z.enum(['accordion']),
+              type: z.literal('accordion'),
               title: z.string(),
               elements: z.array(
                 z.union([
@@ -45,7 +45,7 @@ export const manifestSchema = z.object({
               ),
             }),
             z.object({
-              type: z.enum(['link-button']),
+              type: z.literal('link-button'),
               content: z.string(),
               sx: z.object({}).optional(),
               url: z.string(),
