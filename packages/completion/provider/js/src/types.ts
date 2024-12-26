@@ -70,7 +70,7 @@ export type AIProviderConnectionEditorComponent = {
 
 export type AIProviderConnection = {
   form: JSONSchema7;
-  uiComponents?: (AIProviderConnectionAccordionComponent | AIProviderConnectionAccordionComponent)[];
+  uiComponents?: (AIProviderConnectionAccordionComponent | AIProviderConnectionButtonComponent)[];
 };
 
 export type AIProviderModel = {
