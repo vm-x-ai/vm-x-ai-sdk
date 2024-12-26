@@ -1,3 +1,13 @@
+## 0.12.2 (2024-12-26)
+
+### 🩹 Fixes
+
+- change type definitions in manifest schema from enum to literal for accordion and link-button ([5d6e63e](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/5d6e63e))
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.12.1 (2024-12-26)
 
 ### 🩹 Fixes
