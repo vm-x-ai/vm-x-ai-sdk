@@ -50,6 +50,7 @@ export type AIProviderConnectionButtonComponent = {
   sx?: Record<string, unknown>;
   url: string;
   target?: string;
+  helperText?: string;
 };
 
 export type AIProviderConnectionTypographyComponent = {
