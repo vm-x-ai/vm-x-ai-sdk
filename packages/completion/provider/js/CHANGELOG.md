@@ -1,3 +1,13 @@
+## 0.13.0 (2025-01-02)
+
+### 🚀 Features
+
+- add helperText property to AIProviderConnectionButtonComponent type ([4735111](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/4735111))
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.12.3 (2024-12-26)
 
 ### 🩹 Fixes
