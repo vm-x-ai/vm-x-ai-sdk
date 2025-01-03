@@ -1,3 +1,13 @@
+## 0.14.0 (2025-01-03)
+
+### 🚀 Features
+
+- add metadata property to provider model config ([c274696](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/c274696))
+
+### ❤️  Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.13.0 (2025-01-02)
 
 ### 🚀 Features
