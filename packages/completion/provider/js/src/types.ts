@@ -79,6 +79,7 @@ export type AIProviderModel = {
   label: string;
   logo?: AIProviderLogo;
   options?: AIProviderModelOptions;
+  metadata?: Record<string, unknown>;
 };
 
 export type AIProviderModelOptions = {
