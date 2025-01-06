@@ -126,4 +126,6 @@ const main = async () => {
   console.log('\n'.repeat(2));
 };
 
-main().finally(() => process.exit(0));
+main()
+  .catch((error) => console.log(error))
+  .finally(() => process.exit(0));
