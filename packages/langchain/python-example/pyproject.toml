@@ -22,7 +22,7 @@ group = { }
   include = "example"
 
   [tool.poetry.dependencies]
-  python = ">=3.8.1,<4"
+  python = ">=3.9,<4"
   blessings = "^1.7"
 
     [tool.poetry.dependencies.vm-x-ai-sdk]

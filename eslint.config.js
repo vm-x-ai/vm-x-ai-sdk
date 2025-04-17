@@ -62,7 +62,7 @@ module.exports = [
   },
   ...compat.config({ extends: ['plugin:@nx/typescript'] }).map((config) => ({
     ...config,
-    files: ['**/*.ts', '**/*.tsx'],
+    files: ['**/*.ts', '**/*.tsx', '**/*.cts', '**/*.mts'],
     rules: {
       ...config.rules,
       '@typescript-eslint/no-extra-semi': 'error',
@@ -71,7 +71,7 @@ module.exports = [
   })),
   ...compat.config({ extends: ['plugin:@nx/javascript'] }).map((config) => ({
     ...config,
-    files: ['**/*.js', '**/*.jsx'],
+    files: ['**/*.js', '**/*.jsx', '**/*.cjs', '**/*.mjs'],
     rules: {
       ...config.rules,
       '@typescript-eslint/no-extra-semi': 'error',
@@ -84,7 +84,7 @@ module.exports = [
       ...eslintPluginVitest.configs.recommended.rules,
     },
   },
-  { ignores: ['dist'] },
+  { ignores: ['dist', '**/vite.config.*.timestamp*', '**/vitest.config.*.timestamp*'] },
   {
     files: ['**/package.json', '**/generators.json'],
     rules: { '@nx/nx-plugin-checks': 'error' },
