@@ -29,11 +29,13 @@ group = { }
   include = "vmxai"
 
   [tool.poetry.dependencies]
-  python = ">=3.8,<4"
+  python = ">=3.9,<4"
   requests = "^2.31.0"
   cachetools = "^5.3.3"
   grpcio = "^1.62.2"
   protobuf = "^4.21.6"
+  pyhumps = "^3.8.0"
+  pydantic = "^2.11.3"
 
     [tool.poetry.dependencies.vm-x-ai-completion-client]
     path = "../../completion/client/python"
