@@ -23,7 +23,7 @@
   "dependencies": {
     "@swc/helpers": "~0.5.11",
     "@nx/devkit": "20.0.3",
-    "@nx/js": "20.0.3",
+    "@nx/js": "20.7.1",
     "@vm-x-ai/completion-provider": "0.14.0"
   },
   "type": "commonjs",

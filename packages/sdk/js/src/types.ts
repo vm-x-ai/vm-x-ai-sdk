@@ -84,6 +84,11 @@ export enum BatchRequestType {
 }
 
 /**
+ * Events to include in the callback request
+ */
+export type BatchCallbackEvent = 'BATCH_UPDATE' | 'ITEM_UPDATE' | 'ALL';
+
+/**
  * Configuration for callback URL when using CALLBACK batch requests
  */
 export type BatchRequestCallbackOptions = {
@@ -91,6 +96,8 @@ export type BatchRequestCallbackOptions = {
   url: string;
   /** Optional headers to include in the callback request */
   headers?: Record<string, string>;
+  /** Events to include in the callback request */
+  events: BatchCallbackEvent[];
 };
 
 /**

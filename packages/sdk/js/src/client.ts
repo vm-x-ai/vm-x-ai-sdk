@@ -10,7 +10,7 @@ import type { AxiosRequestConfig, AxiosResponse } from 'axios';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import { VMXClientAPIKey, type VMXClientAuthProvider } from './auth';
-import type { BatchRequestCallbackOptions, CompletionBatchStream } from './types';
+import type { BatchRequestCallbackOptions, CompletionBatchItem, CompletionBatchStream } from './types';
 import {
   BatchRequestType,
   CompletionBatchRequestStatus,
@@ -186,13 +186,62 @@ export class VMXClient {
    * @param batchId - The ID of the batch to retrieve
    * @returns The batch response object
    */
-  public async getCompletionBatchResult(batchId: string): Promise<CompletionBatchResponse> {
+  public async getCompletionBatchResult(batchId: string, includeResults = false): Promise<CompletionBatchResponse> {
     const response = await this.executeApiRequest<undefined, CompletionBatchResponse>(
       `/completion-batch/${this.workspaceId}/${this.environmentId}/${batchId}`,
       'GET',
+      undefined,
+      includeResults ? { includeResults: 'true' } : undefined,
     );
 
     return response.data;
+  }
+
+  /**
+   * Get the result of a previously submitted batch completion item
+   *
+   * @param batchId - The ID of the batch to retrieve
+   * @param itemId - The ID of the item to retrieve
+   * @returns The batch item response object
+   */
+  public async getCompletionBatchItemResult(batchId: string, itemId: string): Promise<CompletionBatchItem> {
+    const response = await this.executeApiRequest<undefined, CompletionBatchItem>(
+      `/completion-batch/${this.workspaceId}/${this.environmentId}/${batchId}/item/${itemId}`,
+      'GET',
+    );
+    return response.data;
+  }
+
+  /**
+   * Wait for a batch completion item to finish
+   *
+   * Polls the batch item status until it's no longer pending or running.
+   *
+   * @param batchId - The ID of the batch to retrieve
+   * @param itemId - The ID of the item to retrieve
+   * @param timeout - Optional timeout in milliseconds (throws an error if exceeded)
+   * @param retryInterval - Time in milliseconds between status checks (default: 1000ms)
+   * @returns The final batch item response object
+   * @throws Error if the timeout is exceeded
+   */
+  public async waitForCompletionBatchItem(
+    batchId: string,
+    itemId: string,
+    timeout?: number,
+    retryInterval = 1000,
+  ): Promise<CompletionBatchItem> {
+    const startAt = Date.now();
+    let response = await this.getCompletionBatchItemResult(batchId, itemId);
+    while ([CompletionBatchRequestStatus.PENDING, CompletionBatchRequestStatus.RUNNING].includes(response.status)) {
+      if (timeout !== undefined && Date.now() - startAt > timeout) {
+        throw new Error('Timeout waiting for completion batch item to finish');
+      }
+
+      await new Promise((resolve) => setTimeout(resolve, retryInterval));
+      response = await this.getCompletionBatchItemResult(batchId, itemId);
+    }
+
+    return response;
   }
 
   /**
@@ -223,7 +272,7 @@ export class VMXClient {
       response = await this.getCompletionBatchResult(batchId);
     }
 
-    return response;
+    return await this.getCompletionBatchResult(batchId, true);
   }
 
   /**
@@ -371,6 +420,7 @@ export class VMXClient {
     url: string,
     method: AxiosRequestConfig['method'],
     payload?: T,
+    queryParams?: Record<string, string>,
   ): Promise<AxiosResponse<R>> {
     const authProvider = this.getAuthProvider();
     const headers = {};
@@ -383,6 +433,7 @@ export class VMXClient {
         ...headers,
         ...(payload ? { 'Content-Type': 'application/json' } : {}),
       },
+      params: queryParams,
     });
     return response;
   }

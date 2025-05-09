@@ -28,14 +28,9 @@ async def main():
     response = await client.completion_batch(requests)
     print(f"Batch created: {response.batch_id}")
 
-    # Wait for the batch to complete
-    result = await client.wait_for_completion_batch(response.batch_id)
-    for item in result.items:
-        print(f"Batch item: {item.response.message}")
-
     # Get the result of a batch completion item
     for item in response.items:
-        result = await client.get_completion_batch_item_result(response.batch_id, item.item_id)
+        result = await client.wait_for_completion_batch_item(response.batch_id, item.item_id)
         print(f"Batch item: {result.response.message}")
 
 

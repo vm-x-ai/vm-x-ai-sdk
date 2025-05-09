@@ -22,13 +22,8 @@ const main = async () => {
 
   console.log('Batch created', response.batchId);
 
-  const result = await client.waitForCompletionBatch(response.batchId);
-  for (const item of result.items) {
-    console.log('Batch item', item.response?.message);
-  }
-
   for (const item of response.items) {
-    const result = await client.getCompletionBatchItemResult(response.batchId, item.itemId);
+    const result = await client.waitForCompletionBatchItem(response.batchId, item.itemId);
     console.log('Batch item', result.response?.message);
   }
 };

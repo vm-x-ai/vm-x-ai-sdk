@@ -393,19 +393,23 @@ class VMXClient:
         else:
             return GrpcRequestToolChoice(auto=False, none=False, tool=tool_choice)
 
-    async def get_completion_batch_result(self, batch_id: str) -> CompletionBatchResponse:
+    async def get_completion_batch_result(
+        self, batch_id: str,
+        include_results: bool = False
+    ) -> CompletionBatchResponse:
         """
         Get the result of a batch completion request.
 
         Args:
             batch_id: The ID of the batch to retrieve.
-
+            include_results: Whether to include the results in the response.
         Returns:
             CompletionBatchResponse: The batch response object.
         """
         result = await self._execute_api_request(
             f"/completion-batch/{self.workspace_id}/{self.environment_id}/{batch_id}",
             "GET",
+            query_params={"includeResults": str(include_results).lower()},
         )
         return CompletionBatchResponse.model_validate(result)
 
@@ -441,6 +445,41 @@ class VMXClient:
 
             await asyncio.sleep(retry_interval)
             response = await self.get_completion_batch_result(batch_id)
+
+        return await self.get_completion_batch_result(batch_id, include_results=True)
+    
+    async def get_completion_batch_item_result(self, batch_id: str, item_id: str) -> CompletionBatchItem:
+        """
+        Get the result of a batch completion item.
+        """
+        result = await self._execute_api_request(
+            f"/completion-batch/{self.workspace_id}/{self.environment_id}/{batch_id}/item/{item_id}",
+            "GET",
+        )
+        return CompletionBatchItem.model_validate(result)
+    
+    async def wait_for_completion_batch_item(
+        self,
+        batch_id: str,
+        item_id: str,
+        timeout: Optional[float] = None,
+        retry_interval: float = 1.0,
+    ) -> CompletionBatchItem:
+        """
+        Wait for a batch completion item to finish.
+        """
+        response = await self.get_completion_batch_item_result(batch_id, item_id)
+        start_time = asyncio.get_event_loop().time()
+
+        while response.status in [
+            CompletionBatchRequestStatus.PENDING,
+            CompletionBatchRequestStatus.RUNNING,
+        ]:
+            if timeout is not None and (asyncio.get_event_loop().time() - start_time) > timeout:
+                raise TimeoutError("Timeout waiting for completion batch item to finish")
+
+            await asyncio.sleep(retry_interval)
+            response = await self.get_completion_batch_item_result(batch_id, item_id)
 
         return response
 
@@ -587,7 +626,8 @@ class VMXClient:
         self, 
         url: str, 
         method: str, 
-        payload: Optional[Dict[str, Any]] = None
+        payload: Optional[Dict[str, Any]] = None,
+        query_params: Optional[Dict[str, Any]] = None
     ) -> dict:
         """
         Execute a REST API request to the VMX API.
@@ -596,6 +636,7 @@ class VMXClient:
             url: The URL path (without domain).
             method: HTTP method (GET, POST, etc.).
             payload: Optional request payload for POST requests.
+            query_params: Optional query parameters for GET requests.
 
         Returns:
             dict: The response data parsed into a dictionary.
@@ -612,9 +653,9 @@ class VMXClient:
         full_url = f"{self.api_domain}{url}"
         
         if method.upper() == "GET":
-            response = requests.get(full_url, headers=headers)
+            response = requests.get(full_url, headers=headers, params=query_params)
         elif method.upper() == "POST":
-            response = requests.post(full_url, json=payload, headers=headers)
+            response = requests.post(full_url, json=payload, headers=headers, params=query_params)
         else:
             raise ValueError(f"Unsupported HTTP method: {method}")
             
