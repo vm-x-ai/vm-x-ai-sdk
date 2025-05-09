@@ -19,3 +19,4 @@ jobs:
     with:
       use-python: true
       specifier: ${{ inputs.specifier }}
+      pnpm-version: 10

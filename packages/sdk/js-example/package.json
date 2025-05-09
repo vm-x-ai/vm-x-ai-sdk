@@ -4,7 +4,8 @@
   "dependencies": {
     "@vm-x-ai/sdk": "1.1.5",
     "tslib": "^2.3.0",
-    "@inquirer/prompts": "^5.3.8"
+    "@inquirer/prompts": "^5.3.8",
+    "axios": "1.7.2"
   },
   "type": "commonjs",
   "main": "./src/index.js",
