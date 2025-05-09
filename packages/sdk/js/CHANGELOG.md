@@ -1,3 +1,13 @@
+## 1.2.0 (2025-05-09)
+
+### 🚀 Features
+
+- add support for completion batch ([#18](https://github.com/vm-x-ai/vm-x-ai-sdk/pull/18))
+
+### ❤️ Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 1.1.5 (2024-12-09)
 
 ### 🧱 Updated Dependencies

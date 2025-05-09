@@ -1,6 +1,6 @@
 {
   "name": "@vm-x-ai/completion-provider-nx",
-  "version": "0.4.9",
+  "version": "0.5.0",
   "description": "VM-X AI Completion Provider Nx Plugin",
   "license": "MIT",
   "repository": {
