@@ -193,3 +193,17 @@ export type CompletionBatchStream =
       /** Information about the completed/failed batch (without items) */
       payload: Omit<CompletionBatchResponse, 'items'>;
     };
+
+export type CompletionBatchUpdateCallbackPayload = {
+  event: 'BATCH_UPDATE';
+  payload: CompletionBatchResponse;
+};
+
+export type CompletionBatchItemUpdateCallbackPayload = {
+  event: 'ITEM_UPDATE';
+  payload: CompletionBatchItem;
+};
+
+export type CompletionBatchCallbackPayload =
+  | CompletionBatchUpdateCallbackPayload
+  | CompletionBatchItemUpdateCallbackPayload;

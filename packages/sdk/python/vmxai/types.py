@@ -3,14 +3,14 @@ from typing import Any, Dict, List, Literal, Optional, Union
 
 import humps
 from google.protobuf.struct_pb2 import Struct
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, RootModel, field_validator
 from vmxai_completion_client import CompletionResponse, RequestMessageToolCall, RequestToolChoiceItem
 
 
 class RequestToolFunction(BaseModel):
     """
     Represents a function that can be called by a tool.
-    
+
     Attributes:
         name: The name of the function to be called.
         description: A description of what the function does.
@@ -24,7 +24,7 @@ class RequestToolFunction(BaseModel):
 class RequestTools(BaseModel):
     """
     Defines a tool that can be made available during a completion request.
-    
+
     Attributes:
         type: The type of tool, currently only "function" is supported.
         function: Configuration for the function tool.
@@ -36,7 +36,7 @@ class RequestTools(BaseModel):
 class RequestMessage(BaseModel):
     """
     Represents a message in a chat completion conversation.
-    
+
     Attributes:
         role: The role of the entity sending the message (system, user, assistant, or tool).
         name: Optional name of the entity sending the message.
@@ -48,8 +48,9 @@ class RequestMessage(BaseModel):
     name: Optional[str] = None
     content: Optional[str] = None
     tool_call_id: Optional[str] = Field(default=None, alias="toolCallId")
-    tool_calls: Optional[list[RequestMessageToolCall]] = Field(default_factory=list, alias="toolCalls")
-    
+    tool_calls: Optional[list[RequestMessageToolCall]] = Field(
+        default_factory=list, alias="toolCalls")
+
     class Config:
         populate_by_name = True
         arbitrary_types_allowed = True
@@ -58,7 +59,7 @@ class RequestMessage(BaseModel):
 class CompletionRequest(BaseModel):
     """
     Represents a request for a completion.
-    
+
     Attributes:
         resource: The resource identifier to use for generating the completion.
         workspace_id: Optional workspace ID where the request should run.
@@ -79,9 +80,10 @@ class CompletionRequest(BaseModel):
     )
     config: Optional[dict] = Field(default_factory=dict)
     messages: list[RequestMessage] = Field(default_factory=list)
-    resource_config_overrides: Optional[dict] = Field(default_factory=dict, alias="resourceConfigOverrides")
+    resource_config_overrides: Optional[dict] = Field(
+        default_factory=dict, alias="resourceConfigOverrides")
     metadata: Optional[dict] = Field(default_factory=dict)
-    
+
     class Config:
         populate_by_name = True
         arbitrary_types_allowed = True
@@ -90,7 +92,7 @@ class CompletionRequest(BaseModel):
 class CompletionBatchRequestStatus(str, Enum):
     """
     Enum representing the possible states of a batch completion request.
-    
+
     Values:
         PENDING: The batch is waiting to be processed.
         RUNNING: The batch is currently processing.
@@ -108,7 +110,7 @@ class CompletionBatchRequestStatus(str, Enum):
 class BatchRequestType(str, Enum):
     """
     Enum representing the types of batch requests.
-    
+
     Values:
         ASYNC: Execute the batch asynchronously and return immediately.
         SYNC: Execute the batch synchronously and stream events as they occur.
@@ -122,7 +124,7 @@ class BatchRequestType(str, Enum):
 class BaseEntity(BaseModel):
     """
     Base class for entities with creation and update metadata.
-    
+
     Attributes:
         created_at: ISO timestamp when the entity was created.
         updated_at: ISO timestamp when the entity was last updated.
@@ -133,7 +135,7 @@ class BaseEntity(BaseModel):
     updated_at: str = Field(alias="updatedAt")
     created_by: str = Field(alias="createdBy")
     updated_by: str = Field(alias="updatedBy")
-    
+
     class Config:
         populate_by_name = True
 
@@ -141,7 +143,7 @@ class BaseEntity(BaseModel):
 class BatchRequestCallbackOptions(BaseModel):
     """
     Configuration for the callback mechanism used in CALLBACK batch requests.
-    
+
     Attributes:
         url: The URL to send the callback to when the batch completes or fails.
         headers: Optional headers to include in the callback request.
@@ -149,13 +151,14 @@ class BatchRequestCallbackOptions(BaseModel):
     """
     url: str
     headers: Optional[Dict[str, str]] = None
-    events: List[Literal["BATCH_UPDATE", "ITEM_UPDATE", "ALL"]] = Field(default_factory=list)
+    events: List[Literal["BATCH_UPDATE", "ITEM_UPDATE", "ALL"]
+                 ] = Field(default_factory=list)
 
 
 class CompletionBatchItem(BaseEntity):
     """
     Represents a single item in a batch completion request.
-    
+
     Attributes:
         workspace_environment_item_id: The workspace environment batch item ID.
         timestamp: The timestamp when the item was created.
@@ -167,7 +170,8 @@ class CompletionBatchItem(BaseEntity):
         error: Optional error message if the item failed.
         retry_count: Optional count of retries for this item.
     """
-    workspace_environment_item_id: str = Field(alias="workspaceEnvironmentItemId")
+    workspace_environment_item_id: str = Field(
+        alias="workspaceEnvironmentItemId")
     timestamp: str
     item_id: str = Field(alias="itemId")
     batch_id: str = Field(alias="batchId")
@@ -196,11 +200,10 @@ class CompletionBatchItem(BaseEntity):
         arbitrary_types_allowed = True
 
 
-
 class CompletionBatchResponse(BaseEntity):
     """
     Response containing information about a batch completion request.
-    
+
     Attributes:
         workspace_environment_batch_id: The workspace environment batch ID.
         timestamp: The timestamp when the batch was created.
@@ -216,7 +219,8 @@ class CompletionBatchResponse(BaseEntity):
         pending: Optional count of pending items.
         completed_percentage: Optional percentage of completed items.
     """
-    workspace_environment_batch_id: str = Field(alias="workspaceEnvironmentBatchId")
+    workspace_environment_batch_id: str = Field(
+        alias="workspaceEnvironmentBatchId")
     timestamp: str
     type: BatchRequestType
     batch_id: str = Field(alias="batchId")
@@ -227,8 +231,9 @@ class CompletionBatchResponse(BaseEntity):
     running: Optional[int] = None
     failed: Optional[int] = None
     pending: Optional[int] = None
-    completed_percentage: Optional[str] = Field(default=None, alias="completedPercentage")
-    
+    completed_percentage: Optional[str] = Field(
+        default=None, alias="completedPercentage")
+
     class Config:
         populate_by_name = True
         arbitrary_types_allowed = True
@@ -237,7 +242,7 @@ class CompletionBatchResponse(BaseEntity):
 class CompletionBatchRequest(BaseModel):
     """
     Request to execute a batch of completion requests.
-    
+
     Attributes:
         type: The type of batch to execute (ASYNC, SYNC, or CALLBACK).
         requests: List of completion requests to execute.
@@ -245,8 +250,9 @@ class CompletionBatchRequest(BaseModel):
     """
     type: BatchRequestType
     requests: List[CompletionRequest]
-    callback_options: Optional[BatchRequestCallbackOptions] = Field(default=None, alias="callbackOptions")
-    
+    callback_options: Optional[BatchRequestCallbackOptions] = Field(
+        default=None, alias="callbackOptions")
+
     class Config:
         populate_by_name = True
 
@@ -254,14 +260,14 @@ class CompletionBatchRequest(BaseModel):
 class CompletionBatchStreamBatchCreated(BaseModel):
     """
     Stream event indicating a batch has been created.
-    
+
     Attributes:
         action: The action type, always "batch-created".
         payload: Information about the created batch.
     """
     action: Literal["batch-created"]
     payload: CompletionBatchResponse
-    
+
     class Config:
         arbitrary_types_allowed = True
 
@@ -269,14 +275,14 @@ class CompletionBatchStreamBatchCreated(BaseModel):
 class CompletionBatchStreamItem(BaseModel):
     """
     Stream event for a batch item status change.
-    
+
     Attributes:
         action: The action type, one of "item-running", "item-completed", or "item-failed".
         payload: Information about the item that changed status.
     """
     action: Literal["item-running", "item-completed", "item-failed"]
     payload: CompletionBatchItem
-    
+
     class Config:
         arbitrary_types_allowed = True
 
@@ -284,14 +290,14 @@ class CompletionBatchStreamItem(BaseModel):
 class CompletionBatchStreamCompleted(BaseModel):
     """
     Stream event indicating a batch has completed or failed.
-    
+
     Attributes:
         action: The action type, either "batch-completed" or "batch-failed".
         payload: Information about the completed/failed batch.
     """
     action: Literal["batch-completed", "batch-failed"]
     payload: CompletionBatchResponse
-    
+
     class Config:
         arbitrary_types_allowed = True
 
@@ -309,3 +315,42 @@ This can be one of:
 - CompletionBatchStreamItem: When an item's status changes
 - CompletionBatchStreamCompleted: When a batch is completed or fails
 """
+
+
+class CompletionBatchUpdateCallbackPayload(BaseModel):
+    """
+    Payload for a completion batch update callback.
+
+    Attributes:
+        events: The events to include in the callback.
+        payload: Information about the batch.
+    """
+    event: Literal["BATCH_UPDATE"]
+    payload: CompletionBatchResponse
+
+    class Config:
+        arbitrary_types_allowed = True
+
+
+class CompletionBatchItemUpdateCallbackPayload(BaseModel):
+    """
+    Payload for a completion batch item update callback.
+
+    Attributes:
+        event: The event type, always "item-update".
+        payload: Information about the item that changed status.
+    """
+    event: Literal["ITEM_UPDATE"]
+    payload: CompletionBatchItem
+
+    class Config:
+        arbitrary_types_allowed = True
+
+
+class CompletionBatchCallbackPayload(
+    RootModel[
+        Union[CompletionBatchUpdateCallbackPayload, CompletionBatchItemUpdateCallbackPayload]
+    ]
+):
+    class Config:
+        arbitrary_types_allowed = True
