@@ -1,3 +1,13 @@
+## 1.4.0 (2025-05-12)
+
+### 🚀 Features
+
+- add events attribute to BatchRequestCallbackOptions for enhanced callback functionality ([55cb506](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/55cb506))
+
+### ❤️ Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 1.3.0 (2025-05-09)
 
 ### 🚀 Features
