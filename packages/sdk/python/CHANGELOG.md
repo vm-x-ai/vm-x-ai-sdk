@@ -1,3 +1,13 @@
+## 1.5.0 (2025-05-12)
+
+### 🚀 Features
+
+- introduce callback payload types for completion batch updates and item updates ([de3fc60](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/de3fc60))
+
+### ❤️ Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 1.4.0 (2025-05-12)
 
 ### 🚀 Features

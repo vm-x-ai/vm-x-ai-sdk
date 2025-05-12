@@ -673,7 +673,7 @@ url = "../../completion/client/python"
 
 [[package]]
 name = "vm-x-ai-sdk"
-version = "1.4.0"
+version = "1.5.0"
 description = "VM-X AI Python SDK"
 optional = false
 python-versions = ">=3.9,<4"
