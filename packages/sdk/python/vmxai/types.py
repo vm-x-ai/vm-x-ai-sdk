@@ -3,7 +3,7 @@ from typing import Any, Dict, List, Literal, Optional, Union
 
 import humps
 from google.protobuf.struct_pb2 import Struct
-from pydantic import BaseModel, Field, RootModel, field_validator
+from pydantic import BaseModel, Field, RootModel, field_serializer, field_validator
 from vmxai_completion_client import CompletionResponse, RequestMessageToolCall, RequestToolChoiceItem
 
 
@@ -181,6 +181,22 @@ class CompletionBatchItem(BaseEntity):
     error: Optional[str] = None
     retry_count: Optional[int] = Field(default=None, alias="retryCount")
 
+    @field_serializer('response')
+    def serialize_response(self, value: Optional[CompletionResponse], _info):
+        if value is None:
+            return None
+
+        from google.protobuf.json_format import MessageToDict
+        result = MessageToDict(
+            value
+        )
+
+        # Convert responseTimestamp to int
+        if 'responseTimestamp' in result:
+            result['response_timestamp'] = int(result['responseTimestamp'])
+
+        return result
+
     @field_validator("response", mode="before")
     def validate_response(cls, value: Any):
         if value is None:
@@ -192,6 +208,7 @@ class CompletionBatchItem(BaseEntity):
                 raw_response = Struct()
                 raw_response.update(normalized_value['raw_response'])
                 normalized_value['raw_response'] = raw_response
+
             return CompletionResponse(**normalized_value)
         return value
 
