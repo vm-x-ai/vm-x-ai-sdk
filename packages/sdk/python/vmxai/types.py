@@ -145,9 +145,11 @@ class BatchRequestCallbackOptions(BaseModel):
     Attributes:
         url: The URL to send the callback to when the batch completes or fails.
         headers: Optional headers to include in the callback request.
+        events: List of events to include in the callback request.
     """
     url: str
     headers: Optional[Dict[str, str]] = None
+    events: List[Literal["BATCH_UPDATE", "ITEM_UPDATE", "ALL"]] = Field(default_factory=list)
 
 
 class CompletionBatchItem(BaseEntity):
