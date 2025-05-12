@@ -1,3 +1,13 @@
+## 1.6.0 (2025-05-12)
+
+### 🚀 Features
+
+- add response serialization to CompletionBatchItem for improved data handling ([f5baac1](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/f5baac1))
+
+### ❤️ Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 1.5.0 (2025-05-12)
 
 ### 🚀 Features
