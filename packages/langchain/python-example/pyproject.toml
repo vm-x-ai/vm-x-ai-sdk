@@ -8,7 +8,7 @@ show_missing = true
 
 [tool.poetry]
 name = "langchain-vm-x-ai-example"
-version = "0.0.40"
+version = "0.0.43"
 description = "VM-X AI Python SDK Example"
 authors = [ "VM-X Engineering <eng@vm-x.ai>" ]
 maintainers = [ "VM-X Engineering <eng@vm-x.ai>" ]

@@ -1,3 +1,13 @@
+## 1.6.1 (2025-05-16)
+
+### 🩹 Fixes
+
+- update tool_choice handling in VMXClient and add serialization/validation ([fcd0de5](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/fcd0de5))
+
+### ❤️ Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 1.6.0 (2025-05-12)
 
 ### 🚀 Features
