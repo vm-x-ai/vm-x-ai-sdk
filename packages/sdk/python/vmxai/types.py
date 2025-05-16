@@ -113,8 +113,10 @@ class CompletionRequest(BaseModel):
                 return "auto"
             elif value.get("none"):
                 return "none"
-            else:
+            elif 'tool' in value:
                 return RequestToolChoiceItem(**value.get("tool"))
+            else:
+                return RequestToolChoiceItem(**value)
 
         return value
 
