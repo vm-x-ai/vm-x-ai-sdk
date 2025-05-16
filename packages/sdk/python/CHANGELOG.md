@@ -1,3 +1,13 @@
+## 1.6.2 (2025-05-16)
+
+### 🩹 Fixes
+
+- support tool choice grpc and json formats ([272c0ac](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/272c0ac))
+
+### ❤️ Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 1.6.1 (2025-05-16)
 
 ### 🩹 Fixes

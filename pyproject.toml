@@ -3,7 +3,7 @@ autoActivate = true
 
 [tool.poetry]
 name = "@vm-x-ai/sdk"
-version = "1.0.62"
+version = "1.0.68"
 description = ""
 authors = [ ]
 license = "Proprietary"

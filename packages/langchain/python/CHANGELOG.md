@@ -1,3 +1,9 @@
+## 1.2.5 (2025-05-16)
+
+### 🧱 Updated Dependencies
+
+- Updated sdk-python to 1.6.2
+
 ## 1.2.4 (2025-05-16)
 
 ### 🧱 Updated Dependencies
