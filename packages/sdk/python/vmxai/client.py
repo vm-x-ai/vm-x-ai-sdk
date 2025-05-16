@@ -677,15 +677,14 @@ class VMXClient:
         """
         # Use model_dump with by_alias=True to convert to camelCase
         result = {**request}
-
-        if request.get("tool_choice"):
-            if request.get("tool_choice") == "auto":
+        if request.get("toolChoice"):
+            if request.get("toolChoice") == "auto":
                 result["toolChoice"] = {"auto": True}
-            elif request.get("tool_choice") == "none":
+            elif request.get("toolChoice") == "none":
                 result["toolChoice"] = {"none": True}
             else:
-                result["toolChoice"] = {"tool": request.get("tool_choice")}
-        
+                result["toolChoice"] = {"tool": request.get("toolChoice")}
+
         # Ensure stream is False for batch requests
         result["stream"] = False
         

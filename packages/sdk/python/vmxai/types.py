@@ -88,6 +88,36 @@ class CompletionRequest(BaseModel):
         populate_by_name = True
         arbitrary_types_allowed = True
 
+    @field_serializer('tool_choice')
+    def serialize_tool_choice(self, value: Optional[Union[Literal["auto", "none"], RequestToolChoiceItem]], _info):
+        if value is None:
+            return None
+        
+        if isinstance(value, str):
+            return value
+
+        from google.protobuf.json_format import MessageToDict
+        result = MessageToDict(
+            value
+        )
+
+        return result
+
+    @field_validator("tool_choice", mode="before")
+    def validate_tool_choice(cls, value: Any):
+        if value is None:
+            return None
+
+        if isinstance(value, dict):
+            if value.get("auto"):
+                return "auto"
+            elif value.get("none"):
+                return "none"
+            else:
+                return RequestToolChoiceItem(**value.get("tool"))
+
+        return value
+
 
 class CompletionBatchRequestStatus(str, Enum):
     """
