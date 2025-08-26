@@ -104,3 +104,9 @@ export interface AIProviderConfig {
   visibility: AIProviderVisibility;
   status: AIProviderStatus;
 }
+
+export type AIProviderRateLimit = {
+  model: string;
+  requests: number;
+  tokens: number;
+};

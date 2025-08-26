@@ -2,9 +2,16 @@ import type { Logger } from '@nestjs/common';
 import type { CompletionRequest, CompletionResponse, CompletionResponseMetadata } from '@vm-x-ai/completion-client';
 import type { Subject } from 'rxjs';
 import { TokenCounter } from './token';
-import type { AIConnection, AIProviderConfig, CompletionMetadata, ResourceModelConfig } from './types';
+import type {
+  AIConnection,
+  AIProviderConfig,
+  AIProviderRateLimit,
+  CompletionMetadata,
+  ResourceModelConfig,
+} from './types';
 
 export interface ICompletionProvider {
+  getRateLimit(modelConfig: ResourceModelConfig): Promise<AIProviderRateLimit | null>;
   getMaxReplyTokens(request: CompletionRequest, modelConfig: ResourceModelConfig): number;
   getRequestTokens(request: CompletionRequest, modelConfig: ResourceModelConfig): Promise<number>;
   completion(
