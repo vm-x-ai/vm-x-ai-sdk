@@ -1,3 +1,13 @@
+## 0.16.0 (2025-08-26)
+
+### 🚀 Features
+
+- add ai connection to get rate limit ([a6793ce](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/a6793ce))
+
+### ❤️ Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.15.0 (2025-08-26)
 
 ### 🚀 Features
