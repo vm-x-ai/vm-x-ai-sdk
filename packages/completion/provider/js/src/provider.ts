@@ -11,7 +11,7 @@ import type {
 } from './types';
 
 export interface ICompletionProvider {
-  getRateLimit(modelConfig: ResourceModelConfig): Promise<AIProviderRateLimit | null>;
+  getRateLimit(connection: AIConnection, modelConfig: ResourceModelConfig): Promise<AIProviderRateLimit | null>;
   getMaxReplyTokens(request: CompletionRequest, modelConfig: ResourceModelConfig): number;
   getRequestTokens(request: CompletionRequest, modelConfig: ResourceModelConfig): Promise<number>;
   completion(
