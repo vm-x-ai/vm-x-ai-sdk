@@ -1,3 +1,13 @@
+## 0.15.0 (2025-08-26)
+
+### 🚀 Features
+
+- add get rate limit method to completion provider interface ([186ba35](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/186ba35))
+
+### ❤️ Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.14.0 (2025-01-03)
 
 ### 🚀 Features
