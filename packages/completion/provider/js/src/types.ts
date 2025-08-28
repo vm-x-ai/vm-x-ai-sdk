@@ -106,6 +106,7 @@ export interface AIProviderConfig {
 }
 
 export type AIProviderRateLimit = {
+  period: 'minute' | 'hour' | 'day';
   model: string;
   requests: number;
   tokens: number;
