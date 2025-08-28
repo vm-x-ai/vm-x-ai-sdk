@@ -1,6 +1,6 @@
 {
   "name": "@vm-x-ai/completion-provider-nx",
-  "version": "0.5.2",
+  "version": "0.5.3",
   "description": "VM-X AI Completion Provider Nx Plugin",
   "license": "MIT",
   "repository": {
@@ -24,7 +24,7 @@
     "@swc/helpers": "~0.5.11",
     "@nx/devkit": "20.0.3",
     "@nx/js": "20.7.1",
-    "@vm-x-ai/completion-provider": "0.16.0"
+    "@vm-x-ai/completion-provider": "0.17.0"
   },
   "type": "commonjs",
   "main": "./src/index.js",

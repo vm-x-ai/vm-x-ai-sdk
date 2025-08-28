@@ -1,3 +1,13 @@
+## 0.17.0 (2025-08-28)
+
+### 🚀 Features
+
+- add period to ai provider rate limit type ([d69e3e0](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/d69e3e0))
+
+### ❤️ Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.16.0 (2025-08-26)
 
 ### 🚀 Features
