@@ -1,3 +1,13 @@
+## 1.4.0 (2025-08-29)
+
+### 🚀 Features
+
+- **nodejs-sdk:** add rate limit function ([91cf6ec](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/91cf6ec))
+
+### ❤️ Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 1.3.0 (2025-05-12)
 
 ### 🚀 Features
