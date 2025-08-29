@@ -1,3 +1,13 @@
+## 0.18.0 (2025-08-29)
+
+### 🚀 Features
+
+- add models.metadata to manifest zod schema ([968275b](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/968275b))
+
+### ❤️ Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 0.17.0 (2025-08-28)
 
 ### 🚀 Features
