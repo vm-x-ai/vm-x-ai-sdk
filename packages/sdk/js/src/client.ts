@@ -10,7 +10,12 @@ import type { AxiosRequestConfig, AxiosResponse } from 'axios';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import { VMXClientAPIKey, type VMXClientAuthProvider } from './auth';
-import type { BatchRequestCallbackOptions, CompletionBatchItem, CompletionBatchStream } from './types';
+import type {
+  AIProviderRateLimit,
+  BatchRequestCallbackOptions,
+  CompletionBatchItem,
+  CompletionBatchStream,
+} from './types';
 import {
   BatchRequestType,
   CompletionBatchRequestStatus,
@@ -402,6 +407,22 @@ export class VMXClient {
           stream: false,
         })),
       },
+    );
+
+    return response.data;
+  }
+
+  /**
+   * Get the rate limit for a specific model
+   *
+   * @param connectionId - The ID of the connection to get the rate limit for
+   * @param model - The model to get the rate limit for
+   * @returns The rate limit for the model
+   */
+  public async getRateLimit(connectionId: string, model: string): Promise<AIProviderRateLimit[] | null> {
+    const response = await this.executeApiRequest<null, AIProviderRateLimit[] | null>(
+      `/ai-connection/${this.workspaceId}/${this.environmentId}/${connectionId}/rate-limit/${model}`,
+      'GET',
     );
 
     return response.data;

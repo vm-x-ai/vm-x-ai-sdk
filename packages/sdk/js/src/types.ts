@@ -207,3 +207,10 @@ export type CompletionBatchItemUpdateCallbackPayload = {
 export type CompletionBatchCallbackPayload =
   | CompletionBatchUpdateCallbackPayload
   | CompletionBatchItemUpdateCallbackPayload;
+
+export type AIProviderRateLimit = {
+  period: 'minute' | 'hour' | 'day';
+  model: string;
+  requests: number;
+  tokens: number;
+};
