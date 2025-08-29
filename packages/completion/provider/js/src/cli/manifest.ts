@@ -65,6 +65,7 @@ export const manifestSchema = z.object({
             url: z.string().optional(),
           })
           .optional(),
+        metadata: z.record(z.string(), z.any()).optional(),
       }),
     ),
     handler: z.object({
