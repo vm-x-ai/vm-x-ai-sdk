@@ -1,3 +1,13 @@
+## 1.5.0 (2025-09-01)
+
+### 🚀 Features
+
+- add batch capacity property ([c465dfb](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/c465dfb))
+
+### ❤️ Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 1.4.0 (2025-08-29)
 
 ### 🚀 Features
