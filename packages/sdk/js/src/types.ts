@@ -154,6 +154,12 @@ export type CompletionBatchResponse = {
   completedPercentage?: string;
 } & BaseEntity;
 
+export type CompletionBatchCapacity = {
+  requests: number;
+  tokens: number;
+  period: 'minute' | 'hour' | 'day' | 'week' | 'month' | 'lifetime';
+};
+
 /**
  * Request to execute a batch of completion requests
  */
@@ -164,6 +170,8 @@ export type CompletionBatchRequest = {
   requests: Omit<CompletionRequestPayload, 'stream'>[];
   /** Optional callback configuration for CALLBACK batch types */
   callbackOptions?: BatchRequestCallbackOptions;
+  /** Optional capacity for the batch */
+  capacity?: CompletionBatchCapacity[];
 };
 
 /**

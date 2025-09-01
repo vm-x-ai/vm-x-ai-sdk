@@ -287,6 +287,14 @@ class CompletionBatchResponse(BaseEntity):
         populate_by_name = True
         arbitrary_types_allowed = True
 
+class CompletionBatchCapacity(BaseModel):
+    """
+    Capacity for a batch completion request.
+    """
+    requests: int
+    tokens: int
+    period: Literal["minute", "hour", "day", "week", "month", "lifetime"]
+
 
 class CompletionBatchRequest(BaseModel):
     """
@@ -301,6 +309,8 @@ class CompletionBatchRequest(BaseModel):
     requests: List[CompletionRequest]
     callback_options: Optional[BatchRequestCallbackOptions] = Field(
         default=None, alias="callbackOptions")
+    capacity: Optional[List[CompletionBatchCapacity]] = Field(
+        default=None, alias="capacity")
 
     class Config:
         populate_by_name = True
