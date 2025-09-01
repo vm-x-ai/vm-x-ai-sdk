@@ -421,7 +421,7 @@ export class VMXClient {
    */
   public async getRateLimit(connectionId: string, model: string): Promise<AIProviderRateLimit[] | null> {
     const response = await this.executeApiRequest<null, AIProviderRateLimit[] | null>(
-      `/ai-connection/${this.workspaceId}/${this.environmentId}/${connectionId}/rate-limit/${model}`,
+      `/ai-connection/${this.workspaceId}/${this.environmentId}/${connectionId}/rate-limit/${encodeURIComponent(model)}`,
       'GET',
     );
 
