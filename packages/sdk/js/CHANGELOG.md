@@ -1,3 +1,13 @@
+## 1.5.1 (2025-09-01)
+
+### 🩹 Fixes
+
+- encode model parameter in getRateLimit API request ([9a73c1b](https://github.com/vm-x-ai/vm-x-ai-sdk/commit/9a73c1b))
+
+### ❤️ Thank You
+
+- Lucas Vieira @lucasvieirasilva
+
 ## 1.5.0 (2025-09-01)
 
 ### 🚀 Features
